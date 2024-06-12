@@ -37,7 +37,7 @@ class Posts(db.Model):
     author_id = db.Column(db.Integer, db,ForeignKey('users.id'))  # Hace falta poner nullable aqui?
     author_to = db.relationship('Users, foreign_keys=[user_id]')
     game_id = db.Column(db.Integer, db,ForeignKey('games.id')) 
-    game_to = db.relationship('Games, foreign_keys=[games_id]')
+    game_to = db.relationship('Games, foreign_keys=[game_id]')
 
     def __repr__(self):
         return f'<User {self.title}>' 
@@ -59,7 +59,7 @@ class Products(db.Model):
     cdk = db.Column(db.String(), unique=True, nullable=False)
     price = db.Column(db.Integer(), unique=False, nullable=False)
     game_id = db.Column(db.Integer, db,ForeignKey('games.id')) 
-    game_to = db.relationship('Games, foreign_keys=[games_id]')
+    game_to = db.relationship('Games, foreign_keys=[game_id]')
 
     def __repr__(self):
         return f'<User {self.name}>' 
@@ -75,8 +75,10 @@ class Products(db.Model):
 
 class Likes(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    product_id = db.Column(db.Integer(), unique=True, nullable=True)
-    user_id = db.Column(db.Integer(), unique=True, nullable=True)
+    product_id = db.Column(db.Integer, db,ForeignKey('games.id')) 
+    product_to = db.relationship('Games, foreign_keys=[product_id]')
+    user_id = db.Column(db.Integer, db,ForeignKey('users.id')) 
+    user_to = db.relationship('Users, foreign_keys=[user_id]')
 
 
     def __repr__(self):
