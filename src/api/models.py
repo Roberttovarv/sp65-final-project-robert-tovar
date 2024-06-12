@@ -34,8 +34,10 @@ class Posts(db.Model):
     body = db.Column(db.String(150), unique=False, nullable=False)
     date = db.Column(db.Date(), unique=False, nullable=True)
     image_url = db.Column(db.String(), unique=False, nullable=True)
-    author_id = db.Column(db.Integer(), unique=True)  # Hace falta poner nullable aqui?
-    games_id = db.Column(db.Boolean(), unique=True)
+    author_id = db.Column(db.Integer, db,ForeignKey('users.id'))  # Hace falta poner nullable aqui?
+    author_to = db.relationship('Users, foreign_keys=[user_id]')
+    game_id = db.Column(db.Integer, db,ForeignKey('games.id')) 
+    game_to = db.relationship('Games, foreign_keys=[games_id]')
 
     def __repr__(self):
         return f'<User {self.title}>' 
@@ -47,7 +49,7 @@ class Posts(db.Model):
                 'date': self.date,
                 'image_url': self.image_url,
                 'author_id': self.author_id,
-                'games_id': self.games_id}
+                'game_id': self.games_id}
     
 
 class Products(db.Model):
