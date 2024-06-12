@@ -58,7 +58,8 @@ class Products(db.Model):
     body_img = db.Column(db.String(), unique=True)
     cdk = db.Column(db.String(), unique=True, nullable=False)
     price = db.Column(db.Integer(), unique=False, nullable=False)
-    game_id = db.Column(db.Integer(), unique=True)
+    game_id = db.Column(db.Integer, db,ForeignKey('games.id')) 
+    game_to = db.relationship('Games, foreign_keys=[games_id]')
 
     def __repr__(self):
         return f'<User {self.name}>' 
