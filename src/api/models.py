@@ -145,10 +145,11 @@ class Carts(db.Model):
 
 class Orders(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer(), unique=True)
     date = db.Column(db.Date(), unique=False, nullable=False)
     price_total = db.Column(db.Integer(), unique=False, nullable=False)
     status = db.Column(db.Enum('pagado', 'cancelado', 'pendiente de pago'), unique=False)
+    user_id = db.Column(db.Integer, db,ForeignKey('users.id')) 
+    user_to = db.relationship('Users, foreign_keys=[user_id]')
 
     def __repr__(self):
         return f'<User {self.status}>' 
