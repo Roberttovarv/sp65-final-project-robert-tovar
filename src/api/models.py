@@ -164,10 +164,12 @@ class Orders(db.Model):
 
 class OrderItems(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    order_id = db.Column(db.Integer(), unique=True)
-    product_id = db.Column(db.Integer(), unique=True)
     quantity = db.Column(db.Integer(), unique=False, nullable=False)
     price = db.Column(db.Integer(), unique=False, nullable=False)
+    order_id = db.Column(db.Integer, db,ForeignKey('orders.id')) 
+    order_to = db.relationship('Orders, foreign_keys=[order_id]')
+    product_id = db.Column(db.Integer, db,ForeignKey('products.id')) 
+    product_to = db.relationship('Products, foreign_keys=[product_id]')
 
     def __repr__(self):
         return f'<User {self.order_id}>' 
