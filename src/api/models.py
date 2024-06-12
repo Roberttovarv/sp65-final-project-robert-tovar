@@ -136,6 +136,24 @@ class Carts(db.Model):
                 'status': self.status,
                 'date': self.date}
 
+class Orders(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer(), unique=True)
+    date = db.Column(db.Date(), unique=False, nullable=False)
+    price_total = db.Column(db.Integer(), unique=False, nullable=False)
+    status = db.Column(db.Enum('pagado', 'cancelado', 'pendiente de pago'), unique=False)
+
+    def __repr__(self):
+        return f'<User {self.status}>' 
+
+    def serialize(self):
+        return {'id': self.id,
+                'user_id': self.products_id,
+                'date': self.quantity,
+                'price_total': self.price_total,
+                'status': self.status}
+
+
 
 
 
