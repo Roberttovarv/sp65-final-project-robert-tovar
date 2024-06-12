@@ -104,7 +104,20 @@ class Games(db.Model):
                 'platform': self.platform}
 
 
+class CarItems(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    products_id = db.Column(db.Integer(), unique=True)
+    quantity = db.Column(db.Integer(), unique=False, nullable=False)
+    price = db.Column(db.Integer(), unique=False, nullable=False)
 
+    def __repr__(self):
+        return f'<User {self.name}>' 
+
+    def serialize(self):
+        return {'id': self.id,
+                'products_id': self.products_id,
+                'quantity': self.quantity,
+                'price': self.price}
   
 
  
