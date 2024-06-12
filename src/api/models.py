@@ -112,25 +112,27 @@ class Games(db.Model):
 
 class CarItems(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    products_id = db.Column(db.Integer(), unique=True)
     quantity = db.Column(db.Integer(), unique=False, nullable=False)
     price = db.Column(db.Integer(), unique=False, nullable=False)
+    product_id = db.Column(db.Integer, db,ForeignKey('caritems.id')) 
+    product_to = db.relationship('CarItems, foreign_keys=[product_id]')
 
     def __repr__(self):
         return f'<User {self.products_id}>'  # No sabemos bien
 
     def serialize(self):
         return {'id': self.id,
-                'products_id': self.products_id,
+                'product_id': self.products_id,
                 'quantity': self.quantity,
                 'price': self.price}
   
 
 class Carts(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer(), unique=True)
     status = db.Column(db.Enum('en proceso', 'cancelado'), unique=False)
     date = db.Column(db.Date(), unique=False, nullable=False)
+    user_id = db.Column(db.Integer, db,ForeignKey('users.id')) 
+    user_to = db.relationship('Users, foreign_keys=[user_id]')
 
     def __repr__(self):
         return f'<User {self.status}>' 
