@@ -1,4 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import Enum  # Enum?
 
 
 db = SQLAlchemy()
@@ -90,10 +91,10 @@ class Games(db.Model):
     image_url = db.Column(db.String(), unique=True)
     description = db.Column(db.String(), unique=False, nullable=False)
     genre = db.Column(db.String(), unique=False, nullable=False)
-    platform = db.Column(db.Integer(), unique=False, nullable=False)
+    platform = db.Column(Enum('computer', 'playstation', 'xbox', 'switch', 'mobile', name='platform_enum'), unique=False, nullable=False)
 
     def __repr__(self):
-        return f'<User {self.email}>' 
+        return f'<User {self.title}>' 
 
     def serialize(self):
         return {'id': self.id,
@@ -111,7 +112,7 @@ class CarItems(db.Model):
     price = db.Column(db.Integer(), unique=False, nullable=False)
 
     def __repr__(self):
-        return f'<User {self.name}>' 
+        return f'<User {self.products_id}>'  # No sabemos bien
 
     def serialize(self):
         return {'id': self.id,
@@ -120,7 +121,21 @@ class CarItems(db.Model):
                 'price': self.price}
   
 
- 
+class Carts(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer(), unique=True)
+    status = db.Column(db.Enum('en proceso', 'cancelado'), unique=False)
+    date = db.Column(db.Date(), unique=False, nullable=False)
+
+    def __repr__(self):
+        return f'<User {self.status}>' 
+
+    def serialize(self):
+        return {'id': self.id,
+                'user_id': self.user_id,
+                'status': self.status,
+                'date': self.date}
+
 
 
 
