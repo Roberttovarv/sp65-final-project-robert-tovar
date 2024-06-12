@@ -27,14 +27,14 @@ class Users(db.Model):
                 'is_admin': self.is_admin}
     
 
-    class Posts(db.Model):
-        id = db.Column(db.Integer, primary_key=True)
-        title = db.Column(db.String(), unique=False, nullable=True)
-        body = db.Column(db.String(150), unique=False, nullable=True)
-        date = db.Column(db.Date(), unique=False, nullable=True)
-        image_url = db.Column(db.String(), unique=False, nullable=True)
-        author_id = db.Column(db.Integer(), unique=False, nullable=True)
-        games_id = db.Column(db.Boolean(), unique=False, nullable=True)
+class Posts(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(), unique=False, nullable=True)
+    body = db.Column(db.String(150), unique=False, nullable=True)
+    date = db.Column(db.Date(), unique=False, nullable=True)
+    image_url = db.Column(db.String(), unique=False, nullable=True)
+    author_id = db.Column(db.Integer(), unique=True, nullable=True)
+    games_id = db.Column(db.Boolean(), unique=True, nullable=True)
 
     def __repr__(self):
         return f'<User {self.title}>' 
@@ -48,4 +48,27 @@ class Users(db.Model):
                 'author_id': self.author_id,
                 'games_id': self.games_id}
     
+
+class Products(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(), unique=True, nullable=True)
+    body_img = db.Column(db.String(), unique=True, nullable=True)
+    cdk = db.Column(db.String(), unique=True, nullable=True)
+    price = db.Column(db.Integer(), unique=False, nullable=True)
+    game_id = db.Column(db.Integer(), unique=True, nullable=False)
+
+    def __repr__(self):
+        return f'<User {self.name}>' 
+
+    def serialize(self):
+        return {'id': self.id,
+                'name': self.name,
+                'body': self.body,
+                'cdk': self.cdk,
+                'price': self.price,
+                'game_id': self.game_id}
+    
+    
+
+
 
