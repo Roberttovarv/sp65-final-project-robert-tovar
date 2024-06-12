@@ -68,7 +68,24 @@ class Products(db.Model):
                 'price': self.price,
                 'game_id': self.game_id}
     
+
+class Likes(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    product_id = db.Column(db.Integer(), unique=True, nullable=True)
+    user_id = db.Column(db.Integer(), unique=True, nullable=True)
+
+
+    def __repr__(self):
+        return f'<User {self.product_id}>'  # No sabemos bien aqui se aprecia asistencia muchas gracias
+
+    def serialize(self):
+        return {'id': self.id,
+                'product_id': self.product_id,
+                'user_id': self.user_id}
     
+    
+
+ 
 
 
 
