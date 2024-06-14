@@ -1,5 +1,4 @@
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import Enum
 
 db = SQLAlchemy()
 
@@ -56,6 +55,7 @@ class Products(db.Model):
     price = db.Column(db.Integer(), unique=False, nullable=False)
     game_id = db.Column(db.Integer, db.ForeignKey('games.id')) 
     game_to = db.relationship('Games', foreign_keys=[game_id])
+    platform = db.Column(db.Enum('computer', 'playstation', 'xbox', 'switch', 'mobile', name='platform_enum'), unique=False, nullable=False)
 
     def __repr__(self):
         return f'<Product {self.name}>' 
@@ -89,7 +89,6 @@ class Games(db.Model):
     image_url = db.Column(db.String(), unique=True, nullable=True) # Modificación aquí
     description = db.Column(db.String(), unique=False, nullable=False)
     genre = db.Column(db.String(), unique=False, nullable=False)
-    # platform = db.Column(Enum('computer', 'playstation', 'xbox', 'switch', 'mobile', name='platform_enum'), unique=False, nullable=False)
 
     def __repr__(self):
         return f'<Game {self.title}>' 
@@ -99,7 +98,7 @@ class Games(db.Model):
                 'title': self.title,
                 'image_url': self.image_url, # Modificación aquí
                 'description': self.description,
-                # 'platform': self.platform,
+                'platform': self.platform,
                 'genre': self.genre}
 
 class CarItems(db.Model):
@@ -121,10 +120,10 @@ class CarItems(db.Model):
 
 class Carts(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    # status = db.Column(db.Enum('en proceso', 'cancelado'), unique=False)
     date = db.Column(db.Date(), unique=False, nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id')) 
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), unique=True)  # No quiero que un user tenga dos carros, por eso unique True
     user_to = db.relationship('Users', foreign_keys=[user_id]) # Modificación aquí
+    status = db.Column(db.Enum('en proceso', 'cancelado', name='status'), unique=False)
 
     def __repr__(self):
         return f'<Cart {self.id}>' 
@@ -132,16 +131,17 @@ class Carts(db.Model):
     def serialize(self):
         return {'id': self.id,
                 'user_id': self.user_id,
-                # 'status': self.status,
+                'status': self.status,
                 'date': self.date}
+
 
 class Orders(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     date = db.Column(db.Date(), unique=False, nullable=False)
     price_total = db.Column(db.Integer(), unique=False, nullable=False)
-    # status = db.Column(db.Enum('pagado', 'cancelado', 'pendiente de pago'), unique=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id')) 
     user_to = db.relationship('Users', foreign_keys=[user_id]) # Modificación aquí
+    status = db.Column(db.Enum('pagado', 'cancelado', 'pendiente de pago', name='status'), unique=False)
 
     def __repr__(self):
         return f'<Order {self.id}>' 
@@ -150,7 +150,7 @@ class Orders(db.Model):
         return {'id': self.id,
                 'user_id': self.user_id,
                 'date': self.date,
-                # 'status': self.status,
+                'status': self.status,
                 'price_total': self.price_total}
 
 
