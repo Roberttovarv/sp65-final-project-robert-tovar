@@ -4,6 +4,7 @@ This module takes care of starting the API Server, Loading the DB and Adding the
 from flask import Flask, request, jsonify, url_for, Blueprint
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
+from datetime import datetime
 from api.models import db, Users, Games, Carts, CartItems, Products, Orders, OrderItems, Posts
 
 
@@ -275,3 +276,101 @@ def handle_product(product_id):
         response_body['results'] = {}
         return response_body, 404
     
+@api.route('/carts', methods=['GET', 'POST'])  
+def handle_carts():
+    response_body = {}
+    if request.method == 'GET':
+       
+        rows = db.session.execute(db.select(Carts)).scalars()
+        results = [row.serialize() for row in rows]  
+        response_body['results'] = results
+        response_body['message'] = 'Listado de Carritos'
+        return response_body, 200
+    if request.method == 'POST':
+        row = Products()
+        row.user_id = data['user_id']
+        row.status = data['status']
+        row.date = datetime.today()
+        db.session.add(row)
+        db.session.commit()
+        response_body['results'] = row.serialize()
+        response_body['message'] = 'Carrito creado'
+        return response_body, 201
+    
+@api.route('/cartitems', methods=['GET', 'POST', 'DELETE']) # Preguntar, creo que el nombre es '/carts/<int:cartitem_id>'
+def handle_cartitem(cartitem_id):
+    response_body = {}
+    if request.method == 'GET':
+        cartitem = db.session.execute(db.select(CartItems).where(CartItems.id == cartitem_id)).scalar()
+        if cartitem:
+            response_body['results'] = cartitem.serialize()
+            response_body['message'] = 'Productos encontrados'
+            return response_body, 200
+        response_body['message'] = 'Productos inexistentes'
+        response_body['results'] = {}
+        return response_body, 404
+       if request.method == 'POST':
+        row = CartItems()
+        row.product_id = data['product_id']
+        row.quantity = data['quantity']
+        row.price = data['price']
+        db.session.add(row)
+        db.session.commit()
+        response_body['results'] = row.serialize()
+        response_body['message'] = 'Productos añadidos'
+        return response_body, 201
+    if request.method == 'DELETE':
+        cartitem = db.session.execute(db.select(CartItems.where(CartItems.id == cartitem_id))).scalar()
+        if cartitem:
+            db.session.delete(cartitem)
+            db.session.commit()
+            response_body['message'] = 'Productos eliminados'
+            response_body['results'] = {}
+        response_body['message'] = 'Productos inexistentes'
+        response_body['results'] = {}
+        return response_body, 404
+    
+@api.route('/orders', methods=['GET', 'POST'])  
+def handle_orders():
+    response_body = {}
+    if request.method == 'GET':
+       
+        rows = db.session.execute(db.select(Orders)).scalars()
+        results = [row.serialize() for row in rows]  
+        response_body['results'] = results
+        response_body['message'] = 'Listado de Ordenes'
+        return response_body, 200
+    if request.method == 'POST':
+        row = Orders()
+        row.user_id = data['user_id']
+        row.status = data['status']
+        row.price_total = data['price_total']
+        row.date = datetime.today()
+        db.session.add(row)
+        db.session.commit()
+        response_body['results'] = row.serialize()
+        response_body['message'] = 'Orden creada'
+        return response_body, 201
+
+@api.route('/orderitems', methods=['GET', 'POST'])  # Preguntar, creo que el nombre es '/orders/<int:orderitem_id>'
+def handle_orderitems():
+    response_body = {}
+    if request.method == 'GET':
+       
+        rows = db.session.execute(db.select(OrderItems)).scalars()
+        results = [row.serialize() for row in rows]  
+        response_body['results'] = results
+        response_body['message'] = 'Listado de Productos de la Orden'
+        return response_body, 200
+    if request.method == 'POST':
+        row = OrderItems()
+        row.user_id = data['user_id']
+        row.product_id = data['product_id']
+        row.price_total = data['price_total']
+        row.quantity = data['quantity']
+        row.date = datetime.today()
+        db.session.add(row)
+        db.session.commit()
+        response_body['results'] = row.serialize()
+        response_body['message'] = 'Orden creada'
+        return response_body, 201
