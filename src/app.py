@@ -10,6 +10,10 @@ from api.routes import api
 from api.admin import setup_admin
 from api.commands import setup_commands
 from api.models import db
+from flask_jwt_extended import create_access_token
+from flask_jwt_extended import get_jwt_identity
+from flask_jwt_extended import jwt_required
+from flask_jwt_extended import JWTManager
 
 
 ENV = "development" if os.getenv("FLASK_DEBUG") == "1" else "production"
@@ -28,6 +32,8 @@ db.init_app(app)
 setup_admin(app)  # Add the admin
 setup_commands(app)  # Add the admin
 app.register_blueprint(api, url_prefix='/api')  # Add all endpoints form the API with a "api" prefix
+app.config["JWT_SECRET_KEY"] = "Meleros"  # Change this!
+jwt = JWTManager(app)
 
 
 @app.errorhandler(APIException)  # Handle/serialize errors like a JSON object
