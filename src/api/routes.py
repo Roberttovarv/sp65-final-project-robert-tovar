@@ -309,7 +309,7 @@ def handle_cartitem(cartitem_id):
         response_body['message'] = 'Productos inexistentes'
         response_body['results'] = {}
         return response_body, 404
-       if request.method == 'POST':
+    if request.method == 'POST':
         row = CartItems()
         row.product_id = data['product_id']
         row.quantity = data['quantity']
