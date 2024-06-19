@@ -156,16 +156,17 @@ def handle_posts():
         return response_body, 200
     if request.method == 'POST':
         data = request.json
-        required_fields = ['title', 'body', 'game_id', 'image_url']
+        required_fields = ['title', 'body', 'game_id', 'image_url', 'author_id']
         for field in required_fields:
             if field not in data:
                 return jsonify({'message': f'Falta el campo requerido: {field}'}), 400
         row = Posts()
         row.title = data['title']
-        row.image_url = data['image_url']
         row.body = data['body']
+        row.image_url = data['image_url']
         row.game_id = data['game_id']
-        row.date = datetime.today()  
+        row.author_id = data['author_id']
+        row.date = datetime.today()
         db.session.add(row)
         db.session.commit()
         response_body['results'] = row.serialize()
@@ -234,10 +235,11 @@ def handle_products():
         row.body_img = data['body_img']
         row.game_id = data['game_id']  
         row.price = data['price']
+        row.platform = data['platform']
         db.session.add(row)
         db.session.commit()
         response_body['results'] = row.serialize()
-        response_body['message'] = 'Publicación creada'
+        response_body['message'] = 'Producto añadido'
         return response_body, 201
     
 @api.route('/products/<int:product_id>', methods=['GET', 'PUT', 'DELETE'])
