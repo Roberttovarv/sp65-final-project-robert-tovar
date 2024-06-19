@@ -144,7 +144,7 @@ def handle_game(game_id):
         response_body['results'] = {}
         return response_body, 404
     
-@api.route('/posts', methods=['GET', 'POST'])  
+@api.route('/posts', methods=['GET', 'POST'])  # Cambiado
 def handle_posts():
     response_body = {}
     if request.method == 'GET':
