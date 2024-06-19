@@ -35,6 +35,7 @@ def handle_users():
         response_body['message'] = 'Este endpoint no es válido. Ud debe hacer un /signup'
         return response_body, 200
     
+
 @api.route('/users/<int:user_id>', methods=['GET', 'PUT', 'DELETE'])
 def handle_user(user_id):
     response_body = {}
@@ -78,6 +79,7 @@ def handle_user(user_id):
         response_body['results'] = {}
         return response_body, 200
     
+
 @api.route('/games', methods=['GET', 'POST'])  
 def handle_games():
     response_body = {}
@@ -106,6 +108,7 @@ def handle_games():
         response_body['message'] = 'Videojuego creado'
         return response_body, 201
     
+
 @api.route('/games/<int:game_id>', methods=['GET', 'PUT', 'DELETE'])
 def handle_game(game_id):
     response_body = {}
@@ -146,6 +149,7 @@ def handle_game(game_id):
         response_body['results'] = {}
         return response_body, 404
     
+
 @api.route('/posts', methods=['GET', 'POST'])  # Cambiado
 def handle_posts():
     response_body = {}
@@ -175,6 +179,7 @@ def handle_posts():
         response_body['message'] = 'Publicación creada'
         return response_body, 201
     
+
 @api.route('/posts/<int:post_id>', methods=['GET', 'PUT', 'DELETE'])
 def handle_post(post_id):
     response_body = {}
@@ -215,6 +220,7 @@ def handle_post(post_id):
         response_body['results'] = {}
         return response_body, 404
     
+
 @api.route('/products', methods=['GET', 'POST'])  
 def handle_products():
     response_body = {}
@@ -244,6 +250,7 @@ def handle_products():
         response_body['message'] = 'Producto añadido'
         return response_body, 201
     
+
 @api.route('/products/<int:product_id>', methods=['GET', 'PUT', 'DELETE'])
 def handle_product(product_id):
     response_body = {}
@@ -284,6 +291,7 @@ def handle_product(product_id):
         response_body['results'] = {}
         return response_body, 404
     
+
 @api.route('/carts', methods=['GET', 'POST'])  
 def handle_carts():
     response_body = {}
@@ -306,6 +314,7 @@ def handle_carts():
         response_body['message'] = 'Carrito creado'
         return response_body, 201
     
+
 @api.route('/carts/<int:cartitem_id>', methods=['GET', 'POST', 'DELETE']) 
 def handle_cartitem(cartitem_id):
     response_body = {}
@@ -340,6 +349,7 @@ def handle_cartitem(cartitem_id):
         response_body['results'] = {}
         return response_body, 404
     
+
 @api.route('/orders', methods=['GET', 'POST'])  
 def handle_orders():
     response_body = {}
@@ -361,6 +371,7 @@ def handle_orders():
         response_body['results'] = row.serialize()
         response_body['message'] = 'Orden creada'
         return response_body, 201
+
 
 @api.route('/orders/<int:orderitem_id>', methods=['GET', 'POST'])  
 def handle_orderitems():
@@ -385,6 +396,30 @@ def handle_orderitems():
         response_body['message'] = 'Orden creada'
         return response_body, 201
 
+
+@api.route('/signup', methods=['POST'])
+def signup():
+    response_body = {}
+    data = request.json
+    email = request.json.get("email", None).lower()
+    password = request.json.get("password", None)
+    # Logica de verificación de un mail válido y password válido
+    user = Users()
+    user.email = email
+    user.password = password
+    user.is_active = True
+    user.first_name = data['first_name']
+    user.last_name = data['last_name']
+    user.age = data['age']
+    user.is_admin = data['is_admin']
+    db.session.add(user)
+    db.session.commit()
+    access_token = create_access_token(identity={'user_id': user.id})
+    response_body['message'] = 'User Registrado y logeado'
+    response_body['access_token'] = access_token
+    return response_body, 200
+
+
 @api.route("/login", methods=["POST"])
 def login():
     response_body = {}
@@ -399,9 +434,6 @@ def login():
     response_body['message'] = 'Bad user or password'
     return response_body, 401
         
-    # if email != "test" or password != "test":
-    #     return jsonify({"msg": "Bad email or password"}), 401
-    # return jsonify(access_token=access_token)
 
 @api.route("/profile", methods=["GET"])
 @jwt_required()
@@ -412,3 +444,8 @@ def profile():
     response_body['message'] = f'User logeado: {current_user}'
     return response_body, 200
 
+
+# @api.route("/logout", methods=["POST"])
+# @jwt_required()
+# def logout():
+#     return jsonify({"msg": "Logout successful"}), 200
