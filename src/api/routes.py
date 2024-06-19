@@ -156,16 +156,16 @@ def handle_posts():
         return response_body, 200
     if request.method == 'POST':
         data = request.json
-        required_fields = ['title', 'description', 'body', 'game_id', 'image_url']
+        required_fields = ['title', 'body', 'game_id', 'image_url']
         for field in required_fields:
             if field not in data:
                 return jsonify({'message': f'Falta el campo requerido: {field}'}), 400
         row = Posts()
         row.title = data['title']
-        row.description = data['description']
         row.image_url = data['image_url']
         row.body = data['body']
-        row.game_id = data['game_id']  
+        row.game_id = data['game_id']
+        row.date = datetime.today()  
         db.session.add(row)
         db.session.commit()
         response_body['results'] = row.serialize()
