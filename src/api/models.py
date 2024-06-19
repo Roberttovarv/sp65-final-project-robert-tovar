@@ -83,6 +83,7 @@ class Games(db.Model):
     image_url = db.Column(db.String(), unique=True, nullable=True) # Modificación aquí
     description = db.Column(db.String(), unique=False, nullable=False)
     genre = db.Column(db.String(), unique=False, nullable=False)
+    platform = db.Column(db.String(), unique=False, nullable=False)
     def __repr__(self):
         return f'<Game {self.title}>'
     def serialize(self):

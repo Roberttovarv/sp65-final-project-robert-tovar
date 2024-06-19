@@ -73,6 +73,7 @@ def handle_user(user_id):
             db.session.commit()
             response_body['message'] = 'Usuario eliminado'
             response_body['results'] = {}
+            return response_body, 200
         response_body['message'] = 'Usuario inexistente'
         response_body['results'] = {}
         return response_body, 200
@@ -134,12 +135,13 @@ def handle_game(game_id):
         response_body['results'] = {}
         return response_body, 404
     if request.method == 'DELETE':
-        game = db.session.execute(db.select(Games.where(Games.id == game_id))).scalar()
+        game = db.session.execute(db.select(Games).where(Games.id == game_id)).scalar()
         if game:
             db.session.delete(game)
             db.session.commit()
             response_body['message'] = 'Videojuego eliminado'
             response_body['results'] = {}
+            return response_body, 200
         response_body['message'] = 'Videojuego inexistente'
         response_body['results'] = {}
         return response_body, 404
@@ -156,16 +158,17 @@ def handle_posts():
         return response_body, 200
     if request.method == 'POST':
         data = request.json
-        required_fields = ['title', 'description', 'body', 'game_id', 'image_url']
+        required_fields = ['title', 'body', 'game_id', 'image_url', 'author_id']
         for field in required_fields:
             if field not in data:
                 return jsonify({'message': f'Falta el campo requerido: {field}'}), 400
         row = Posts()
         row.title = data['title']
-        row.description = data['description']
-        row.image_url = data['image_url']
         row.body = data['body']
-        row.game_id = data['game_id']  
+        row.image_url = data['image_url']
+        row.game_id = data['game_id']
+        row.author_id = data['author_id']
+        row.date = datetime.today()
         db.session.add(row)
         db.session.commit()
         response_body['results'] = row.serialize()
@@ -201,12 +204,13 @@ def handle_post(post_id):
         response_body['results'] = {}
         return response_body, 404
     if request.method == 'DELETE':
-        post = db.session.execute(db.select(Posts.where(Posts.id == post_id))).scalar()
+        post = db.session.execute(db.select(Posts).where(Posts.id == post_id)).scalar() 
         if post:
             db.session.delete(post)
             db.session.commit()
             response_body['message'] = 'Publicación eliminada'
             response_body['results'] = {}
+            return response_body, 200
         response_body['message'] = 'Publicación inexistente'
         response_body['results'] = {}
         return response_body, 404
@@ -233,10 +237,11 @@ def handle_products():
         row.body_img = data['body_img']
         row.game_id = data['game_id']  
         row.price = data['price']
+        row.platform = data['platform']
         db.session.add(row)
         db.session.commit()
         response_body['results'] = row.serialize()
-        response_body['message'] = 'Publicación creada'
+        response_body['message'] = 'Producto añadido'
         return response_body, 201
     
 @api.route('/products/<int:product_id>', methods=['GET', 'PUT', 'DELETE'])
@@ -268,12 +273,13 @@ def handle_product(product_id):
         response_body['results'] = {}
         return response_body, 404
     if request.method == 'DELETE':
-        product = db.session.execute(db.select(Products.where(Products.id == product_id))).scalar()
+        product = db.session.execute(db.select(Products).where(Products.id == product_id)).scalar()
         if product:
             db.session.delete(product)
             db.session.commit()
             response_body['message'] = 'Producto eliminado'
             response_body['results'] = {}
+            return response_body, 200
         response_body['message'] = 'Producto inexistente'
         response_body['results'] = {}
         return response_body, 404
@@ -289,7 +295,8 @@ def handle_carts():
         response_body['message'] = 'Listado de Carritos'
         return response_body, 200
     if request.method == 'POST':
-        row = Products()
+        data = request.json
+        row = Carts()
         row.user_id = data['user_id']
         row.status = data['status']
         row.date = datetime.today()
@@ -299,7 +306,7 @@ def handle_carts():
         response_body['message'] = 'Carrito creado'
         return response_body, 201
     
-@api.route('/cartitems', methods=['GET', 'POST', 'DELETE']) # Preguntar, creo que el nombre es '/carts/<int:cartitem_id>'
+@api.route('/carts/<int:cartitem_id>', methods=['GET', 'POST', 'DELETE']) 
 def handle_cartitem(cartitem_id):
     response_body = {}
     if request.method == 'GET':
@@ -322,12 +329,13 @@ def handle_cartitem(cartitem_id):
         response_body['message'] = 'Productos añadidos'
         return response_body, 201
     if request.method == 'DELETE':
-        cartitem = db.session.execute(db.select(CartItems.where(CartItems.id == cartitem_id))).scalar()
+        cartitem = db.session.execute(db.select(CartItems).where(CartItems.id == cartitem_id)).scalar()
         if cartitem:
             db.session.delete(cartitem)
             db.session.commit()
             response_body['message'] = 'Productos eliminados'
             response_body['results'] = {}
+            return response_body, 200
         response_body['message'] = 'Productos inexistentes'
         response_body['results'] = {}
         return response_body, 404
@@ -354,7 +362,7 @@ def handle_orders():
         response_body['message'] = 'Orden creada'
         return response_body, 201
 
-@api.route('/orderitems', methods=['GET', 'POST'])  # Preguntar, creo que el nombre es '/orders/<int:orderitem_id>'
+@api.route('/orders/<int:orderitem_id>', methods=['GET', 'POST'])  
 def handle_orderitems():
     response_body = {}
     if request.method == 'GET':
