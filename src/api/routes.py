@@ -293,7 +293,8 @@ def handle_carts():
         response_body['message'] = 'Listado de Carritos'
         return response_body, 200
     if request.method == 'POST':
-        row = Products()
+        data = request.json
+        row = Carts()
         row.user_id = data['user_id']
         row.status = data['status']
         row.date = datetime.today()
