@@ -328,10 +328,11 @@ def handle_cartitem(cartitem_id):
         response_body['results'] = {}
         return response_body, 404
     if request.method == 'POST':
+        data = request.json
         row = CartItems()
         row.product_id = data['product_id']
+        row.cart_id = data['cart_id']
         row.quantity = data['quantity']
-        row.price = data['price']
         db.session.add(row)
         db.session.commit()
         response_body['results'] = row.serialize()
@@ -361,10 +362,11 @@ def handle_orders():
         response_body['message'] = 'Listado de Ordenes'
         return response_body, 200
     if request.method == 'POST':
+        data = request.json
         row = Orders()
         row.user_id = data['user_id']
+        row.cartitems_id = data['cartitems_id'] # Tiene que obtener todos los items de cada carro realizado
         row.status = data['status']
-        row.price_total = data['price_total']
         row.date = datetime.today()
         db.session.add(row)
         db.session.commit()
@@ -384,6 +386,7 @@ def handle_orderitems():
         response_body['message'] = 'Listado de Productos de la Orden'
         return response_body, 200
     if request.method == 'POST':
+        data = request.json
         row = OrderItems()
         row.user_id = data['user_id']
         row.product_id = data['product_id']
