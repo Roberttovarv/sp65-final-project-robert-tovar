@@ -95,26 +95,31 @@ class Games(db.Model):
                 'genre': self.genre}
 
 
-class CartItems(db.Model):
+class CartItems(db.Model): 
     id = db.Column(db.Integer, primary_key=True)
-    quantity = db.Column(db.Integer(), unique=False, nullable=False)
-    price = db.Column(db.Integer(), unique=False, nullable=False)
-    product_id = db.Column(db.Integer, db.ForeignKey('products.id'))
-    product_to = db.relationship('Products', foreign_keys=[product_id]) # Modificación aquí
+    quantity = db.Column(db.Integer, unique=False, nullable=False)
+    product_id = db.Column(db.Integer, db.ForeignKey('products.id')) 
+    product_to = db.relationship('Products', foreign_keys=[product_id])
+    cart_id = db.Column(db.Integer, db.ForeignKey('carts.id'))
+    cart_to = db.relationship('Carts', foreign_keys=[cart_id])
+
     def __repr__(self):
         return f'<CarItem {self.product_id}>'
+
     def serialize(self):
-        return {'id': self.id,
-                'product_id': self.product_id,
-                'quantity': self.quantity,
-                'price': self.price}
+        return {
+            'id': self.id,
+            'product_id': self.product_id,
+            'quantity': self.quantity,
+            'price': self.product_to.price
+        }
+
 
 class Carts(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    date = db.Column(db.Date(), unique=False, nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), unique=True)  # No quiero que un user tenga dos carros, por eso unique True
-    user_to = db.relationship('Users', foreign_keys=[user_id]) # Modificación aquí
-    status = db.Column(db.Enum('en proceso', 'cancelado', name='status'), unique=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), unique=True)  
+    user_to = db.relationship('Users', foreign_keys=[user_id]) 
+    status = db.Column(db.Enum('en proceso', 'inactivo', name='status'), unique=False)
     def __repr__(self):
         return f'<Cart {self.id}>'
     def serialize(self):
@@ -126,9 +131,9 @@ class Carts(db.Model):
 class Orders(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     date = db.Column(db.Date(), unique=False, nullable=False)
-    price_total = db.Column(db.Integer(), unique=False, nullable=False)
+    price_total = db.Column(db.Integer(), unique=False, nullable=False) # Debe poder sumar el precio total de todos los productos CartItems
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    user_to = db.relationship('Users', foreign_keys=[user_id]) # Modificación aquí
+    user_to = db.relationship('Users', foreign_keys=[user_id])
     status = db.Column(db.Enum('pagado', 'cancelado', 'pendiente de pago', name='status'), unique=False)
     def __repr__(self):
         return f'<Order {self.id}>'
@@ -137,7 +142,7 @@ class Orders(db.Model):
                 'user_id': self.user_id,
                 'date': self.date,
                 'status': self.status,
-                'price_total': self.price_total}
+                'price_total': self.cartitems_toprice_total}
 
                 
 class OrderItems(db.Model):
