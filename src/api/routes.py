@@ -293,26 +293,20 @@ def handle_product(product_id):
     
 
 @api.route('/carts', methods=['GET', 'POST'])  
+@jwt_required()
 def handle_carts():
     response_body = {}
+    current_user = get_jwt_identity()
+    print(current_user)
     if request.method == 'GET':
-       
         rows = db.session.execute(db.select(Carts)).scalars()
         results = [row.serialize() for row in rows]  
         response_body['results'] = results
         response_body['message'] = 'Listado de Carritos'
         return response_body, 200
     if request.method == 'POST':
-        data = request.json
-        row = Carts()
-        row.user_id = data['user_id']
-        row.status = data['status']
-        row.date = datetime.today()
-        db.session.add(row)
-        db.session.commit()
-        response_body['results'] = row.serialize()
-        response_body['message'] = 'Carrito creado'
-        return response_body, 201
+        response_body['message'] = 'Este endpoint no es válido. Ud debe hacer un /signup'
+        return response_body, 200
     
 
 @api.route('/carts/<int:cartitem_id>', methods=['GET', 'POST', 'DELETE']) 
@@ -363,13 +357,17 @@ def handle_orders():
         return response_body, 200
     if request.method == 'POST':
         data = request.json
+        # Tiene que venir el user.cart_id
+        # Tengo que obtener el user_id y cartitems
         row = Orders()
         row.user_id = data['user_id']
-        row.cartitems_id = data['cartitems_id'] # Tiene que obtener todos los items de cada carro realizado
-        row.status = data['status']
         row.date = datetime.today()
+        row.status = 'pendiente de pago'
+        row.price_total = 0  # Debe hacer la suma del precio de los items del carro
         db.session.add(row)
         db.session.commit()
+        # Recorrer el cartitem, por cada iteracion hago un row.item = order.item
+        row.cartitems_id = data['cartitems_id'] # Tiene que obtener todos los items de cada carro realizado
         response_body['results'] = row.serialize()
         response_body['message'] = 'Orden creada'
         return response_body, 201
@@ -417,6 +415,11 @@ def signup():
     user.is_admin = data['is_admin']
     db.session.add(user)
     db.session.commit()
+    cart = Carts()
+    cart.user_id = user.id
+    cart.status = 'inactivo'
+    db.session.add(cart)
+    db.session.commit()
     access_token = create_access_token(identity={'user_id': user.id})
     response_body['message'] = 'User Registrado y logeado'
     response_body['access_token'] = access_token
@@ -430,7 +433,7 @@ def login():
     password = request.json.get("password", None)
     user = db.session.execute(db.select(Users).where(Users.email == email, Users.password == password, Users.is_active == True)).scalar()
     if user:
-        access_token = create_access_token(identity=email)
+        access_token = create_access_token(identity={'user_id': user.id, 'is_admin': user.is_admin})
         response_body['message'] = 'User logged in'
         response_body['access_token'] = access_token
         return response_body, 200
