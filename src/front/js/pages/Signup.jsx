@@ -1,20 +1,40 @@
 import React, { useState } from "react";
+// import "./styles/home.css"
+
+
 
 export const Signup = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleEmailChange = (e) => {
-    setEmail(e.target.value);
+  const handleEmailChange = (event) => {
+    setEmail(event.target.value);
   };
 
-  const handlePasswordChange = (e) => {
-    setPassword(e.target.value);
+  const handlePasswordChange = (event) => {
+    setPassword(event.target.value);
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const dataToSend = { email, password };
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const dataToSend = { email, password }
+    const url = `${process.env.BACKEND_URL}/api/signup`
+
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-type': 'application/json'
+      },
+      body: JSON.stringify(dataToSend)
+    };
+    const response = await fetch(url, options)
+    if (!response.ok) {
+      console.log('error: ', response.status, response.statusText);
+      return
+    }
+    const data = await response.json()
+    console.log(data);
+
     console.log(dataToSend);
   };
 
