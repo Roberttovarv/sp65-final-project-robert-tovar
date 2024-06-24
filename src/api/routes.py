@@ -417,7 +417,7 @@ def signup():
     db.session.commit()
     cart = Carts()
     cart.user_id = user.id
-    cart.status = 'inactivo'
+    cart.status = "inactivo"
     db.session.add(cart)
     db.session.commit()
     access_token = create_access_token(identity={'user_id': user.id})
@@ -435,10 +435,10 @@ def login():
     if user:
         access_token = create_access_token(identity={'user_id': user.id, 'is_admin': user.is_admin})
         response_body['message'] = 'User logged in'
-        response_body['access_token'] = access_token
+        response_body['access_token'] = access_token  # Añadir un user serialize arriba del 200
         return response_body, 200
     response_body['message'] = 'Bad user or password'
-    return response_body, 401
+    return response_body, 401  
         
 
 @api.route("/profile", methods=["GET"])
@@ -449,6 +449,17 @@ def profile():
     current_user = get_jwt_identity()
     response_body['message'] = f'User logeado: {current_user}'
     return response_body, 200
+
+
+@api.route('/users', methods=['GET'])
+def get_users():
+    response_body = {}
+    if request.method == 'GET':
+        rows = db.session.execute(db.select(Users)).scalars()
+        results = [row.serialize() for row in rows]
+        response_body['results'] = results
+        response_body['message'] = 'Listado de Usuarios'
+        return response_body, 200
 
 
 # @api.route("/logout", methods=["POST"])
