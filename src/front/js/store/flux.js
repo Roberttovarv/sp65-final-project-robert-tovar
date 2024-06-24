@@ -32,6 +32,11 @@ const getState = ({getStore, getActions, setStore}) => {
 			
 				return data;
 			},
+
+			logout: () => {
+				setStore({ token: null }); // Limpio el token del estado global
+				localStorage.removeItem('token'); // Remover el token del almacenamiento local si lo estoy usando
+			},
 			
 			exampleFunction: () => {getActions().changeColor(0, "green");},  // Use getActions to call a function within a fuction
 			changeColor: (index, color) => {
