@@ -396,7 +396,7 @@ def handle_orderitems(orderitem_id):
         db.session.commit()
         response_body['results'] = row.serialize()
         response_body['message'] = 'Producto añadido a la orden'
-        return response_body, 20101
+        return response_body, 201
 
 
 @api.route('/signup', methods=['POST'])
