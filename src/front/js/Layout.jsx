@@ -12,6 +12,7 @@ import { Demo } from "./pages/Demo.jsx";
 import { Single } from "./pages/Single.jsx";
 import { Login } from "./pages/Login.jsx";
 import { Signup } from "./pages/Signup.jsx";
+import { Users } from "./pages/Users.jsx";
 
 
 // Create your first component
@@ -35,6 +36,7 @@ const Layout = () => {
                         <Route element={<Login />} path="/login" />
                         <Route element={<Signup />} path="/signup" />
                         <Route element={<h1>Not found!</h1>} />
+                        <Route element={<Users />} path="/users" />
                     </Routes>
                     <Footer />
                 </ScrollToTop>
