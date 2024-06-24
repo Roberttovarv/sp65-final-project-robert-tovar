@@ -402,17 +402,17 @@ def handle_orderitems():
 def signup():
     response_body = {}
     data = request.json
-    email = request.json.get("email", None).lower()
-    password = request.json.get("password", None)
+    email = data.get("email", None).lower()
+    password = data.get("password", None)
     # Logica de verificación de un mail válido y password válido
     user = Users()
     user.email = email
     user.password = password
     user.is_active = True
-    user.first_name = data['first_name']
-    user.last_name = data['last_name']
-    user.age = data['age']
-    user.is_admin = data['is_admin']
+    user.first_name = data.get('first_name', None)
+    user.last_name = data.get('last_name', None)
+    user.age = data.get('age', None)
+    user.is_admin = False
     db.session.add(user)
     db.session.commit()
     cart = Carts()

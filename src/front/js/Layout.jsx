@@ -12,6 +12,7 @@ import { Demo } from "./pages/Demo.jsx";
 import { Single } from "./pages/Single.jsx";
 import { Login } from "./pages/Login.jsx";
 import { Signup } from "./pages/Signup.jsx";
+// import "./styles/home.css";
 
 
 // Create your first component
@@ -24,7 +25,7 @@ const Layout = () => {
     if (!process.env.BACKEND_URL || process.env.BACKEND_URL == "") return <BackendURL/ >;
 
     return (
-        <div>
+        <div >
             <BrowserRouter basename={basename}>
                 <ScrollToTop>
                     <Navbar />
