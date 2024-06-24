@@ -16,6 +16,7 @@ class Users(db.Model):
     orders = db.relationship('Orders', backref='user', lazy=True)
     def __repr__(self):
         return f'<User {self.email}>'
+        
     def serialize(self):
         return {'id': self.id,
                 'email': self.email,
@@ -59,6 +60,7 @@ class Products(db.Model):
     platform = db.Column(db.Enum('computer', 'playstation', 'xbox', 'switch', 'mobile', name='platform_enum'), unique=False, nullable=False)
     def __repr__(self):
         return f'<Product {self.name}>'
+        
     def serialize(self):
         return {'id': self.id,
                 'name': self.name,
@@ -77,6 +79,7 @@ class Likes(db.Model):
     user_to = db.relationship('Users', foreign_keys=[user_id])
     def __repr__(self):
         return f'<Like {self.id}>'
+        
     def serialize(self):
         return {'id': self.id,
                 'product_id': self.product_id,
@@ -92,6 +95,7 @@ class Games(db.Model):
     platform = db.Column(db.String(), unique=False, nullable=False)
     def __repr__(self):
         return f'<Game {self.title}>'
+        
     def serialize(self):
         return {'id': self.id,
                 'title': self.title,
@@ -129,6 +133,10 @@ class Carts(db.Model):
     status = db.Column(db.Enum('en proceso', 'inactivo', name='status'), unique=False)
     def __repr__(self):
         return f'<Cart {self.id}>'
+
+    def total_price(self):
+        return sum(item.product_to.price * item.quantity for item in self.cart_items)
+        
     def serialize(self):
         return {'id': self.id,
                 'user_id': self.user_id,
