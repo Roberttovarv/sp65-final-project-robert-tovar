@@ -57,8 +57,8 @@ def handle_user(user_id):
             user.first_name = data['first_name']
             user.last_name = data['last_name']
             user.age = data['age']
-            user.pfp = data ['pfp']
-            user.is_admin = ['is_admin']
+            user.pfp = data['pfp']
+            user.is_admin = data['is_admin']
             db.session.commit()
             response_body['message'] = 'Datos del usuario actualizados'
             response_body['results'] = user.serialize()
@@ -357,36 +357,37 @@ def handle_orders():
         return response_body, 200
     if request.method == 'POST':
         data = request.json
-        # Tiene que venir el user.cart_id
-        # Tengo que obtener el user_id y cartitems
         row = Orders()
         row.user_id = data['user_id']
         row.date = datetime.today()
         row.status = 'pendiente de pago'
-        row.price_total = 0  # Debe hacer la suma del precio de los items del carro
+        cart_items = db.session.execute(db.select(CartItems).where(CartItems.cart_id == data['cart_id'])).scalars()
+        total_price = sum(item.product_to.price * item.quantity for item in cart_items)
+        row.price_total = total_price
         db.session.add(row)
         db.session.commit()
-        # Recorrer el cartitem, por cada iteracion hago un row.item = order.item
-        row.cartitems_id = data['cartitems_id'] # Tiene que obtener todos los items de cada carro realizado
+        for item in cart_items:
+            order_item = OrderItems(order_id=row.id, product_id=item.product_id, quantity=item.quantity)
+            db.session.add(order_item)
+        db.session.commit()
         response_body['results'] = row.serialize()
         response_body['message'] = 'Orden creada'
         return response_body, 201
 
 
 @api.route('/orders/<int:orderitem_id>', methods=['GET', 'POST'])  
-def handle_orderitems():
+def handle_orderitems(orderitem_id):
     response_body = {}
     if request.method == 'GET':
-       
-        rows = db.session.execute(db.select(OrderItems)).scalars()
-        results = [row.serialize() for row in rows]  
+        rows = db.session.execute(db.select(OrderItems).where(OrderItems.order_id == orderitem_id)).scalars()
+        results = [row.serialize() for row in rows]
         response_body['results'] = results
         response_body['message'] = 'Listado de Productos de la Orden'
         return response_body, 200
     if request.method == 'POST':
         data = request.json
         row = OrderItems()
-        row.user_id = data['user_id']
+        row.order_id = data['order_id']
         row.product_id = data['product_id']
         row.price_total = data['price_total']
         row.quantity = data['quantity']
@@ -394,8 +395,8 @@ def handle_orderitems():
         db.session.add(row)
         db.session.commit()
         response_body['results'] = row.serialize()
-        response_body['message'] = 'Orden creada'
-        return response_body, 201
+        response_body['message'] = 'Producto añadido a la orden'
+        return response_body, 20101
 
 
 @api.route('/signup', methods=['POST'])
