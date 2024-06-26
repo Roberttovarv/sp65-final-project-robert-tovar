@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 // import "./styles/home.css"
 
 
@@ -6,6 +7,7 @@ import React, { useState } from "react";
 export const Signup = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
@@ -33,7 +35,10 @@ export const Signup = () => {
       return
     }
     const data = await response.json()
-    console.log(data);
+    console.log(data)
+    localStorage.setItem('token', data.access_token)
+    navigate('/') // Cambiar este navigate cuando tengamos definido la pantalla de inicio.
+    
 
     console.log(dataToSend);
   };
