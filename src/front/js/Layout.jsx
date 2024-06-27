@@ -14,6 +14,8 @@ import { Login } from "./pages/Login.jsx";
 import { Signup } from "./pages/Signup.jsx";
 import { Users } from "./pages/Users.jsx";
 import Logout from "./pages/Logout.jsx";
+import { GamePanel } from "./pages/GamePanel.jsx"
+import { AdminPanel } from "./pages/AdminPanel.jsx"
 
 
 // Create your first component
@@ -36,9 +38,11 @@ const Layout = () => {
                         <Route element={<Single />} path="/single/:theid" />
                         <Route element={<Login />} path="/login" />
                         <Route element={<Signup />} path="/signup" />
-                        <Route element={<h1>Not found!</h1>} />
+                        <Route element={<h1>Not found!</h1>} path="*" />
                         <Route element={<Users />} path="/users" />
                         <Route element ={<Logout />} path="/logout" />
+                        <Route element={<AdminPanel />} path="/adminpanel" />
+                        <Route element={<GamePanel />} path="/adminpanel/gamepanel" />
                     </Routes>
                     <Footer />
                 </ScrollToTop>
