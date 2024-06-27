@@ -18,7 +18,7 @@ export const AdminPanel = () => {
 <div className="container-fluid m-auto">
                     <div className="row justify-content-around mx-5 align-items-center" style={{ height: "100%" }}>
                         <div className="col-3">
-                            <button className="comic-button" style={{ height: "30vh", width: "20vw" }}>Crear Videojuego</button>
+                        <Link to="/adminpanel/gamepanel"><button className="comic-button" style={{ height: "30vh", width: "20vw" }}>Crear Videojuego</button></Link>
                         </div>
                         <div className="col-3">
                             <button className="comic-button" style={{ height: "30vh", width: "20vw" }}>Crear Producto</button>

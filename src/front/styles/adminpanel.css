@@ -6,7 +6,7 @@
     text-align: center;
     text-decoration: none;
     color: #000;
-    background-color: #ffc1ef;
+    background-color: #FF5353;
     border: 2px solid #000;
     border-radius: 10px;
     box-shadow: 5px 5px 0px #000;
@@ -16,9 +16,9 @@
   
   .comic-button:hover {
     background-color: #fff;
-    color: #000;
-    border: 2px solid #ffc1ef;
-    box-shadow: 5px 5px 0px #ffc1ef;
+    color: #FF5353;
+    border: 2px solid #FF5353;
+    box-shadow: 5px 5px 0px #FF5353;
   }
   
   .comic-button:active {
@@ -26,4 +26,35 @@
     box-shadow: none;
     transform: translateY(4px);
   }
-  
+  .actual   {
+    background-color: #fff;
+    color: #FF5353;
+    border: 2px solid #000;
+    box-shadow: 5px 5px 0px #000;
+}
+.admin-button {
+  height: auto;
+  font-weight: bold;
+  text-align: center;
+  text-decoration: none;
+  color: #000;
+  background-color: #FF5353;
+  border: 2px solid #000;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+.admin-button:hover {
+  background-color: #fff;
+  color: #000;
+  border: 2px solid #000;
+}
+
+.admin-button:active {
+  background-color: #efffc1;
+  box-shadow: none;
+  transform: translateY(1px);
+}
+.pointer{
+  cursor: pointer;
+}
