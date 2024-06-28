@@ -123,7 +123,7 @@ class CartItems(db.Model):
             'id': self.id,
             'product_id': self.product_id,
             'quantity': self.quantity,
-            'price': self.product_to.price
+            'price': self.product_to.price,
             'cart_id': self.cart_id}
 
 
