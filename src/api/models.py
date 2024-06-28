@@ -92,8 +92,7 @@ class Games(db.Model):
     title = db.Column(db.String(), unique=True, nullable=False)
     image_url = db.Column(db.String(), unique=True, nullable=True) 
     description = db.Column(db.String(), unique=False, nullable=False)
-    genre = db.Column(db.String(), unique=False, nullable=False)
-    platform = db.Column(db.String(), unique=False, nullable=False)
+
     def __repr__(self):
         return f'<Game {self.title}>'
         
@@ -101,9 +100,7 @@ class Games(db.Model):
         return {'id': self.id,
                 'title': self.title,
                 'image_url': self.image_url, 
-                'description': self.description,
-                'platform': self.platform,
-                'genre': self.genre}
+                'description': self.description}
 
 
 class CartItems(db.Model): 
@@ -123,7 +120,7 @@ class CartItems(db.Model):
             'id': self.id,
             'product_id': self.product_id,
             'quantity': self.quantity,
-            'price': self.product_to.price
+            'price': self.product_to.price,
             'cart_id': self.cart_id}
 
 

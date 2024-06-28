@@ -125,7 +125,6 @@ def handle_game(game_id):
         if game:
             game.title = data['title']
             game.image_url = data['image_url']
-            game.genre = data['genre']
             db.session.commit()
             response_body['message'] = 'Datos del videojuego actualizados'
             response_body['results'] = game.serialize()
