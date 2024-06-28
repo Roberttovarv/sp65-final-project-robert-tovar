@@ -2,9 +2,14 @@ const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
 			message: null,
-			demo: [{ title: "FIRST", background: "white", initial: "white" }],
-			counter: 2,
-			token: null
+
+			demo: [{title: "FIRST", background: "white", initial: "white"}],
+  			counter: 2,
+			token: null,
+			reviews: [], 
+			review: null,
+            games: [],
+			cart: [] 
 		},
 		actions: {
 			login: async (email, password) => {
@@ -40,6 +45,51 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 
 			exampleFunction: () => { getActions().changeColor(0, "green"); },  // Use getActions to call a function within a fuction
+
+			// fetchTopGames: async () => {
+            //     const url = process.env.BACKEND_URL + '/api/top-games'; // aqui tengo que meter la url de la API para los juegos top
+            //     const response = await fetch(url);
+            //     const data = await response.json();
+            //     setStore({ topGames: data });
+            // },
+            // fetchBestRatedGames: async () => {
+            //     const url = process.env.BACKEND_URL + '/api/best-rated-games'; // aqui tengo que meter ejemplo para los juegos mejor valorados
+            //     const response = await fetch(url);
+            //     const data = await response.json();
+            //     setStore({ bestRatedGames: data });
+            // },
+            // addFavorites: (gameTitle) => {
+            //     const store = getStore();
+            //     const favorites = [...store.favorites, gameTitle];
+            //     setStore({ favorites });
+            // },
+			setReviews: (reviews) => {
+                setStore({ reviews: reviews });
+            },
+            getReview: (reviewId) => {
+                const store = getStore();
+                const review = store.reviews.find(r => r.id === parseInt(reviewId));
+                setStore({ review: review });
+            },
+            addToCart: (gameId) => {
+                const store = getStore();
+                const game = store.reviews.find(r => r.gameId === gameId);
+                if (game) {
+                    const newCart = [...store.cart, game];
+                    setStore({ cart: newCart });
+                }
+			},
+			getGames: async () => {
+                const url = process.env.BACKEND_URL + '/api/games'; // Cambiar la URL de la API para obtener los juegos
+                const response = await fetch(url);
+				if (!response.ok) {
+					console.log('Error al obtener categorias de juegos', response.status, response.statusText);
+					return
+				}
+                const data = await response.json();
+                setStore({ games: data });
+            },
+
 			changeColor: (index, color) => {
 				const store = getStore();  // Get the store
 				// We have to loop the entire demo array to look for the respective index and change its color

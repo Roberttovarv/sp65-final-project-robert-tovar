@@ -1,8 +1,10 @@
 import React, { useState, useContext } from "react";
 import { Context } from "../store/appContext";
+import { useNavigate } from "react-router-dom"; 
 
 export const Login = () => {
-  const { actions } = useContext(Context);  // Accedo a las actions desde el contexto
+  const { actions } = useContext(Context); 
+  const navigate = useNavigate(); 
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -22,9 +24,11 @@ export const Login = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const data = await actions.login(email, password);  // Llamamos a la acción login
+    const data = await actions.login(email, password);  
     handleReset();
-    // Navigate a una página de inicio interna
+    if (data) {
+      navigate('/home'); 
+    }
   };
 
   return (

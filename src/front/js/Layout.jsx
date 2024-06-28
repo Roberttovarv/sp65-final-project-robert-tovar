@@ -14,6 +14,16 @@ import { Login } from "./pages/Login.jsx";
 import { Signup } from "./pages/Signup.jsx";
 import { Users } from "./pages/Users.jsx";
 import Logout from "./pages/Logout.jsx";
+// 
+import { GamePanel } from "./pages/GamePanel.jsx"
+import { AdminPanel } from "./pages/AdminPanel.jsx"
+import { UserPanel } from "./pages/UserPanel.jsx"
+
+import { Welcome } from "./component/Welcome.jsx";
+import { LandingPage } from "./component/LandingPage.jsx";
+import { GameDetails } from "./component/GameDetails.jsx";
+import { Reviews } from "./component/Reviews.jsx";
+
 
 
 // Create your first component
@@ -36,10 +46,20 @@ const Layout = () => {
                         <Route element={<Single />} path="/single/:theid" />
                         <Route element={<Login />} path="/login" />
                         <Route element={<Signup />} path="/signup" />
-                        <Route element={<h1>Not found!</h1>} />
+                        <Route element={<h1>Not found!</h1>} path="*" />
+                        <Route element={<UserPanel />} path="/adminpanel/userpanel" />
                         <Route element={<Users />} path="/users" />
                         <Route element ={<Logout />} path="/logout" />
-                    </Routes>
+
+                        <Route element={<AdminPanel />} path="/adminpanel" />
+                        <Route element={<GamePanel />} path="/adminpanel/gamepanel" />
+
+                        <Route element={<Welcome />} path="welcome" />
+                        <Route element={<LandingPage />} path="landingpage" />
+                        <Route element={<GameDetails />} path="/game-details/:gameId" />
+                        <Route element={<Reviews />} path="/reviews" />
+                        
+>                    </Routes>
                     <Footer />
                 </ScrollToTop>
             </BrowserRouter>
