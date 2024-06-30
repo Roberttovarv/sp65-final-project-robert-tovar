@@ -1,4 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import event
 
 
 
@@ -31,6 +32,7 @@ class Users(db.Model):
 class Posts(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(), unique=False, nullable=False)
+    game_name = db.Column(db.String(), unique=False, nullable=False)
     body = db.Column(db.String(150), unique=False, nullable=False)
     date = db.Column(db.Date(), unique=False, nullable=True)
     image_url = db.Column(db.String(), unique=False, nullable=True)
@@ -43,11 +45,26 @@ class Posts(db.Model):
     def serialize(self):
         return {'id': self.id,
                 'title': self.title,
+                'game_name': self.game_name,
                 'body': self.body,
                 'date': self.date,
                 'image_url': self.image_url,
                 'author_id': self.author_id,
                 'game_id': self.game_id}
+    
+@event.listens_for(Posts, 'before_insert')
+def before_insert(mapper, connection, target):
+    if target.game_id:
+        game = Games.query.get(target.game_id)
+        if game:
+            target.game_name = game.title
+
+@event.listens_for(Posts, 'before_update')
+def before_update(mapper, connection, target):
+    if target.game_id:
+        game = Games.query.get(target.game_id)
+        if game:
+            target.name = game.title
 
 
 class Products(db.Model):
@@ -58,18 +75,42 @@ class Products(db.Model):
     price = db.Column(db.Integer(), unique=False, nullable=False)
     game_id = db.Column(db.Integer, db.ForeignKey('games.id'))
     game_to = db.relationship('Games', foreign_keys=[game_id])
-    platform = db.Column(db.Enum('computer', 'playstation', 'xbox', 'switch', 'mobile', name='platform_enum'), unique=False, nullable=False)
+    platform = db.Column(db.Enum('computer', 'playstation', 'xbox', 'switch', name='platform_enum'), unique=False, nullable=False)
+    description = db.Column(db.String(), unique=False, nullable=True)
+
     def __repr__(self):
         return f'<Product {self.name}>'
         
     def serialize(self):
-        return {'id': self.id,
-                'name': self.name,
-                'body_img': self.body_img,
-                'cdk': self.cdk,
-                'price': self.price,
-                'game_id': self.game_id,
-                'platform': self.platform}
+        return {
+            'id': self.id,
+            'name': self.name,
+            'body_img': self.body_img,
+            'cdk': self.cdk,
+            'price': self.price,
+            'game_id': self.game_id,
+            'platform': self.platform,
+            'description': self.description
+        }
+
+# Evento para actualizar los campos 'name', 'body_img' y 'description' de Product al asignar un game_id
+@event.listens_for(Products, 'before_insert')
+def before_insert(mapper, connection, target):
+    if target.game_id:
+        game = Games.query.get(target.game_id)
+        if game:
+            target.name = game.title
+            target.body_img = game.image_url
+            target.description = game.description
+
+@event.listens_for(Products, 'before_update')
+def before_update(mapper, connection, target):
+    if target.game_id:
+        game = Games.query.get(target.game_id)
+        if game:
+            target.name = game.title
+            target.body_img = game.image_url
+            target.description = game.description
 
 
 class Likes(db.Model):
