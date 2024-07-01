@@ -161,7 +161,7 @@ export const GamePanel = () => {
                           <div className="d-flex align-items-center justify-content-between">
                             <div>
                               <div>
-                              <span>{item.id}, {item.title}, {item.image_url}</span>
+                              <span><strong> Item ID: </strong>{item.id}, <strong>Nombre: </strong>{item.title}, <span className="d-inline-block align-bottom text-truncate" style={{maxWidth: "40%"}}> <strong>Foto: </strong>{item.image_url}</span></span>
                               </div>
                               <div className={`${showDescriptionId === item.id ? "" : "d-none"}`}> 
                               <span>{item.description}</span>
@@ -184,7 +184,7 @@ export const GamePanel = () => {
                         currentGame && currentGame.id === item.id && (
                           <div className="d-block w-100">
                             <div className="d-flex">
-                              <input type="text" value={`ID: ${currentGame.id}`} className="flex-input" readOnly style={{ width: "15%" }} />
+                              <input type="text" value={`ID: ${currentGame.id}`} className="flex-input" disabled style={{ width: "15%" }} />
                               <input type="text" placeholder="title" value={currentGame.title} className="flex-input" style={{ width: "60%" }} onChange={(event) => setCurrentGame({ ...currentGame, title: event.target.value })} />
                               <input type="text" placeholder="image_url" value={currentGame.image_url} className="flex-input" style={{ width: "30%" }} onChange={(event) => setCurrentGame({ ...currentGame, image_url: event.target.value })} />
                             </div>

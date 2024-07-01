@@ -180,7 +180,7 @@ export const PostPanel = () => {
                           <div className="d-flex align-items-center justify-content-between">
                             <div>
                               <div>
-                              <span>{item.id}, {item.game_name}, {item.title}, {item.image_url}</span>
+                              <span><strong>ID: </strong>{item.id},<strong>Nombre del juego:</strong> {item.game_name},<strong>Título:</strong> {item.title},<span className="d-inline-block align-bottom text-truncate" style={{maxWidth: "40%"}}><strong>Foto:</strong> {item.image_url}</span></span>
                               </div>
                               <div className={`${showBodyId === item.id ? "" : "d-none"}`}> 
                               <span>{item.body}</span>
@@ -203,7 +203,7 @@ export const PostPanel = () => {
                         currentPost && currentPost.id === item.id && (
                           <div className="d-block w-100">
                             <div className="d-flex">
-                            <input type="text" value={`ID: ${currentPost.id}`} className="flex-input" readOnly style={{ width: "15%" }} />
+                            <input type="text" value={`ID: ${currentPost.id}`} className="flex-input" disabled style={{ width: "15%" }} />
                             <input type="text" value={currentPost.game_id} className="flex-input" style={{ width: "15%" }} onChange={(event) => setCurrentPost({ ...currentPost, game_id: event.target.value })} />
                             <input type="text" placeholder="title" value={currentPost.title} className="flex-input" style={{ width: "60%" }} onChange={(event) => setCurrentPost({ ...currentPost, title: event.target.value })} />
                               <input type="text" placeholder="image_url" value={currentPost.image_url} className="flex-input" style={{ width: "30%" }} onChange={(event) => setCurrentPost({ ...currentPost, image_url: event.target.value })} />
