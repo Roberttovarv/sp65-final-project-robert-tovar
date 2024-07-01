@@ -8,9 +8,10 @@ const getState = ({ getStore, getActions, setStore }) => {
             reviews: [], 
             review: null,
             games: [],
-            topGames: [], // Agregamos topGames al estado
-            bestRatedGames: [], // Agregamos bestRatedGames al estado
-            cart: [] 
+            topGames: [],
+            bestRatedGames: [],
+            cart: [],
+            selectedGame: null // Añadido para almacenar los detalles del juego seleccionado
         },
         actions: {
             login: async (email, password) => {
@@ -95,6 +96,17 @@ const getState = ({ getStore, getActions, setStore }) => {
                 }
                 const data = await response.json();
                 setStore({ games: data });
+            },
+
+            getGameDetails: async (gameId) => {
+                const url = `https://api.rawg.io/api/games/${gameId}?key=bf752f88a1074c599e4be40330ae959e`; 
+                const response = await fetch(url);
+                if (!response.ok) {
+                    console.log('Error al obtener detalles del juego', response.status, response.statusText);
+                    return;
+                }
+                const data = await response.json();
+                setStore({ selectedGame: data });
             },
 
             changeColor: (index, color) => {
