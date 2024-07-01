@@ -1,23 +1,40 @@
 import React, { useContext, useEffect } from "react";
 import { Context } from "../store/appContext";
 import { Link } from "react-router-dom";
+import { useState } from "react";
 
 export const Tienda = () => {
     const { store, actions } = useContext(Context);
+    const [games, setGames] = useState([]);
+
+
+    const host = `${process.env.BACKEND_URL}`
+
 
     useEffect(() => {
-        actions.fetchGames(); // Función para obtener los juegos
+      getGames();
     }, []);
-
-    if (!store.games || store.games.length === 0) {
-        return <div>Loading...</div>;
-    }
-
+  
+    const getGames = async () => {
+      
+      const uri = host + '/api/games';
+      const options = { method: 'GET' };
+  
+      const response = await fetch(uri, options);
+  
+      if (!response.ok) {
+        console.log("Error", response.status, response.statusText);
+      }
+  
+      const data = await response.json();
+      setGames(data.results);
+    };
+  
     return (
         <div className="container">
             <h1 className="text-center text-light">TIENDA</h1>
             <div className="row">
-                {store.games.map((game, index) => (
+                {games.map((game, index) => (
                     <div key={index} className="col-md-4">
                         <div className="card mb-4 shadow-sm">
                             <img src={game.background_image} className="card-img-top" alt={game.name} />

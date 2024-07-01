@@ -7,13 +7,13 @@ export const Navbar = () => {
 
 	const { store, actions } = useContext(Context)
 
-	return (
+	return ( <div>
 		<nav className="navbar border border-bottom-3">
 			<div className="container">
 				<Link to="/">
 					<span className="navbar-brand mb-0 h1">Logo</span>
 				</Link>		
-				<div className="pointer h-100 div-btn"><button className="nav-btn">Tienda</button></div>
+				<div className="pointer h-100 div-btn"><Link to="/store"><button className="nav-btn"> Tienda</button></Link></div>
 				<div className="pointer h-100 div-btn"><button className="nav-btn">Categorías</button></div>
 				<div className="pointer h-100 div-btn"><Link to="/reviews"><button className="nav-btn">Reseñas</button></Link></div>
 				<div className="pointer h-100 div-btn"><Link to="/login"><button className="nav-btn">Login</button></Link></div>
@@ -31,12 +31,14 @@ export const Navbar = () => {
 					{store.cart.length}
 				</span>
 				</button>
-				<ul class="dropdown-menu dropdown-menu-end">
-					{store.map((item, index) => 
-						{<li key={index} class="dropdown-item"> {item}</li>})}					
-					<li><a class="dropdown-item" href="#">Something else here</a></li>
+				<ul className="dropdown-menu dropdown-menu-end">
+					{store.cart.map((item, index) => 
+						{<li key={index} className="dropdown-item"> {item}</li>})}					
+					<li><a className="dropdown-item" href="#">Something else here</a></li>
 				</ul>
 			</div>
+			</div>
 		</nav>
+		</div>
 	);
 };

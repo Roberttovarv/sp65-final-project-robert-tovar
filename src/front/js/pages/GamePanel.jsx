@@ -16,7 +16,7 @@ export const GamePanel = () => {
   ///
   const [description, setDescription] = useState("");
   const [imageURL, setImageURL] = useState("");
-  const [title, setTitle] = useState("");
+  const [name, setName] = useState("");
 
   const host = `${process.env.BACKEND_URL}`
 
@@ -41,8 +41,8 @@ export const GamePanel = () => {
 
   const handleSubmitGame = async () => {
     const gameData = {
-      title: title,
-      image_url: imageURL,
+      name: name,
+      background_image: imageURL,
       description: description,
     };
 
@@ -61,7 +61,7 @@ export const GamePanel = () => {
     const result = await response.json();
     console.log("Juego añadido", result);
 
-    setTitle("");
+    setName("");
     setImageURL("");
     setDescription("");
 
@@ -71,8 +71,8 @@ export const GamePanel = () => {
   const handleEdit = async (event) => {
     event.preventDefault();
     const dataToSend = {
-      title: currentGame.title,
-      image_url: currentGame.image_url,
+      name: currentGame.name,
+      background_image: currentGame.background_image,
       description: currentGame.description,
     };
 
@@ -161,7 +161,7 @@ export const GamePanel = () => {
                           <div className="d-flex align-items-center justify-content-between">
                             <div>
                               <div>
-                              <span><strong> Item ID: </strong>{item.id}, <strong>Nombre: </strong>{item.title}, <span className="d-inline-block align-bottom text-truncate" style={{maxWidth: "40%"}}> <strong>Foto: </strong>{item.image_url}</span></span>
+                              <span><strong> Item ID: </strong>{item.id}, <strong>Nombre: </strong>{item.name}, <span className="d-inline-block align-bottom text-truncate" style={{maxWidth: "20vw"}}> <strong>Foto: </strong>{item.background_image}</span></span>
                               </div>
                               <div className={`${showDescriptionId === item.id ? "" : "d-none"}`}> 
                               <span>{item.description}</span>
@@ -185,8 +185,8 @@ export const GamePanel = () => {
                           <div className="d-block w-100">
                             <div className="d-flex">
                               <input type="text" value={`ID: ${currentGame.id}`} className="flex-input" disabled style={{ width: "15%" }} />
-                              <input type="text" placeholder="title" value={currentGame.title} className="flex-input" style={{ width: "60%" }} onChange={(event) => setCurrentGame({ ...currentGame, title: event.target.value })} />
-                              <input type="text" placeholder="image_url" value={currentGame.image_url} className="flex-input" style={{ width: "30%" }} onChange={(event) => setCurrentGame({ ...currentGame, image_url: event.target.value })} />
+                              <input type="text" placeholder="name" value={currentGame.name} className="flex-input" style={{ width: "60%" }} onChange={(event) => setCurrentGame({ ...currentGame, name: event.target.value })} />
+                              <input type="text" placeholder="background_image" value={currentGame.background_image} className="flex-input" style={{ width: "30%" }} onChange={(event) => setCurrentGame({ ...currentGame, background_image: event.target.value })} />
                             </div>
                             <div>
                               <textarea className="form-control" aria-label="With textarea" placeholder="Descripción" value={currentGame.description} onChange={(event) => setCurrentGame({ ...currentGame, description: event.target.value })}></textarea>
@@ -211,7 +211,7 @@ export const GamePanel = () => {
                 <div className="input-group mb-3">
                   <div className="input-group-prepend"></div>
                   <input type="text" className="form-control" placeholder="Nombre"
-                    id="game-name" value={title} onChange={(e) => setTitle(e.target.value)} />
+                    id="game-name" value={name} onChange={(e) => setName(e.target.value)} />
                 </div>
 
                 <label className="mb-1" htmlFor="basic-url">Image URL</label>

@@ -22,10 +22,10 @@ import { PostPanel } from "./pages/PostPanel.jsx"
 import { ProductPanel } from "./pages/ProductPanel.jsx";
 
 import { Welcome } from "./component/Welcome.jsx";
-import { LandingPage } from "./component/LandingPage.jsx";
-import { GameDetails } from "./component/GameDetails.jsx";
-import { Reviews } from "./component/Reviews.jsx";
-import { Tienda } from "./component/Tienda.jsx";
+import { LandingPage } from "./pages/LandingPage.jsx";
+import { GameDetails } from "./pages/GameDetails.jsx";
+import { Reviews } from "./pages/Reviews.jsx";
+import { Tienda } from "./pages/Tienda.jsx";
 
 // Create your first component
 const Layout = () => {
