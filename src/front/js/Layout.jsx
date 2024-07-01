@@ -18,14 +18,14 @@ import Logout from "./pages/Logout.jsx";
 import { GamePanel } from "./pages/GamePanel.jsx"
 import { AdminPanel } from "./pages/AdminPanel.jsx"
 import { UserPanel } from "./pages/UserPanel.jsx"
+import { PostPanel } from "./pages/PostPanel.jsx"
+import { ProductPanel } from "./pages/ProductPanel.jsx";
 
 import { Welcome } from "./component/Welcome.jsx";
 import { LandingPage } from "./component/LandingPage.jsx";
 import { GameDetails } from "./component/GameDetails.jsx";
 import { Reviews } from "./component/Reviews.jsx";
-import { Shop } from "./pages/Shop.jsx"; // para probar el carrito
-
-
+import { Tienda } from "./component/Tienda.jsx";
 
 // Create your first component
 const Layout = () => {
@@ -48,21 +48,21 @@ const Layout = () => {
                         <Route element={<Login />} path="/login" />
                         <Route element={<Signup />} path="/signup" />
                         <Route element={<h1>Not found!</h1>} path="*" />
-                        <Route element={<UserPanel />} path="/adminpanel/userpanel" />
                         <Route element={<Users />} path="/users" />
                         <Route element={<Logout />} path="/logout" />
 
+                        <Route element={<UserPanel />} path="/adminpanel/userpanel" />
                         <Route element={<AdminPanel />} path="/adminpanel" />
                         <Route element={<GamePanel />} path="/adminpanel/gamepanel" />
+                        <Route element={<PostPanel />} path="/adminpanel/postpanel" />
+                        <Route element={<ProductPanel />} path="/adminpanel/productpanel" />
 
                         <Route element={<Welcome />} path="welcome" />
                         <Route element={<LandingPage />} path="landingpage" />
                         <Route element={<GameDetails />} path="/game-details/:gameId" />
                         <Route element={<Reviews />} path="/reviews" />
-                        <Route element={<Shop/>} path="/shop"/> 
-
-
-                    </Routes>
+                        <Route element={<Tienda />} path="/store" />         
+                      </Routes>
                     <Footer />
                 </ScrollToTop>
             </BrowserRouter>

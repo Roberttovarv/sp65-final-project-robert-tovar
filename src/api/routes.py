@@ -192,7 +192,6 @@ def handle_post(post_id):
         post = db.session.execute(db.select(Posts).where(Posts.id == post_id)).scalar()
         if post:
             post.title = data['title']
-            post.description = data['description']
             post.image_url = data['image_url']
             post.body = data['body']
             post.game_id = data['game_id']
@@ -228,14 +227,12 @@ def handle_products():
         return response_body, 200
     if request.method == 'POST':
         data = request.json
-        required_fields = ['name', 'cdk', 'body_img', 'game_id', 'price']
+        required_fields = ['cdk', 'game_id', 'price']
         for field in required_fields:
             if field not in data:
                 return jsonify({'message': f'Falta el campo requerido: {field}'}), 400
         row = Products()
-        row.name = data['name']
         row.cdk = data['cdk']
-        row.body_img = data['body_img']
         row.game_id = data['game_id']  
         row.price = data['price']
         row.platform = data['platform']
@@ -262,10 +259,8 @@ def handle_product(product_id):
         data = request.json
         product = db.session.execute(db.select(Products).where(Products.id == product_id)).scalar()
         if product:
-            product.name = data['name']
             product.cdk = data['cdk']
-            product.body_img = data['body_img']
-            product.game_id = data['game_id'] # Preguntar
+            product.game_id = data['game_id'] 
             product.price = data['price']
             db.session.commit()
             response_body['message'] = 'Producto actualizado'
