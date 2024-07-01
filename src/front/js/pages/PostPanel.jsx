@@ -5,28 +5,30 @@ import "../../styles/adminpanel.css";
 
 /// Poner limite de texto a la url
 
-export const GamePanel = () => {
+export const PostPanel = () => {
   const { store, actions } = useContext(Context);
-  const [games, setGames] = useState([]);
+  const [posts, setPosts] = useState([]);
   const [pageAction, setPageAction] = useState(true);
   const [pageEdit, setPageEdit] = useState(false);
-  const [currentGame, setCurrentGame] = useState(null);
-  const [showDescriptionId, setShowDescriptionId] = useState(false);
-
+  const [currentPost, setCurrentPost] = useState(null);
+  const [showBodyId, setShowBodyId] = useState(false);
+  
   ///
-  const [description, setDescription] = useState("");
+  const [writer, setWriter] = useState("");
+  const [body, setBody] = useState("");
   const [imageURL, setImageURL] = useState("");
+  const [gameId, setGameId] = useState("");
   const [title, setTitle] = useState("");
 
   const host = `${process.env.BACKEND_URL}`
 
   useEffect(() => {
-    getGames();
+    getPosts();
   }, []);
 
-  const getGames = async () => {
+  const getPosts = async () => {
     
-    const uri = host + '/api/games';
+    const uri = host + '/api/posts';
     const options = { method: 'GET' };
 
     const response = await fetch(uri, options);
@@ -36,47 +38,64 @@ export const GamePanel = () => {
     }
 
     const data = await response.json();
-    setGames(data.results);
+    setPosts(data.results);
   };
 
-  const handleSubmitGame = async () => {
+  const handleSubmitPost = async () => {
     const gameData = {
       title: title,
       image_url: imageURL,
-      description: description,
+      body: body,
+      game_id: gameId,
+      author_id: writer,
     };
 
-    const uri = host + '/api/games';
-    const options = {
-      method: 'POST',
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(gameData),
-    };
+   console.log("Datos del juego a enviar:", gameData);
+
+  const uri = host + '/api/posts';
+  const options = {
+    method: 'POST',
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(gameData),
+  };
+
+  console.log("URI:", uri);
+  console.log("Options:", options);
+
+  try {
     const response = await fetch(uri, options);
 
     if (!response.ok) {
-      console.log("Error", response.status, response.statusText);
+      console.error("Error en la respuesta del servidor:", response.status, response.statusText);
+      const errorText = await response.text(); // Obtener texto del error si lo hay
+      console.error("Detalles del error:", errorText);
       return;
     }
+
     const result = await response.json();
-    console.log("Juego añadido", result);
+    console.log("Juego añadido:", result);
 
     setTitle("");
     setImageURL("");
-    setDescription("");
+    setBody("");
+    setGameId("");
 
-    getGames();
-  };
+    getPosts();
+  } catch (error) {
+    console.error("Error durante la solicitud fetch:", error);
+  }
+};
 
   const handleEdit = async (event) => {
     event.preventDefault();
     const dataToSend = {
-      title: currentGame.title,
-      image_url: currentGame.image_url,
-      description: currentGame.description,
+      title: currentPost.title,
+      image_url: currentPost.image_url,
+      body: currentPost.body,
+      game_id: currentPost.game_id,
     };
 
-    const uri = host + `/api/games/${currentGame.id}`;
+    const uri = host + `/api/posts/${currentPost.id}`;
     const options = {
       method: 'PUT',
       body: JSON.stringify(dataToSend),
@@ -90,14 +109,14 @@ export const GamePanel = () => {
       return;
     }
 
-    getGames();
+    getPosts();
   
-    setCurrentGame(null);
+    setCurrentPost(null);
     setPageEdit(false);
   };
 
-  const deleteGame = async (item) => {
-    const uri = host + '/api/games/' + item.id
+  const deletePost = async (item) => {
+    const uri = host + '/api/posts/' + item.id
     const options = {
       method: 'DELETE'
     }
@@ -107,20 +126,20 @@ export const GamePanel = () => {
       console.log("Error", response.status, response.statusText);
       return
     }
-    getGames();
+    getPosts();
   }
 
-  const editGame = (item) => {
+  const editPost = (item) => {
 
-    setCurrentGame(item);
+    setCurrentPost(item);
     setPageEdit(true);
   };
 
-  const toggleDescription = (id) => {
-    if (showDescriptionId === id) {
-      setShowDescriptionId(null);
+  const toggleBody = (id) => {
+    if (showBodyId === id) {
+      setShowBodyId(null);
     } else {
-      setShowDescriptionId(id);
+      setShowBodyId(id);
     }
   };
 
@@ -153,43 +172,44 @@ export const GamePanel = () => {
             <h3 className="text-center">Lista</h3>
             <div className="mx-5 d-flex justify-content-center">
               <ul className="list-group" style={{ width: "60%" }}>
-                {games.map((item) => (
+                {posts.map((item) => (
                   <li key={item.id} className="list-group-item border border-top-0 border-end-0 border-3 border-bottom-2 border-start-1 mb-2">
                     {
-                      !pageEdit || (pageEdit && currentGame && currentGame.id !== item.id) ? (
+                      !pageEdit || (pageEdit && currentPost && currentPost.id !== item.id) ? (
                         <>
                           <div className="d-flex align-items-center justify-content-between">
                             <div>
                               <div>
-                              <span>{item.id}, {item.title}, {item.image_url}</span>
+                              <span>{item.id}, {item.game_name}, {item.title}, {item.image_url}</span>
                               </div>
-                              <div className={`${showDescriptionId === item.id ? "" : "d-none"}`}> 
-                              <span>{item.description}</span>
+                              <div className={`${showBodyId === item.id ? "" : "d-none"}`}> 
+                              <span>{item.body}</span>
                               </div>
                             </div>
                             <div className="d-flex">
                               <div>
-                              <i className={`fa-solid ${showDescriptionId !== item.id ? "fa-eye" : "fa-eye-slash"} pointer`} onClick={() => toggleDescription(item.id)}></i> 
+                              <i className={`fa-solid ${showBodyId !== item.id ? "fa-eye" : "fa-eye-slash"} pointer`} onClick={() => toggleBody(item.id)}></i> 
                               </div>
                               <div className="mx-3">
-                                <i className="fa-solid fa-pencil pointer" onClick={() => editGame(item)}></i>
+                                <i className="fa-solid fa-pencil pointer" onClick={() => editPost(item)}></i>
                               </div>
                               <div>
-                                <i className="fa-solid fa-trash pointer" onClick={() => deleteGame(item)}></i>
+                                <i className="fa-solid fa-trash pointer" onClick={() => deletePost(item)}></i>
                               </div>
                             </div>
                           </div>
                         </>
                       ) : (
-                        currentGame && currentGame.id === item.id && (
+                        currentPost && currentPost.id === item.id && (
                           <div className="d-block w-100">
                             <div className="d-flex">
-                              <input type="text" value={`ID: ${currentGame.id}`} className="flex-input" readOnly style={{ width: "15%" }} />
-                              <input type="text" placeholder="title" value={currentGame.title} className="flex-input" style={{ width: "60%" }} onChange={(event) => setCurrentGame({ ...currentGame, title: event.target.value })} />
-                              <input type="text" placeholder="image_url" value={currentGame.image_url} className="flex-input" style={{ width: "30%" }} onChange={(event) => setCurrentGame({ ...currentGame, image_url: event.target.value })} />
+                            <input type="text" value={`ID: ${currentPost.id}`} className="flex-input" readOnly style={{ width: "15%" }} />
+                            <input type="text" value={currentPost.game_id} className="flex-input" style={{ width: "15%" }} onChange={(event) => setCurrentPost({ ...currentPost, game_id: event.target.value })} />
+                            <input type="text" placeholder="title" value={currentPost.title} className="flex-input" style={{ width: "60%" }} onChange={(event) => setCurrentPost({ ...currentPost, title: event.target.value })} />
+                              <input type="text" placeholder="image_url" value={currentPost.image_url} className="flex-input" style={{ width: "30%" }} onChange={(event) => setCurrentPost({ ...currentPost, image_url: event.target.value })} />
                             </div>
                             <div>
-                              <textarea className="form-control" aria-label="With textarea" placeholder="Descripción" value={currentGame.description} onChange={(event) => setCurrentGame({ ...currentGame, description: event.target.value })}></textarea>
+                              <textarea className="form-control" aria-label="With textarea" placeholder="Descripción" value={currentPost.body} onChange={(event) => setCurrentPost({ ...currentPost, body: event.target.value })}></textarea>
                             </div>
                             <div className="justify-content-center d-flex mt-1">
                               <button className="rounded-3 bg-light" onClick={handleEdit}>Enviar</button>
@@ -204,14 +224,19 @@ export const GamePanel = () => {
           </>
         ) : (
           <>
-            <h3 className="text-center my-4">Añadir videojuego</h3>
+            <h3 className="text-center my-4">Crear un post</h3>
             <div className="container-fluid d-flex justify-content-center" style={{ width: "60%" }}>
               <div className="w-100">
-                <label className="mb-1" htmlFor="game-name">Nombre del juego</label>
+                <label className="mb-1" htmlFor="create-post"></label>
                 <div className="input-group mb-3">
                   <div className="input-group-prepend"></div>
-                  <input type="text" className="form-control" placeholder="Nombre"
-                    id="game-name" value={title} onChange={(e) => setTitle(e.target.value)} />
+                  <input type="text" className="form-control" placeholder="Título"
+                    id="create-post" value={title} onChange={(e) => setTitle(e.target.value)} />
+                    <input type="number" className="form-control" placeholder="Game ID"
+                    id="create-post" value={gameId} onChange={(e) => setGameId(e.target.value)} />
+                    <input type="number" className="form-control" placeholder="Writer ID"
+                    id="create-post" value={writer} onChange={(e) => setWriter(e.target.value)} />
+
                 </div>
 
                 <label className="mb-1" htmlFor="basic-url">Image URL</label>
@@ -221,14 +246,14 @@ export const GamePanel = () => {
                     placeholder="URL" value={imageURL} onChange={(e) => setImageURL(e.target.value)} />
                 </div>
 
-                <label className="mb-1" htmlFor="game-description">Descripción</label>
+                <label className="mb-1" htmlFor="post-body">Añada un cuerpo del artículo</label>
                 <div className="input-group">
                   <div className="input-group-prepend"></div>
-                  <textarea className="form-control" aria-label="With textarea" id="game-description"
-                    placeholder="Añada una descripción" value={description} onChange={(e) => setDescription(e.target.value)} ></textarea>
+                  <textarea className="form-control" aria-label="With textarea" id="post-body"
+                    placeholder="Añada el cuerpo del artículo" value={body} onChange={(e) => setBody(e.target.value)} ></textarea>
                 </div>
                 <div className="d-flex justify-content-center mt-3">
-                  <button className="rounded-3 bg-light" onClick={handleSubmitGame}>Enviar</button>
+                  <button className="rounded-3 bg-light" onClick={handleSubmitPost}>Enviar</button>
                 </div>
               </div>
             </div>

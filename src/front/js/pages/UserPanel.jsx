@@ -10,7 +10,7 @@ export const UserPanel = () => {
     const [users, setUsers] = useState([]);
 
 
-    const host = 'https://verbose-space-happiness-q77gw6r5jq7426xpr-3001.app.github.dev';
+    const host = `${process.env.BACKEND_URL}`
 
     useEffect(() => {
         getUsers();
