@@ -23,6 +23,7 @@ import { Welcome } from "./component/Welcome.jsx";
 import { LandingPage } from "./component/LandingPage.jsx";
 import { GameDetails } from "./component/GameDetails.jsx";
 import { Reviews } from "./component/Reviews.jsx";
+import { Shop } from "./pages/Shop.jsx"; // para probar el carrito
 
 
 
@@ -33,7 +34,7 @@ const Layout = () => {
     you can set the basename on the .env file located at the root of this project, E.g: BASENAME=/react-hello-webapp/
     */
     const basename = process.env.BASENAME || "";
-    if (!process.env.BACKEND_URL || process.env.BACKEND_URL == "") return <BackendURL/ >;
+    if (!process.env.BACKEND_URL || process.env.BACKEND_URL == "") return <BackendURL />;
 
     return (
         <div >
@@ -49,7 +50,7 @@ const Layout = () => {
                         <Route element={<h1>Not found!</h1>} path="*" />
                         <Route element={<UserPanel />} path="/adminpanel/userpanel" />
                         <Route element={<Users />} path="/users" />
-                        <Route element ={<Logout />} path="/logout" />
+                        <Route element={<Logout />} path="/logout" />
 
                         <Route element={<AdminPanel />} path="/adminpanel" />
                         <Route element={<GamePanel />} path="/adminpanel/gamepanel" />
@@ -58,8 +59,10 @@ const Layout = () => {
                         <Route element={<LandingPage />} path="landingpage" />
                         <Route element={<GameDetails />} path="/game-details/:gameId" />
                         <Route element={<Reviews />} path="/reviews" />
-                        
->                    </Routes>
+                        <Route element={<Shop/>} path="/shop"/> 
+
+
+                    </Routes>
                     <Footer />
                 </ScrollToTop>
             </BrowserRouter>

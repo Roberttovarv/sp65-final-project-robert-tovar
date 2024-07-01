@@ -4,12 +4,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 			message: null,
 
 			demo: [{title: "FIRST", background: "white", initial: "white"}],
-  			counter: 2,
+  			counter: 0,
 			token: null,
 			reviews: [], 
 			review: null,
             games: [],
-			cart: [] 
+			cart: ['fornite','fifa'] 
 		},
 		actions: {
 			login: async (email, password) => {
@@ -110,12 +110,10 @@ const getState = ({ getStore, getActions, setStore }) => {
 				return data;  // Don't forget to return something, that is how the async resolves
 			},
 
-			increase: () => {setStore({counter: getStore().counter + 1})
-
-			},
-			decrease : () => {
-
-			},
+			increase: () => {setStore({counter: getStore().counter + 1})},
+			decrease : () => {setStore({counter: getStore().counter - 1})},
+			addToCartd: (newGameToCart) => {setStore({cart: [...getStore().cart, newGameToCart]})},
+			removeCart: () => {}
 		}
 	};
 };
