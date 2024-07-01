@@ -92,14 +92,14 @@ def handle_games():
         return response_body, 200
     if request.method == 'POST':
         data = request.json
-        required_fields = ['title', 'description', 'image_url']
+        required_fields = ['name', 'description', 'background_image']
         for field in required_fields:
             if field not in data:
                 return jsonify({'message': f'Falta el campo requerido: {field}'}), 400
         row = Games()
-        row.title = data['title']
+        row.name = data['name']
         row.description = data['description']
-        row.image_url = data['image_url']
+        row.background_image = data['background_image']
         db.session.add(row)
         db.session.commit()
         response_body['results'] = row.serialize()
@@ -123,8 +123,8 @@ def handle_game(game_id):
         data = request.json
         game = db.session.execute(db.select(Games).where(Games.id == game_id)).scalar()
         if game:
-            game.title = data['title']
-            game.image_url = data['image_url']
+            game.name = data['name']
+            game.background_image = data['background_image']
             db.session.commit()
             response_body['message'] = 'Datos del videojuego actualizados'
             response_body['results'] = game.serialize()

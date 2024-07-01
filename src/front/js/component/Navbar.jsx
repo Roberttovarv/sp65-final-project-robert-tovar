@@ -7,7 +7,7 @@ export const Navbar = () => {
 
 	const { store, actions } = useContext(Context)
 
-	return (
+	return ( <div>
 		<nav className="navbar border border-bottom-3">
 			<div className="container">
 				<Link to="/">
@@ -31,12 +31,14 @@ export const Navbar = () => {
 					{store.cart.length}
 				</span>
 				</button>
-				<ul class="dropdown-menu dropdown-menu-end">
-					{store.map((item, index) => 
-						{<li key={index} class="dropdown-item"> {item}</li>})}					
-					<li><a class="dropdown-item" href="#">Something else here</a></li>
+				<ul className="dropdown-menu dropdown-menu-end">
+					{store.cart.map((item, index) => 
+						{<li key={index} className="dropdown-item"> {item}</li>})}					
+					<li><a className="dropdown-item" href="#">Something else here</a></li>
 				</ul>
 			</div>
+			</div>
 		</nav>
+		</div>
 	);
 };

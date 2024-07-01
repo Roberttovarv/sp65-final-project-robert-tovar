@@ -57,14 +57,14 @@ def before_insert(mapper, connection, target):
     if target.game_id:
         game = Games.query.get(target.game_id)
         if game:
-            target.game_name = game.title
+            target.game_name = game.name
 
 @event.listens_for(Posts, 'before_update')
 def before_update(mapper, connection, target):
     if target.game_id:
         game = Games.query.get(target.game_id)
         if game:
-            target.name = game.title
+            target.name = game.name
 
 
 class Products(db.Model):
@@ -99,8 +99,8 @@ def before_insert(mapper, connection, target):
     if target.game_id:
         game = Games.query.get(target.game_id)
         if game:
-            target.name = game.title
-            target.body_img = game.image_url
+            target.name = game.name
+            target.body_img = game.background_image
             target.description = game.description
 
 @event.listens_for(Products, 'before_update')
@@ -108,8 +108,8 @@ def before_update(mapper, connection, target):
     if target.game_id:
         game = Games.query.get(target.game_id)
         if game:
-            target.name = game.title
-            target.body_img = game.image_url
+            target.name = game.name
+            target.body_img = game.background_image
             target.description = game.description
 
 
@@ -130,17 +130,17 @@ class Likes(db.Model):
 
 class Games(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(), unique=True, nullable=False)
-    image_url = db.Column(db.String(), unique=True, nullable=True) 
+    name = db.Column(db.String(), unique=True, nullable=False)
+    background_image = db.Column(db.String(), unique=True, nullable=True) 
     description = db.Column(db.String(), unique=False, nullable=False)
 
     def __repr__(self):
-        return f'<Game {self.title}>'
+        return f'<Game {self.name}>'
         
     def serialize(self):
         return {'id': self.id,
-                'title': self.title,
-                'image_url': self.image_url, 
+                'name': self.name,
+                'background_image': self.background_image, 
                 'description': self.description}
 
 
