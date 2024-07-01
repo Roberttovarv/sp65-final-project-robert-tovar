@@ -10,8 +10,7 @@ const getState = ({ getStore, getActions, setStore }) => {
             games: [],
             topGames: [],
             bestRatedGames: [],
-            cart: [],
-            selectedGame: null // Añadido para almacenar los detalles del juego seleccionado
+            cart: [] // Añadido para almacenar los juegos en el carrito
         },
         actions: {
             login: async (email, password) => {
@@ -62,6 +61,13 @@ const getState = ({ getStore, getActions, setStore }) => {
                 setStore({ bestRatedGames: data.results });
             },
 
+            fetchGames: async () => {
+                const url = 'https://api.rawg.io/api/games?key=bf752f88a1074c599e4be40330ae959e';
+                const response = await fetch(url);
+                const data = await response.json();
+                setStore({ games: data.results });
+            },
+
             addFavorites: (gameTitle) => {
                 const store = getStore();
                 const favorites = [...store.favorites, gameTitle];
@@ -78,24 +84,10 @@ const getState = ({ getStore, getActions, setStore }) => {
                 setStore({ review: review });
             },
 
-            addToCart: (gameId) => {
+            addToCart: (game) => {
                 const store = getStore();
-                const game = store.reviews.find(r => r.gameId === gameId);
-                if (game) {
-                    const newCart = [...store.cart, game];
-                    setStore({ cart: newCart });
-                }
-            },
-
-            getGames: async () => {
-                const url = process.env.BACKEND_URL + '/api/games'; 
-                const response = await fetch(url);
-                if (!response.ok) {
-                    console.log('Error al obtener categorias de juegos', response.status, response.statusText);
-                    return;
-                }
-                const data = await response.json();
-                setStore({ games: data });
+                const newCart = [...store.cart, game];
+                setStore({ cart: newCart });
             },
 
             getGameDetails: async (gameId) => {
