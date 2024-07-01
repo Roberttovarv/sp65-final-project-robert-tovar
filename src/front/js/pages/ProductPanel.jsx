@@ -160,7 +160,7 @@ export const ProductPanel = () => {
                           <div className="d-flex align-items-center justify-content-between">
                             <div>
                               <div>
-                                <span>{item.id},, {item.name} {item.cdk}, {item.platform}, {item.price}</span>
+                                <span><strong>ID: </strong>{item.id},<strong> Nombre: </strong>{item.name},<strong> CDK: </strong>{item.cdk},<strong> Plataforma: </strong>{item.platform},<strong> Precio: </strong>{item.price} €</span>
                               </div>
                             </div>
                             <div className="d-flex">
@@ -177,7 +177,7 @@ export const ProductPanel = () => {
                         currentProduct && currentProduct.id === item.id && (
                           <div className="d-block w-100">
                             <div className="d-flex">
-                              <input type="text" value={`ID: ${currentProduct.id}`} className="flex-input" readOnly style={{ width: "15%" }} />
+                              <input type="text" value={`ID: ${currentProduct.id}`} className="flex-input" disabled style={{ width: "15%" }} />
                               <input type="number" value={currentProduct.game_id} className="flex-input" style={{ width: "15%" }} onChange={(event) => setCurrentProduct({ ...currentProduct, game_id: event.target.value })} />
                               <input type="text" placeholder="cdk" value={currentProduct.cdk} className="flex-input" style={{ width: "60%" }} onChange={(event) => setCurrentProduct({ ...currentProduct, cdk: event.target.value })} />
                               <input type="text" placeholder="price" value={currentProduct.price} className="flex-input" style={{ width: "30%" }} onChange={(event) => setCurrentProduct({ ...currentProduct, price: event.target.value })} />

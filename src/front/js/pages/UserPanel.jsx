@@ -67,7 +67,7 @@ export const UserPanel = () => {
                                         <div className="d-flex align-items-center justify-content-between">
                                             <div>
                                                 <div>
-                                                    <span>{item.id}, {item.first_name}, {item.last_name}, {item.email}, {`${item.is_admin ? "Sí" : "No"}`} </span>
+                                                    <span><strong>ID: </strong>{item.id}, <strong>Nombre:</strong> {item.first_name}, <strong>Apellido:</strong> {item.last_name}, <strong>Email:</strong> {item.email}, <strong>Admin:</strong> {`${item.is_admin ? "Sí" : "No"}`} </span>
                                                 </div>
 
                                             </div>
