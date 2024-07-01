@@ -161,7 +161,7 @@ export const GamePanel = () => {
                           <div className="d-flex align-items-center justify-content-between">
                             <div>
                               <div>
-                              <span><strong> Item ID: </strong>{item.id}, <strong>Nombre: </strong>{item.name}, <span className="d-inline-block align-bottom text-truncate" style={{maxWidth: "40%"}}> <strong>Foto: </strong>{item.background_image}</span></span>
+                              <span><strong> Item ID: </strong>{item.id}, <strong>Nombre: </strong>{item.name}, <span className="d-inline-block align-bottom text-truncate" style={{maxWidth: "20vw"}}> <strong>Foto: </strong>{item.background_image}</span></span>
                               </div>
                               <div className={`${showDescriptionId === item.id ? "" : "d-none"}`}> 
                               <span>{item.description}</span>

@@ -62,7 +62,7 @@ const getState = ({ getStore, getActions, setStore }) => {
             },
 
             fetchGames: async () => {
-                const url = 'https://api.rawg.io/api/games?key=bf752f88a1074c599e4be40330ae959e';
+                const url = `${process.env.BACKEND_URL}`;
                 const response = await fetch(url);
                 const data = await response.json();
                 setStore({ games: data.results });

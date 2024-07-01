@@ -64,7 +64,7 @@ def before_update(mapper, connection, target):
     if target.game_id:
         game = Games.query.get(target.game_id)
         if game:
-            target.name = game.name
+            target.game_name = game.name
 
 
 class Products(db.Model):

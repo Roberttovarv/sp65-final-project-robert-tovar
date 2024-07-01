@@ -1,13 +1,13 @@
 """
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
+import requests
 from flask import Flask, request, jsonify, url_for, Blueprint
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 from datetime import datetime
 from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required, JWTManager
 from api.models import db, Users, Games, Carts, CartItems, Products, Orders, OrderItems, Posts, Likes
-
 
 
 api = Blueprint('api', __name__)
@@ -19,6 +19,35 @@ def handle_hello():
     response_body = {}
     response_body["message"] = "Hello! I'm a message that came from the backend, check the network tab on the google inspector and you will see the GET request"
     return response_body, 200
+
+@api.route('/apiexterna', methods=['POST'])
+def fetch_and_store_games():
+    game_ids = request.json.get('game_ids')
+    if not game_ids or not isinstance(game_ids, list):
+        return jsonify({'error': 'No hay juegos o el formato es incorrecto'}), 400
+    api_key = 'bf752f88a1074c599e4be40330ae959e'
+    stored_games = []
+    errors = []
+    for game_id in game_ids:
+        url = f'https://api.rawg.io/api/games/{game_id}?key={api_key}'
+        response = requests.get(url)
+        if response.status_code != 200:
+            errors.append({'game_id': game_id, 'error': 'Fallo al obtener los datos'})
+            continue
+        game_data = response.json()
+        new_game = Games(
+            
+            name=game_data.get('name'),
+            background_image=game_data.get('background_image'),
+            description=game_data.get('description')
+        )
+        db.session.add(new_game)
+        stored_games.append(new_game)
+    db.session.commit()
+    return jsonify({
+        'stored_games': [game.serialize() for game in stored_games],
+        'errors': errors
+    }), 201
 
 
 @api.route('/users', methods=['GET', 'POST'])  
