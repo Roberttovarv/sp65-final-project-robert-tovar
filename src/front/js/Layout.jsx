@@ -25,6 +25,7 @@ import { Welcome } from "./component/Welcome.jsx";
 import { LandingPage } from "./component/LandingPage.jsx";
 import { GameDetails } from "./component/GameDetails.jsx";
 import { Reviews } from "./component/Reviews.jsx";
+import { Tienda } from "./component/Tienda.jsx";
 
 
 
@@ -62,6 +63,7 @@ const Layout = () => {
                         <Route element={<LandingPage />} path="landingpage" />
                         <Route element={<GameDetails />} path="/game-details/:gameId" />
                         <Route element={<Reviews />} path="/reviews" />
+                        <Route element={<Tienda />} path="/store" />
                         
 >                    </Routes>
                     <Footer />
