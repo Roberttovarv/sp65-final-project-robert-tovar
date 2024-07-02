@@ -10,7 +10,9 @@ const getState = ({ getStore, getActions, setStore }) => {
             games: [],
             topGames: [],
             bestRatedGames: [],
-            cart: [] // Añadido para almacenar los juegos en el carrito
+            cart: [], // Añadido para almacenar los juegos en el carrito
+            actionGames: [], // Añadido para los juegos de acción
+			rpgGames: [] // Añadido para los juegos RPG
         },
         actions: {
             login: async (email, password) => {
@@ -101,6 +103,20 @@ const getState = ({ getStore, getActions, setStore }) => {
                 setStore({ selectedGame: data });
             },
 
+            fetchActionGames: async () => {
+                const url = 'https://api.rawg.io/api/games?genres=action&key=bf752f88a1074c599e4be40330ae959e';
+                const response = await fetch(url);
+                const data = await response.json();
+                setStore({ actionGames: data.results });
+            },
+            // Nueva acción para obtener los juegos RPG
+            fetchRPGGames: async () => {
+                const url = 'https://api.rawg.io/api/games?genres=role-playing-games-rpg&key=bf752f88a1074c599e4be40330ae959e';
+                const response = await fetch(url);
+                const data = await response.json();
+                setStore({ rpgGames: data.results });
+            },
+
 			changeColor: (index, color) => {
 				const store = getStore();  // Get the store
 				// We have to loop the entire demo array to look for the respective index and change its color
@@ -110,6 +126,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				});
 				setStore({ demo: demo });  // Reset the global store
 			},
+
 			getMessage: async () => {
 				const response = await fetch(process.env.BACKEND_URL + "/api/hello")
 				if (!response.ok) {
