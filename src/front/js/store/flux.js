@@ -64,10 +64,20 @@ const getState = ({ getStore, getActions, setStore }) => {
             },
 
             fetchGames: async () => {
-                const url = `${process.env.BACKEND_URL}`;
+                const url = 'https://api.rawg.io/api/games?key=bf752f88a1074c599e4be40330ae959e';
                 const response = await fetch(url);
-                const data = await response.json();
-                setStore({ games: data.results });
+                if (response.ok) {
+                    const data = await response.json();
+                    setStore({ games: data.results });
+                } else {
+                    console.error('Error fetching games:', response.status, response.statusText);
+                }
+            },
+
+            removeFromCart: (gameId) => {
+                const store = getStore();
+                const updatedCart = store.cart.filter(game => game.id !== gameId);
+                setStore({ cart: updatedCart });
             },
 
             addFavorites: (gameTitle) => {
@@ -109,7 +119,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                 const data = await response.json();
                 setStore({ actionGames: data.results });
             },
-            // Nueva acción para obtener los juegos RPG
+
             fetchRPGGames: async () => {
                 const url = 'https://api.rawg.io/api/games?genres=role-playing-games-rpg&key=bf752f88a1074c599e4be40330ae959e';
                 const response = await fetch(url);

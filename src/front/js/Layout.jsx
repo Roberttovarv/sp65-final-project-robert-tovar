@@ -43,7 +43,7 @@ const Layout = () => {
                 <ScrollToTop>
                     <Navbar />
                     <Routes>
-                        <Route element={<Home />} path="/" />
+                        <Route element={<Home />} path="/rigo" />
                         <Route element={<Demo />} path="/demo" />
                         <Route element={<Single />} path="/single/:theid" />
                         <Route element={<Login />} path="/login" />
@@ -59,7 +59,7 @@ const Layout = () => {
                         <Route element={<ProductPanel />} path="/adminpanel/productpanel" />
 
                         <Route element={<Welcome />} path="welcome" />
-                        <Route element={<LandingPage />} path="landingpage" />
+                        <Route element={<LandingPage />} path="/" />
                         <Route element={<GameDetails />} path="/game-details/:gameId" />
                         <Route element={<Reviews />} path="/reviews" />
                         <Route element={<Tienda />} path="/store" />

@@ -1,6 +1,11 @@
 import React, { useContext, useEffect } from "react";
 import { Context } from "../store/appContext";
 import { Link } from "react-router-dom";
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
+
+
 import { useState } from "react";
 import "../../styles/store.css";
 
@@ -54,11 +59,12 @@ export const Tienda = () => {
         postGames();
     }, []);
     console.log(games);
+
     return (
         <div className="container">
             <h1 className="text-center text-light">TIENDA</h1>
             <div className="row">
-                {games.map((game, index) => (
+                {store.games.map((game, index) => (
                     <div key={index} className="col-md-4">
                         <div className="card mb-4 shadow-sm comic-button">
                             <img src={game.background_image} className="card-img-top" width= "250" height='250' alt={game.name} />
@@ -68,7 +74,7 @@ export const Tienda = () => {
                                 <div className="d-flex justify-content-between align-items-center">
                                     <Link to={'/game-details/' + game.id} className="btn btn-outline-secondary">Details</Link>
                                     <button className="btn btn-outline-primary" onClick={() => actions.addToCart(game)}>
-                                        Add to Cart
+                                        <FontAwesomeIcon icon={faShoppingCart} /> Add to Cart
                                     </button>
                                 </div>
                             </div>
