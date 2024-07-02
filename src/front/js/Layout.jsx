@@ -26,6 +26,7 @@ import { LandingPage } from "./pages/LandingPage.jsx";
 import { GameDetails } from "./pages/GameDetails.jsx";
 import { Reviews } from "./pages/Reviews.jsx";
 import { Tienda } from "./pages/Tienda.jsx";
+import { CategoriesPage } from "./pages/CategoriesPage.jsx";
 
 // Create your first component
 const Layout = () => {
@@ -61,7 +62,10 @@ const Layout = () => {
                         <Route element={<LandingPage />} path="landingpage" />
                         <Route element={<GameDetails />} path="/game-details/:gameId" />
                         <Route element={<Reviews />} path="/reviews" />
-                        <Route element={<Tienda />} path="/store" />         
+                        <Route element={<Tienda />} path="/store" />
+                        <Route element={<CategoriesPage />} path="/categories" />
+
+
                       </Routes>
                     <Footer />
                 </ScrollToTop>
