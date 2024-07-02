@@ -1,0 +1,26 @@
+.comic-button {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    color: #fff;
+    background-color: #A9D0FF;
+    border: 2px solid #000;
+    border-radius: 10px;
+    box-shadow: 5px 5px 0px #000;
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+  .comic-button:hover {
+    background-color: #EFFFC1;
+    color: #A9D0FF;
+    border: 2px solid #A9D0FF;
+    box-shadow: 5px 5px 0px #A9D0FF;
+  }
+  .comic-button:active {
+    background-color: #EFFFC1;
+    box-shadow: none;
+    transform: translateY(4px);
+  }
