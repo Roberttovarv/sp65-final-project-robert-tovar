@@ -119,7 +119,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                 const data = await response.json();
                 setStore({ actionGames: data.results });
             },
-            
+
             fetchRPGGames: async () => {
                 const url = 'https://api.rawg.io/api/games?genres=role-playing-games-rpg&key=bf752f88a1074c599e4be40330ae959e';
                 const response = await fetch(url);
