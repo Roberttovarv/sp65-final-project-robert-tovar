@@ -362,15 +362,18 @@ def handle_cartitem(cartitem_id):
         response_body['message'] = 'Productos inexistentes'
         response_body['results'] = {}
         return response_body, 404
-    
 
-@api.route('/orders', methods=['GET', 'POST'])  
+
+@api.route('/orders', methods=['GET', 'POST'])
 def handle_orders():
     response_body = {}
     if request.method == 'GET':
-       
-        rows = db.session.execute(db.select(Orders)).scalars()
-        results = [row.serialize() for row in rows]  
+        user_id = request.args.get('user_id')  # Añadido: Obtener user_id de los parámetros de la URL
+        if user_id:
+            rows = db.session.execute(db.select(Orders).where(Orders.user_id == user_id)).scalars()
+        else:
+            rows = db.session.execute(db.select(Orders)).scalars()
+        results = [row.serialize() for row in rows]
         response_body['results'] = results
         response_body['message'] = 'Listado de Ordenes'
         return response_body, 200
@@ -380,41 +383,19 @@ def handle_orders():
         row.user_id = data['user_id']
         row.date = datetime.today()
         row.status = 'pendiente de pago'
+        # Xra calcular el precio total de la orden
         cart_items = db.session.execute(db.select(CartItems).where(CartItems.cart_id == data['cart_id'])).scalars()
         total_price = sum(item.product_to.price * item.quantity for item in cart_items)
         row.price_total = total_price
         db.session.add(row)
         db.session.commit()
+        # Xra crear los OrderItems asociados a la orden
         for item in cart_items:
             order_item = OrderItems(order_id=row.id, product_id=item.product_id, quantity=item.quantity)
             db.session.add(order_item)
         db.session.commit()
         response_body['results'] = row.serialize()
         response_body['message'] = 'Orden creada'
-        return response_body, 201
-
-
-@api.route('/orders/<int:orderitem_id>', methods=['GET', 'POST'])  
-def handle_orderitems(orderitem_id):
-    response_body = {}
-    if request.method == 'GET':
-        rows = db.session.execute(db.select(OrderItems).where(OrderItems.order_id == orderitem_id)).scalars()
-        results = [row.serialize() for row in rows]
-        response_body['results'] = results
-        response_body['message'] = 'Listado de Productos de la Orden'
-        return response_body, 200
-    if request.method == 'POST':
-        data = request.json
-        row = OrderItems()
-        row.order_id = data['order_id']
-        row.product_id = data['product_id']
-        row.price_total = data['price_total']
-        row.quantity = data['quantity']
-        row.date = datetime.today()
-        db.session.add(row)
-        db.session.commit()
-        response_body['results'] = row.serialize()
-        response_body['message'] = 'Producto añadido a la orden'
         return response_body, 201
 
 
