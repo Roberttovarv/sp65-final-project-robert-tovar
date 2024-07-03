@@ -14,6 +14,7 @@ const getState = ({ getStore, getActions, setStore }) => {
             cart: [], // Añadido para almacenar los juegos en el carrito
             actionGames: [], // Añadido para los juegos de acción
 			    rpgGames: [] // Añadido para los juegos RPG
+                // Hay que añadir un usuario para que lo devuelva cuando hagamos login
         },
         actions: {
             login: async (email, password) => {
