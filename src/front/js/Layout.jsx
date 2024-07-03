@@ -26,6 +26,10 @@ import { LandingPage } from "./pages/LandingPage.jsx";
 import { GameDetails } from "./pages/GameDetails.jsx";
 import { Reviews } from "./pages/Reviews.jsx";
 import { Tienda } from "./pages/Tienda.jsx";
+import { CategoriesPage } from "./pages/CategoriesPage.jsx";
+import { MisPedidos } from "./pages/MisPedidos.jsx";
+
+import { Profile } from "./pages/Profile.jsx";
 
 // Create your first component
 const Layout = () => {
@@ -42,7 +46,7 @@ const Layout = () => {
                 <ScrollToTop>
                     <Navbar />
                     <Routes>
-                        <Route element={<Home />} path="/" />
+                        <Route element={<Home />} path="/rigo" />
                         <Route element={<Demo />} path="/demo" />
                         <Route element={<Single />} path="/single/:theid" />
                         <Route element={<Login />} path="/login" />
@@ -50,6 +54,7 @@ const Layout = () => {
                         <Route element={<h1>Not found!</h1>} path="*" />
                         <Route element={<Users />} path="/users" />
                         <Route element={<Logout />} path="/logout" />
+                        <Route element={<Profile />} path="/profile" />
 
                         <Route element={<UserPanel />} path="/adminpanel/userpanel" />
                         <Route element={<AdminPanel />} path="/adminpanel" />
@@ -58,10 +63,15 @@ const Layout = () => {
                         <Route element={<ProductPanel />} path="/adminpanel/productpanel" />
 
                         <Route element={<Welcome />} path="welcome" />
-                        <Route element={<LandingPage />} path="landingpage" />
+                        <Route element={<LandingPage />} path="/" />
                         <Route element={<GameDetails />} path="/game-details/:gameId" />
-                        <Route element={<Reviews />} path="/reviews" />
-                        <Route element={<Tienda />} path="/store" />         
+                        <Route element={<Reviews />} path="/reseñas" />
+                        <Route element={<Tienda />} path="/tienda" />
+                        <Route element={<CategoriesPage />} path="/categorias" />
+                        <Route element={<MisPedidos />} path="/mispedidos" />
+
+
+
                       </Routes>
                     <Footer />
                 </ScrollToTop>

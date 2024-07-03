@@ -1,4 +1,4 @@
-.comic-button {
+.comic-btn {
     display: inline-block;
     padding: 10px 20px;
     font-size: 24px;
@@ -14,14 +14,14 @@
     cursor: pointer;
   }
   
-  .comic-button:hover {
+  .comic-btn:hover {
     background-color: #fff;
     color: #FF5353;
     border: 2px solid #FF5353;
     box-shadow: 5px 5px 0px #FF5353;
   }
   
-  .comic-button:active {
+  .comic-btn:active {
     background-color: #efffc1;
     box-shadow: none;
     transform: translateY(4px);
