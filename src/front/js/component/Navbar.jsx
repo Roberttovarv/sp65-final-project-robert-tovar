@@ -1,9 +1,12 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
-import { Context } from "./../store/appContext.js";
 import { Carrito } from "../pages/Carrito.jsx";
+import { Context } from "./../store/appContext";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 
 export const Navbar = () => {
+    const { store } = useContext(Context);
 
 	const { store, actions } = useContext(Context)
 
@@ -26,3 +29,4 @@ export const Navbar = () => {
 		</div>
 	);
 };
+
