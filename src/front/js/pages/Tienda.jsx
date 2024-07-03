@@ -50,7 +50,7 @@ export const Tienda = () => {
     }, []);
     console.log(games);
     return (
-        <div className="container">
+        <div ssName="container">
             <h1 className="text-center text-light">TIENDA</h1>
             <div className="row">
                 {games.map((game, index) => (
