@@ -86,7 +86,9 @@
     transform: translateY(4px);
   }
 .navbar {
-  background-color: #74a7e4;
+  background-color: #a3ccfd;
+  text-shadow: 3px 3px 10px rgba(0, 0, 0, 0.7);
+  border-bottom: #000 1px;
 
 }
 .nav-btn{
@@ -105,11 +107,17 @@
 }
 
 .nav-btn:active {
-  font-weight: 600;
+  font-weight: 800;
   transform: translateZ(2px);
 }
 
 .nav-btn:focus, .div-btn:focus {
-  font-weight: 600;
+  font-weight: 900;
 }
-  
+.page-bg{
+  background-color: #fdeff2;
+
+}
+.sombra-text{
+  text-shadow: -2px 3px 5px rgba(0, 0, 0, .7);
+}

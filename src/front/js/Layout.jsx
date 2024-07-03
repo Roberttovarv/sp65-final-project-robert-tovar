@@ -29,6 +29,8 @@ import { Tienda } from "./pages/Tienda.jsx";
 import { CategoriesPage } from "./pages/CategoriesPage.jsx";
 import { MisPedidos } from "./pages/MisPedidos.jsx";
 
+import { Profile } from "./pages/Profile.jsx";
+
 // Create your first component
 const Layout = () => {
     /* 
@@ -52,6 +54,7 @@ const Layout = () => {
                         <Route element={<h1>Not found!</h1>} path="*" />
                         <Route element={<Users />} path="/users" />
                         <Route element={<Logout />} path="/logout" />
+                        <Route element={<Profile />} path="/profile" />
 
                         <Route element={<UserPanel />} path="/adminpanel/userpanel" />
                         <Route element={<AdminPanel />} path="/adminpanel" />
