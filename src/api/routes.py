@@ -426,7 +426,10 @@ def signup():
     data = request.json
     email = data.get("email", None).lower()
     password = data.get("password", None)
-    # Logica de verificación de un mail válido y password válido
+    existing_user = Users.query.filter_by(email=email).first()
+    if existing_user:
+        response_body['error'] = 'El correo electrónico ya está registrado'
+        return jsonify(response_body), 400
     user = Users()
     user.email = email
     user.password = password
@@ -443,10 +446,9 @@ def signup():
     db.session.add(cart)
     db.session.commit()
     access_token = create_access_token(identity={'user_id': user.id})
-    response_body['message'] = 'User Registrado y logeado'
+    response_body['message'] = 'Usuario registrado y logueado'
     response_body['access_token'] = access_token
-    return response_body, 200
-
+    return jsonify(response_body), 200
 
 @api.route("/login", methods=["POST"])
 def login():
