@@ -24,3 +24,14 @@
     box-shadow: none;
     transform: translateY(4px);
   }
+.card-round {
+    border-radius: 5%; 
+    background-color: #d0e5ff;
+   
+}
+
+.shadow-box {
+    box-shadow: -3px 4px 8px rgba(0, 0, 0, 0.9);
+    border: 2px solid #000;
+}
+

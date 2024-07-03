@@ -18,16 +18,16 @@ export const AdminPanel = () => {
                     <div className="container-fluid m-auto">
                         <div className="row justify-content-around mx-5 align-items-center" style={{ height: "100%" }}>
                             <div className="col-3">
-                                <Link to="/adminpanel/gamepanel"><button className="comic-button" style={{ height: "30vh", width: "20vw" }}>Videojuegos</button></Link>
+                                <Link to="/adminpanel/gamepanel"><button className="comic-btn" style={{ height: "30vh", width: "20vw" }}>Videojuegos</button></Link>
                             </div>
                             <div className="col-3">
-                            <Link to="/adminpanel/productpanel"><button className="comic-button" style={{ height: "30vh", width: "20vw" }}>Productos</button></Link>
+                            <Link to="/adminpanel/productpanel"><button className="comic-btn" style={{ height: "30vh", width: "20vw" }}>Productos</button></Link>
                             </div>
                             <div className="col-3">
-                               <Link to="/adminpanel/postpanel"><button className="comic-button" style={{ height: "30vh", width: "20vw" }}>Posts</button></Link>
+                               <Link to="/adminpanel/postpanel"><button className="comic-btn" style={{ height: "30vh", width: "20vw" }}>Posts</button></Link>
                             </div>
                             <div className="col-3">
-                            <Link to="/adminpanel/userpanel"><button className="comic-button" style={{ height: "30vh", width: "20vw" }}>Usuarios</button></Link>
+                            <Link to="/adminpanel/userpanel"><button className="comic-btn" style={{ height: "30vh", width: "20vw" }}>Usuarios</button></Link>
                             </div>
                         </div>
                     </div>

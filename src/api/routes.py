@@ -467,8 +467,9 @@ def profile():
     response_body = {}
     # Access the identity of the current user with get_jwt_identity
     current_user = get_jwt_identity()
+    user = Users.query.get(current_user)
     response_body['message'] = f'User logeado: {current_user}'
-    return response_body, 200
+    return response_body, user.serialize, 200
 
 
 @api.route('/users', methods=['GET'])
@@ -481,8 +482,15 @@ def get_users():
         response_body['message'] = 'Listado de Usuarios'
         return response_body, 200
 
+@api.route('/pedidos', methods=['GET'])
+def get_pedidos():
+    response_body = {}
+    user_id = request.jwt_payload['user_id']
+    rows = db.session.execute(
+        db.select(OrderItems).join(Orders).where(Orders.user_id == user_id)
+    ).scalars()
+    results = [row.serialize() for row in rows]
+    response_body['results'] = results
+    response_body['message'] = 'Listado de Pedidos del Usuario'
+    return response_body, 200
 
-# @api.route("/logout", methods=["POST"])
-# @jwt_required()
-# def logout():
-#     return jsonify({"msg": "Logout successful"}), 200
