@@ -2,14 +2,15 @@ const getState = ({ getStore, getActions, setStore }) => {
     return {
         store: {
             message: null,
-            demo: [{title: "FIRST", background: "white", initial: "white"}],
+            demo: [{ title: "FIRST", background: "white", initial: "white" }],
             counter: 2,
             token: null,
-            reviews: [], 
+            reviews: [],
             review: null,
             games: [],
             topGames: [],
             bestRatedGames: [],
+            user: null,
             cart: ['David'] // Añadido para almacenar los juegos en el carrito
         },
         actions: {
@@ -36,7 +37,8 @@ const getState = ({ getStore, getActions, setStore }) => {
                     setStore({ token: data.access_token });
                     localStorage.setItem('token', data.access_token);
                 }
-
+                // Hay que guardar los datos del usuario(data.results) en el localStorage y en el store
+                // Hay que guardar el data.cart también el localStorage y en el store
                 return data;
             },
 
@@ -48,14 +50,14 @@ const getState = ({ getStore, getActions, setStore }) => {
             exampleFunction: () => { getActions().changeColor(0, "green"); },
 
             fetchTopGames: async () => {
-                const url = 'https://api.rawg.io/api/games?key=bf752f88a1074c599e4be40330ae959e'; 
+                const url = 'https://api.rawg.io/api/games?key=bf752f88a1074c599e4be40330ae959e';
                 const response = await fetch(url);
                 const data = await response.json();
                 setStore({ topGames: data.results });
             },
 
             fetchBestRatedGames: async () => {
-                const url = 'https://api.rawg.io/api/games?key=bf752f88a1074c599e4be40330ae959e'; 
+                const url = 'https://api.rawg.io/api/games?key=bf752f88a1074c599e4be40330ae959e';
                 const response = await fetch(url);
                 const data = await response.json();
                 setStore({ bestRatedGames: data.results });
@@ -75,7 +77,7 @@ const getState = ({ getStore, getActions, setStore }) => {
             },
 
             setReviews: (reviews) => {
-              setStore({ reviews: reviews });
+                setStore({ reviews: reviews });
             },
 
             getReview: (reviewId) => {
@@ -91,7 +93,7 @@ const getState = ({ getStore, getActions, setStore }) => {
             },
 
             getGameDetails: async (gameId) => {
-                const url = `https://api.rawg.io/api/games/${gameId}?key=bf752f88a1074c599e4be40330ae959e`; 
+                const url = `https://api.rawg.io/api/games/${gameId}?key=bf752f88a1074c599e4be40330ae959e`;
                 const response = await fetch(url);
                 if (!response.ok) {
                     console.log('Error al obtener detalles del juego', response.status, response.statusText);
@@ -101,32 +103,32 @@ const getState = ({ getStore, getActions, setStore }) => {
                 setStore({ selectedGame: data });
             },
 
-			changeColor: (index, color) => {
-				const store = getStore();  // Get the store
-				// We have to loop the entire demo array to look for the respective index and change its color
-				const demo = store.demo.map((element, i) => {
-					if (i === index) element.background = color;
-					return element;
-				});
-				setStore({ demo: demo });  // Reset the global store
-			},
-			getMessage: async () => {
-				const response = await fetch(process.env.BACKEND_URL + "/api/hello")
-				if (!response.ok) {
-					console.log("Error loading message from backend", response.status, response.statusText)
-					return
-				}
-				const data = await response.json()
-				setStore({ message: data.message })
-				return data;  // Don't forget to return something, that is how the async resolves
-			},
+            changeColor: (index, color) => {
+                const store = getStore();  // Get the store
+                // We have to loop the entire demo array to look for the respective index and change its color
+                const demo = store.demo.map((element, i) => {
+                    if (i === index) element.background = color;
+                    return element;
+                });
+                setStore({ demo: demo });  // Reset the global store
+            },
+            getMessage: async () => {
+                const response = await fetch(process.env.BACKEND_URL + "/api/hello")
+                if (!response.ok) {
+                    console.log("Error loading message from backend", response.status, response.statusText)
+                    return
+                }
+                const data = await response.json()
+                setStore({ message: data.message })
+                return data;  // Don't forget to return something, that is how the async resolves
+            },
 
-			increase: () => {setStore({counter: getStore().counter + 1})},
-			decrease : () => {setStore({counter: getStore().counter - 1})},
-			addToCartd: (newGameToCart) => {setStore({cart: [...getStore().cart, newGameToCart]})},
-			removeCart: (removeGame) => {setStore({cart: getStore().cart.filter((item) => item != removeGame)})}
-		}
-	};
+            increase: () => { setStore({ counter: getStore().counter + 1 }) },
+            decrease: () => { setStore({ counter: getStore().counter - 1 }) },
+            addToCartd: (newGameToCart) => { setStore({ cart: [...getStore().cart, newGameToCart] }) },
+            removeCart: (removeGame) => { setStore({ cart: getStore().cart.filter((item) => item != removeGame) }) }
+        }
+    };
 };
-        
+
 export default getState;

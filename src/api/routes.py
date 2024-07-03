@@ -340,6 +340,7 @@ def handle_cartitem(cartitem_id):
         response_body['message'] = 'Productos inexistentes'
         response_body['results'] = {}
         return response_body, 404
+
     if request.method == 'POST':
         data = request.json
         row = CartItems()
@@ -351,6 +352,7 @@ def handle_cartitem(cartitem_id):
         response_body['results'] = row.serialize()
         response_body['message'] = 'Productos añadidos'
         return response_body, 201
+
     if request.method == 'DELETE':
         cartitem = db.session.execute(db.select(CartItems).where(CartItems.id == cartitem_id)).scalar()
         if cartitem:
@@ -455,12 +457,24 @@ def login():
     if user:
         access_token = create_access_token(identity={'user_id': user.id, 'is_admin': user.is_admin})
         response_body['message'] = 'User logged in'
-        response_body['access_token'] = access_token  # Añadir un user serialize arriba del 200
+        response_body['access_token'] = access_token
+        response_body['results'] = user.serialize()
+        cart = Carts.query.filter_by(user_id=user.id).first()
+        if cart:
+            cart_items = db.session.execute(db.select(CartItems).where(CartItems.cart_id == cart.id)).scalars()
+            items_serialized = [item.serialize() for item in cart_items]
+            response_body['cart'] = items_serialized
+        else:
+            new_cart = Carts(user_id=user.id, status='en proceso')
+            db.session.add(new_cart)
+            db.session.commit()
+            cart_items = db.session.execute(db.select(CartItems).where(CartItems.cart_id == new_cart.id)).scalars()
+            items_serialized = [item.serialize() for item in cart_items]
+            response_body['cart'] = items_serialized
         return response_body, 200
-    response_body['message'] = 'Bad user or password'
-    return response_body, 401  
-        
-
+    else:
+        response_body['message'] = 'Bad user or password'
+        return response_body, 401
 @api.route("/profile", methods=["GET"])
 @jwt_required()
 def profile():
