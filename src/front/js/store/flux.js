@@ -10,9 +10,10 @@ const getState = ({ getStore, getActions, setStore }) => {
             games: [],
             topGames: [],
             bestRatedGames: [],
+
             cart: [], // Añadido para almacenar los juegos en el carrito
             actionGames: [], // Añadido para los juegos de acción
-			rpgGames: [] // Añadido para los juegos RPG
+			    rpgGames: [] // Añadido para los juegos RPG
         },
         actions: {
             login: async (email, password) => {
@@ -151,7 +152,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			increase: () => {setStore({counter: getStore().counter + 1})},
 			decrease : () => {setStore({counter: getStore().counter - 1})},
 			addToCartd: (newGameToCart) => {setStore({cart: [...getStore().cart, newGameToCart]})},
-			removeCart: () => {}
+			removeCart: (removeGame) => {setStore({cart: getStore().cart.filter((item) => item != removeGame)})}
 		}
 	};
 };
