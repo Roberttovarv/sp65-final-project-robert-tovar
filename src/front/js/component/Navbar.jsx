@@ -6,7 +6,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 
 export const Navbar = () => {
-    const { store } = useContext(Context);
 
 	const { store, actions } = useContext(Context)
 
