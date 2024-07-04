@@ -99,10 +99,18 @@ const getState = ({ getStore, getActions, setStore }) => {
                 setStore({ review: review });
             },
 
-            addToCart: (game) => {
-                const store = getStore();
-                const newCart = [...store.cart, game];
-                setStore({ cart: newCart });
+            addToCart: async ()  => {
+                    const uri = host + '/api/login';
+                    const options = { method: 'POST'}
+                    const response = await fetch (uri, options)
+        
+            
+                if (!response.ok) {
+                    console.log("Error", response.status, response.statusText);
+                }
+                const data = await response.json();
+                setStore({cart: data.cart})
+                console.log(data);
             },
 
             getGameDetails: async (gameId) => {

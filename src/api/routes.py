@@ -446,7 +446,13 @@ def login():
         if cart:
             cart_items = db.session.execute(db.select(CartItems).where(CartItems.cart_id == cart.id)).scalars()
             items_serialized = [item.serialize() for item in cart_items]
-            response_body['cart'] = items_serialized
+            items_carts = []
+            for row in items_serialized:
+                product = db.session.execute(db.select(Products).where(Products.id == row['product_id'])).scalar()
+                if product:
+                    row['product_name'] = product.name
+                    items_carts.append(row)
+            response_body['cart'] = items_carts
         else:
             new_cart = Carts(user_id=user.id, status='en proceso')
             db.session.add(new_cart)

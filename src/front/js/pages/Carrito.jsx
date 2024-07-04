@@ -8,24 +8,24 @@ export const Carrito = () => {
 
     const { store, actions } = useContext(Context)
 
-    const host = `${process.env.BACKEND_URL}`;
+    // const host = `${process.env.BACKEND_URL}`;
 
-    const getCart = async (id) => {
-        const uri = `${host}/api/carts/${id}`;
-        const options = { method: 'GET' };
+    // const getCart = async (id) => {
+    //     const uri = `${host}/api/carts/${id}`;
+    //     const options = { method: 'GET' };
 
-        const response = await fetch(uri, options);
+    //     const response = await fetch(uri, options);
 
-        if (!response.ok) {
-            console.log("Error", response.status, response.statusText);
-        }
-        const data = await response.json();
-        setCartData(data)
-        console.log(data);
-    };
-    useEffect(() => {
-        getCart()
-    }, [])
+    //     if (!response.ok) {
+    //         console.log("Error", response.status, response.statusText);
+    //     }
+    //     const data = await response.json();
+    //     setCartData(data)
+    //     console.log(data);
+    // };
+    // useEffect(() => {
+    //     getCart()
+    // }, [])
 
     return (
         <>
