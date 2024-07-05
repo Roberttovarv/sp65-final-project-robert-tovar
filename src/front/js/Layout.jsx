@@ -66,10 +66,9 @@ const Layout = () => {
                         <Route element={<LandingPage />} path="/" />
                         <Route element={<GameDetails />} path="/game-details/:gameId" />
                         <Route element={<Reviews />} path="/reseñas" />
-                        <Route element={<Tienda />} path="/tienda" />
+                        <Route element={<Tienda />} path="/store" />
                         <Route element={<CategoriesPage />} path="/categorias" />
                         <Route element={<MisPedidos />} path="/mispedidos" />
-
 
 
                       </Routes>
