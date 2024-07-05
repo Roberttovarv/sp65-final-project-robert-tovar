@@ -5,7 +5,7 @@ export const MisPedidos = () => {
 
   useEffect(() => {
     const fetchPedidos = async () => {
-      const response = await fetch('/api/orders');
+      const response = await fetch('https://ideal-space-succotash-r44jgw9vgjw93w7g9-3001.app.github.dev/api/orders');
       if (!response.ok) {
         console.log(`Error al obtener las órdenes: ${response.status} ${response.statusText}`);
         return; 
@@ -16,7 +16,9 @@ export const MisPedidos = () => {
 
     fetchPedidos();
 
-  }, []); // Dependencia vacía para ejecutar solo una vez al montar el componente
+  }, []); 
+
+  console.log(pedidos);
 
   return (
     <div>
@@ -27,7 +29,6 @@ export const MisPedidos = () => {
             <div>Fecha: {pedido.date}</div>
             <div>Total: {pedido.price_total}</div>
             <div>Estado: {pedido.status}</div>
-            {/* Otros detalles del pedido como productos, estado, etc. */}
           </li>
         ))}
       </ul>
