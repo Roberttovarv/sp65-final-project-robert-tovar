@@ -17,7 +17,7 @@ export const UserPanel = () => {
     }, []);
 
     const getUsers = async () => {
-        const uri = host + '/api/users';
+        const uri = host + '/api/users/';
         const options = { method: 'GET' };
 
         const response = await fetch(uri, options);

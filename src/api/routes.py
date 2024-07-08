@@ -25,7 +25,7 @@ def fetch_and_store_games():
     game_ids = request.json.get('game_ids')
     if not game_ids or not isinstance(game_ids, list):
         return jsonify({'error': 'No hay juegos o el formato es incorrecto'}), 400
-    api_key = 'bf752f88a1074c599e4be40330ae959e'
+    api_key = '3429cc68d06a4bd08e1bec15b038c967'
     stored_games = []
     errors = []
     for game_id in game_ids:
@@ -310,48 +310,59 @@ def handle_product(product_id):
         response_body['results'] = {}
         return response_body, 404
     
-
-@api.route('/carts', methods=['GET', 'POST'])  
+@api.route('/cart', methods=['GET', 'POST'])
 @jwt_required()
-def handle_carts():
+def handle_cart():
     response_body = {}
     current_user = get_jwt_identity()
     print(current_user)
+    
     if request.method == 'GET':
-        rows = db.session.execute(db.select(Carts)).scalars()
-        results = [row.serialize() for row in rows]  
-        response_body['results'] = results
-        response_body['message'] = 'Listado de Carritos'
-        return response_body, 200
-    if request.method == 'POST':
-        response_body['message'] = 'Este endpoint no es válido. Ud debe hacer un /signup'
+        cart = db.session.execute(db.select(Carts).filter_by(user_id=current_user)).scalar_one_or_none()
+        if not cart:
+            response_body['message'] = 'Carrito no encontrado'
+            return response_body, 404
+        cart_items = db.session.execute(db.select(CartItems).filter_by(cart_id=cart.id)).scalars()
+        response_body['results'] = [item.serialize() for item in cart_items]
+        response_body['message'] = 'Listado de productos en el carrito'
         return response_body, 200
     
-
-@api.route('/carts/<int:cartitem_id>', methods=['GET', 'POST', 'DELETE']) 
-def handle_cartitem(cartitem_id):
-    response_body = {}
-    if request.method == 'GET':
-        cartitem = db.session.execute(db.select(CartItems).where(CartItems.id == cartitem_id)).scalar()
-        if cartitem:
-            response_body['results'] = cartitem.serialize()
-            response_body['message'] = 'Productos encontrados'
-            return response_body, 200
-        response_body['message'] = 'Productos inexistentes'
-        response_body['results'] = {}
-        return response_body, 404
-
     if request.method == 'POST':
-        data = request.json
-        row = CartItems()
-        row.product_id = data['product_id']
-        row.cart_id = data['cart_id']
-        row.quantity = data['quantity']
-        db.session.add(row)
+        product_id = request.json.get('product_id')
+        quantity = request.json.get('quantity', 1)
+        
+        cart = db.session.execute(db.select(Carts).filter_by(user_id=current_user)).scalar_one_or_none()
+        if not cart:
+            cart = Carts(user_id=current_user)
+            db.session.add(cart)
+            db.session.commit()
+        
+        cart_item = CartItems(cart_id=cart.id, product_id=product_id, quantity=quantity)
+        db.session.add(cart_item)
         db.session.commit()
-        response_body['results'] = row.serialize()
-        response_body['message'] = 'Productos añadidos'
+        
+        response_body['message'] = 'Producto agregado al carrito'
         return response_body, 201
+
+
+@api.route('/cart/<int:item_id>', methods=['DELETE'])
+@jwt_required()
+def handle_cart_item(item_id):
+    response_body = {}
+    current_user = get_jwt_identity()
+    print(current_user)
+    
+    cart_item = db.session.execute(db.select(CartItems).filter_by(id=item_id)).scalar_one_or_none()
+    if not cart_item:
+        response_body['message'] = 'Producto no encontrado en el carrito'
+        return response_body, 404
+    
+    db.session.delete(cart_item)
+    db.session.commit()
+    
+    response_body['message'] = 'Producto eliminado del carrito'
+    return response_body, 200
+
 
     if request.method == 'DELETE':
         cartitem = db.session.execute(db.select(CartItems).where(CartItems.id == cartitem_id)).scalar()

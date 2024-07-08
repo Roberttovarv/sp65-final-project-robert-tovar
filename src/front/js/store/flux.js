@@ -13,8 +13,7 @@ const getState = ({ getStore, getActions, setStore }) => {
             user: null,
             cart: [], // Añadido para almacenar los juegos en el carrito
             actionGames: [], // Añadido para los juegos de acción
-			      rpgGames: [] // Añadido para los juegos RPG
-            // Hay que añadir un usuario para que lo devuelva cuando hagamos login
+            auth: false,
         },
         actions: {
             login: async (email, password) => {
@@ -39,44 +38,20 @@ const getState = ({ getStore, getActions, setStore }) => {
                 if (data.access_token) {
                     setStore({ token: data.access_token });
                     localStorage.setItem('token', data.access_token);
+                    setStore({auth: true})
                 }
-                // Hay que guardar los datos del usuario(data.results) en el localStorage y en el store
-                // Hay que guardar el data.cart también el localStorage y en el store
                 return data;
             },
 
             logout: () => {
                 setStore({ token: null });
                 localStorage.removeItem('token');
+                setStore({auth: false})
             },
 
             exampleFunction: () => { getActions().changeColor(0, "green"); },
 
-            fetchTopGames: async () => {
-                const url = 'https://api.rawg.io/api/games?key=bf752f88a1074c599e4be40330ae959e';
-                const response = await fetch(url);
-                const data = await response.json();
-                setStore({ topGames: data.results });
-            },
-
-            fetchBestRatedGames: async () => {
-                const url = 'https://api.rawg.io/api/games?key=bf752f88a1074c599e4be40330ae959e';
-                const response = await fetch(url);
-                const data = await response.json();
-                setStore({ bestRatedGames: data.results });
-            },
-
-            fetchGames: async () => {
-                const url = 'https://api.rawg.io/api/games?key=bf752f88a1074c599e4be40330ae959e';
-                const response = await fetch(url);
-                if (response.ok) {
-                    const data = await response.json();
-                    setStore({ games: data.results });
-                } else {
-                    console.error('Error fetching games:', response.status, response.statusText);
-                }
-            },
-
+            
             removeFromCart: (gameId) => {
                 const store = getStore();
                 const updatedCart = store.cart.filter(game => game.id !== gameId);

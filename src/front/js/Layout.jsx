@@ -30,6 +30,7 @@ import { CategoriesPage } from "./pages/CategoriesPage.jsx";
 import { MisPedidos } from "./pages/MisPedidos.jsx";
 
 import { Profile } from "./pages/Profile.jsx";
+import { LoginRegister } from "./pages/LoginRegister.jsx";
 
 // Create your first component
 const Layout = () => {
@@ -69,6 +70,9 @@ const Layout = () => {
                         <Route element={<Tienda />} path="/store" />
                         <Route element={<CategoriesPage />} path="/categorias" />
                         <Route element={<MisPedidos />} path="/mispedidos" />
+                        <Route element={<LoginRegister />} path="/login-register" />
+        
+                        
 
 
                       </Routes>
