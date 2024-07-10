@@ -8,18 +8,12 @@ import { Navbar } from "./component/Navbar.jsx";
 import { Footer } from "./component/Footer.jsx";
 // Custom Pages
 import { Home } from "./pages/Home.jsx";
-import { Demo } from "./pages/Demo.jsx";
-import { Single } from "./pages/Single.jsx";
-import { Login } from "./pages/Login.jsx";
-import { Signup } from "./pages/Signup.jsx";
-import { Users } from "./pages/Users.jsx";
 import Logout from "./pages/Logout.jsx";
 // 
 import { GamePanel } from "./pages/GamePanel.jsx"
 import { AdminPanel } from "./pages/AdminPanel.jsx"
 import { UserPanel } from "./pages/UserPanel.jsx"
 import { PostPanel } from "./pages/PostPanel.jsx"
-import { ProductPanel } from "./pages/ProductPanel.jsx";
 
 import { Welcome } from "./component/Welcome.jsx";
 import { LandingPage } from "./pages/LandingPage.jsx";
@@ -27,7 +21,6 @@ import { GameDetails } from "./pages/GameDetails.jsx";
 import { Reviews } from "./pages/Reviews.jsx";
 import { Tienda } from "./pages/Tienda.jsx";
 import { CategoriesPage } from "./pages/CategoriesPage.jsx";
-import { MisPedidos } from "./pages/MisPedidos.jsx";
 
 import { Profile } from "./pages/Profile.jsx";
 import { LoginRegister } from "./pages/LoginRegister.jsx";
@@ -48,12 +41,7 @@ const Layout = () => {
                     <Navbar />
                     <Routes>
                         <Route element={<Home />} path="/rigo" />
-                        <Route element={<Demo />} path="/demo" />
-                        <Route element={<Single />} path="/single/:theid" />
-                        <Route element={<Login />} path="/login" />
-                        <Route element={<Signup />} path="/signup" />
                         <Route element={<h1>Not found!</h1>} path="*" />
-                        <Route element={<Users />} path="/users" />
                         <Route element={<Logout />} path="/logout" />
                         <Route element={<Profile />} path="/profile" />
 
@@ -61,15 +49,13 @@ const Layout = () => {
                         <Route element={<AdminPanel />} path="/adminpanel" />
                         <Route element={<GamePanel />} path="/adminpanel/gamepanel" />
                         <Route element={<PostPanel />} path="/adminpanel/postpanel" />
-                        <Route element={<ProductPanel />} path="/adminpanel/productpanel" />
 
                         <Route element={<Welcome />} path="welcome" />
                         <Route element={<LandingPage />} path="/" />
                         <Route element={<GameDetails />} path="/game-details/:gameId" />
-                        <Route element={<Reviews />} path="/reseñas" />
+                        <Route element={<Reviews />} path="/reviews" />
                         <Route element={<Tienda />} path="/store" />
                         <Route element={<CategoriesPage />} path="/categorias" />
-                        <Route element={<MisPedidos />} path="/mispedidos" />
                         <Route element={<LoginRegister />} path="/login-register" />
         
                         

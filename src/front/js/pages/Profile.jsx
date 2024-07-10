@@ -6,31 +6,41 @@ import "../../styles/index.css";
 
 export const Profile = () => {
     const { store, actions } = useContext(Context);
-    const [users, setUsers] = useState([]);
+    const [user, setUser] = useState([]);
     const [currentUser, setCurrentUser] = useState(null);
     const [userEdit, setUserEdit] = useState(false);
 
     const host = `${process.env.BACKEND_URL}`;
 
-    useEffect(() => {
-        getUsers();
-    }, []);
-
-    const getUsers = async () => {
-        const uri = host + '/api/users';
-        const options = { method: 'GET' };
-
-        const response = await fetch(uri, options);
-
-        if (!response.ok) {
-            console.log("Error", response.status, response.statusText);
+    
+    const fetchProfile = async () => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            console.log("No token found in localStorage");
+            return;
         }
-
-        const data = await response.json();
-        setUsers(data.results);
+        
+        const response = await fetch(`${host}/api/profile`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        
+        if (response.ok) {
+            const data = await response.json();
+            setUser(data.results);
+            localStorage.setItem('is_admin', data.results.is_admin);
+        } else {
+            console.log("Failed to fetch profile");
+        }
     };
-
-    const handleEdit = async (event) => {
+    useEffect(() => {
+        fetchProfile();
+    }, [
+    ]);
+    
+   const handleEdit = async (event) => {
         event.preventDefault();
         const dataToSend = {
             name: currentUser.name,
@@ -85,7 +95,7 @@ export const Profile = () => {
                                                 type="text"
                                                 className="form-control"
                                                 placeholder="Nombre"
-                                                value={currentUser?.name || ''}
+                                                value={user.first_name}
                                                 onChange={(e) => setCurrentUser({ ...currentUser, name: e.target.value })}
                                             />
                                         </div>
@@ -95,8 +105,7 @@ export const Profile = () => {
                                                 type="text"
                                                 className="form-control"
                                                 placeholder="Apellido"
-                                                value={currentUser?.apellido || ''}
-                                                onChange={(e) => setCurrentUser({ ...currentUser, apellido: e.target.value })}
+                                                value={user.last_name}
                                             />
                                         </div>
                                     </div>
@@ -107,17 +116,16 @@ export const Profile = () => {
                                                 type="email"
                                                 className="form-control"
                                                 placeholder="Correo Electrónico"
-                                                value={currentUser?.email || ''}
-                                                onChange={(e) => setCurrentUser({ ...currentUser, email: e.target.value })}
+                                                value={user.email}
                                             />
                                         </div>
                                         <div className="col-md-12">
-                                            <label className="labels">Edad</label>
+                                            <label className="labels">Nombre de usuario</label>
                                             <input
                                                 type="text"
                                                 className="form-control"
                                                 placeholder="Edad"
-                                                value={currentUser?.edad || ''}
+                                                value={user.username}
                                                 onChange={(e) => setCurrentUser({ ...currentUser, edad: e.target.value })}
                                             />
                                         </div>

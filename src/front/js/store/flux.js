@@ -1,21 +1,23 @@
+
+
 const getState = ({ getStore, getActions, setStore }) => {
     return {
         store: {
             message: null,
-            demo: [{ title: "FIRST", background: "white", initial: "white" }],
             counter: 2,
             token: null,
-            reviews: [],
+            admin: false,
             review: null,
             games: [],
             topGames: [],
             bestRatedGames: [],
             user: null,
-            cart: [], // Añadido para almacenar los juegos en el carrito
-            actionGames: [], // Añadido para los juegos de acción
             auth: false,
+            currentGame: {},
+
         },
         actions: {
+
             login: async (email, password) => {
                 console.log("Intentando iniciar sesión con email:", email);
                 console.log("Contraseña:", password);
@@ -40,64 +42,25 @@ const getState = ({ getStore, getActions, setStore }) => {
                     localStorage.setItem('token', data.access_token);
                     setStore({auth: true})
                 }
+                if (data.is_admin) {
+                    setStore({ admin: data.is_admin});
+                    localStorage.setItem('is_admin', data.is_admin);
+                    setStore({admin: true})
+                }
                 return data;
             },
-
+            
             logout: () => {
                 setStore({ token: null });
                 localStorage.removeItem('token');
                 setStore({auth: false})
             },
 
-            exampleFunction: () => { getActions().changeColor(0, "green"); },
-
-            
-            removeFromCart: (gameId) => {
-                const store = getStore();
-                const updatedCart = store.cart.filter(game => game.id !== gameId);
-                setStore({ cart: updatedCart });
+            setCurrentGame: (game) => {
+             
+                setStore({currentGame: game});
             },
 
-            addFavorites: (gameTitle) => {
-                const store = getStore();
-                const favorites = [...store.favorites, gameTitle];
-                setStore({ favorites });
-            },
-
-            setReviews: (reviews) => {
-                setStore({ reviews: reviews });
-            },
-
-            getReview: (reviewId) => {
-                const store = getStore();
-                const review = store.reviews.find(r => r.id === parseInt(reviewId));
-                setStore({ review: review });
-            },
-
-            addToCart: async ()  => {
-                    const uri = host + '/api/login';
-                    const options = { method: 'POST'}
-                    const response = await fetch (uri, options)
-        
-            
-                if (!response.ok) {
-                    console.log("Error", response.status, response.statusText);
-                }
-                const data = await response.json();
-                setStore({cart: data.cart})
-                console.log(data);
-            },
-
-            getGameDetails: async (gameId) => {
-                const url = `https://api.rawg.io/api/games/${gameId}?key=bf752f88a1074c599e4be40330ae959e`;
-                const response = await fetch(url);
-                if (!response.ok) {
-                    console.log('Error al obtener detalles del juego', response.status, response.statusText);
-                    return;
-                }
-                const data = await response.json();
-                setStore({ selectedGame: data });
-            },
 
             changeColor: (index, color) => {
                 const store = getStore();  // Get the store
@@ -108,22 +71,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                 });
                 setStore({ demo: demo });  // Reset the global store
             },
-            getMessage: async () => {
-                const response = await fetch(process.env.BACKEND_URL + "/api/hello")
-                if (!response.ok) {
-                    console.log("Error loading message from backend", response.status, response.statusText)
-                    return
-                }
-                const data = await response.json()
-                setStore({ message: data.message })
-                return data;  // Don't forget to return something, that is how the async resolves
-            },
-
-            increase: () => { setStore({ counter: getStore().counter + 1 }) },
-            decrease: () => { setStore({ counter: getStore().counter - 1 }) },
-            addToCartd: (newGameToCart) => { setStore({ cart: [...getStore().cart, newGameToCart] }) },
-            removeCart: (removeGame) => { setStore({ cart: getStore().cart.filter((item) => item != removeGame) }) }
-        }
+          }
     };
 
 }
