@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: cc248fa9dcb5
+Revision ID: 9d26b4caea47
 Revises: 
-Create Date: 2024-07-09 19:39:22.695235
+Create Date: 2024-07-11 21:07:15.902711
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'cc248fa9dcb5'
+revision = '9d26b4caea47'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -23,10 +23,9 @@ def upgrade():
     sa.Column('name', sa.String(), nullable=False),
     sa.Column('background_image', sa.String(), nullable=True),
     sa.Column('description', sa.String(), nullable=False),
-    sa.Column('released_at', sa.String(), nullable=False),
-    sa.Column('metacritic', sa.Float(), nullable=False),
+    sa.Column('released_at', sa.String(), nullable=True),
+    sa.Column('metacritic', sa.Integer(), nullable=True),
     sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('background_image'),
     sa.UniqueConstraint('name')
     )
     op.create_table('users',
@@ -51,13 +50,11 @@ def upgrade():
     op.create_table('posts',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('title', sa.String(), nullable=False),
-    sa.Column('game_name', sa.String(), nullable=False),
-    sa.Column('body', sa.String(length=150), nullable=False),
+    sa.Column('game_name', sa.String(), nullable=True),
+    sa.Column('body', sa.String(), nullable=False),
     sa.Column('date', sa.Date(), nullable=True),
     sa.Column('image_url', sa.String(), nullable=True),
-    sa.Column('author_id', sa.Integer(), nullable=False),
     sa.Column('game_id', sa.Integer(), nullable=True),
-    sa.ForeignKeyConstraint(['author_id'], ['users.id'], ),
     sa.ForeignKeyConstraint(['game_id'], ['games.id'], ),
     sa.PrimaryKeyConstraint('id')
     )

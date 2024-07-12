@@ -115,7 +115,9 @@
   font-weight: 900;
 }
 .page-bg{
-  background-color: #fdeff2;
+  background-image: url('https://i.pinimg.com/564x/8b/0c/61/8b0c618e3660ee7a97fcbf125c507c12.jpg');
+  background-repeat: repeat;
+  background-size: 30%;
 
 }
 .sombra-text{

@@ -12,6 +12,15 @@ export const Navbar = () => {
 	const host = `${process.env.BACKEND_URL}`
 	
     useEffect(() => {
+        let numeros = [];
+
+// Iteramos desde 1 hasta 20000
+for (let i = 1; i <= 20000; i++) {
+    numeros.push(i); // Añadimos el número actual al arreglo
+}
+
+// Ahora 'numeros' contendrá todos los números del 1 al 20000
+console.log(numeros);
 
         const fetchProfile = async () => {
             const token = localStorage.getItem('token');

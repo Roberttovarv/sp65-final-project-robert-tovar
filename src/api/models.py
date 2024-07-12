@@ -1,7 +1,13 @@
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import event
+from flask import request, jsonify
+from datetime import datetime
+import re
 
 
+def delete_html_tags(text):
+        clean = re.compile('<.*?>')
+        return re.sub(clean, '', text)
 
 db = SQLAlchemy()
 class Users(db.Model):
@@ -31,26 +37,27 @@ class Users(db.Model):
 class Posts(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(), unique=False, nullable=False)
-    game_name = db.Column(db.String(), unique=False, nullable=False)
-    body = db.Column(db.String(150), unique=False, nullable=False)
+    game_name = db.Column(db.String(), unique=False, nullable=True)
+    body = db.Column(db.String(), unique=False, nullable=False)
     date = db.Column(db.Date(), unique=False, nullable=True)
     image_url = db.Column(db.String(), unique=False, nullable=True)
-    author_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    author_to = db.relationship('Users', foreign_keys=[author_id])
     game_id = db.Column(db.Integer, db.ForeignKey('games.id'))
     game_to = db.relationship('Games', foreign_keys=[game_id])
+
     def __repr__(self):
         return f'<Post {self.title}>'
+
     def serialize(self):
-        return {'id': self.id,
-                'title': self.title,
-                'game_name': self.game_name,
-                'body': self.body,
-                'date': self.date,
-                'image_url': self.image_url,
-                'author_id': self.author_id,
-                'game_id': self.game_id}
-    
+        return {
+            'id': self.id,
+            'title': self.title,
+            'game_name': self.game_name,
+            'body': self.body,
+            'date': self.date,
+            'image_url': self.image_url,
+            'game_id': self.game_id
+        }
+
 @event.listens_for(Posts, 'before_insert')
 def before_insert(mapper, connection, target):
     if target.game_id:
@@ -81,19 +88,22 @@ class Likes(db.Model):
 class Games(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(), unique=True, nullable=False)
-    background_image = db.Column(db.String(), unique=True, nullable=True) 
+    background_image = db.Column(db.String(), unique=False, nullable=True) 
     description = db.Column(db.String(), unique=False, nullable=False)
-    released_at = db.Column(db.String(), unique=False, nullable=False)
-    metacritic = db.Column(db.Float(), unique=False, nullable=False)
+    released_at = db.Column(db.String(), unique=False, nullable=True)
+    metacritic = db.Column(db.Integer(), unique=False, nullable=True)
 
 
     def __repr__(self):
         return f'<Game {self.name}>'
+    
+    def clean_description(self):
+        return delete_html_tags(self.description)
         
     def serialize(self):
         return {'id': self.id,
                 'name': self.name,
                 'background_image': self.background_image, 
-                'description': self.description,
+                'description': self.clean_description(),
                 'metacritic': self.metacritic,
                 'released_at': self.released_at}

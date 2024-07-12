@@ -44,7 +44,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                 }
                 if (data.is_admin) {
                     setStore({ admin: data.is_admin});
-                    localStorage.setItem('is_admin', data.is_admin);
+                    localStorage.setItem('admin', data.is_admin);
                     setStore({admin: true})
                 }
                 return data;

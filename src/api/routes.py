@@ -5,16 +5,16 @@ import requests
 from datetime import datetime
 from flask_cors import CORS
 
-
 api = Blueprint('api', __name__)
 CORS(api)  # Allow CORS requests to this API
+
 
 @api.route('/apiexterna', methods=['POST'])
 def fetch_and_store_games():
     game_ids = request.json.get('game_ids')
     if not game_ids or not isinstance(game_ids, list):
         return jsonify({'error': 'No hay juegos o el formato es incorrecto'}), 400
-    api_key = '3429cc68d06a4bd08e1bec15b038c967'
+    api_key = '6b2c1174d36a4cf3beba7d9d088235c1'
     stored_games = []
     errors = []
     for game_id in game_ids:
@@ -144,40 +144,53 @@ def handle_game(game_id):
         db.session.commit()
         response_body['message'] = 'Videojuego eliminado'
         return response_body, 200
-
+    
 @api.route('/posts', methods=['GET', 'POST'])
 def handle_posts():
     response_body = {}
-    
+
     if request.method == 'GET':
         posts = Posts.query.all()
         results = [post.serialize() for post in posts]
         response_body['results'] = results
         response_body['message'] = 'Listado de Publicaciones'
-        return response_body, 200
-    
+        return jsonify(response_body), 200
+
     if request.method == 'POST':
         data = request.json
-        required_fields = ['title', 'body', 'game_id', 'image_url', 'author_id']
-        
-        for field in required_fields:
-            if field not in data:
-                return jsonify({'message': f'Falta el campo requerido: {field}'}), 400
-        
-        new_post = Posts(
-            title=data['title'],
-            body=data['body'],
-            game_id=data['game_id'],
-            image_url=data['image_url'],
-            author_id=data['author_id'],
-            date=datetime.today()
-        )
-        db.session.add(new_post)
-        db.session.commit()
-        
-        response_body['results'] = new_post.serialize()
-        response_body['message'] = 'Publicación creada'
-        return response_body, 201
+        if isinstance(data, list):
+            new_posts = []
+            existing_images_url = {post.image_url for post in Posts.query.all()}  # Set of existing titles
+            for post_data in data:
+                required_fields = ['title', 'body', 'image_url']
+                # Check for missing fields
+                for field in required_fields:
+                    if field not in post_data:
+                        return jsonify({'message': f'Falta el campo requerido: {field}'}), 400
+                
+                # Check for duplicate title
+                if post_data['image_url'] in existing_images_url:
+                    continue  # Ignore this post_data and proceed to the next
+
+                new_post = Posts(
+                    title=post_data['title'],
+                    body=post_data['body'],
+                    game_id=post_data.get('game_id'),
+                    image_url=post_data['image_url'],
+                    date=datetime.today()
+                )
+                db.session.add(new_post)
+                new_posts.append(new_post)
+                existing_images_url.add(post_data['title'])  # Add to the set of existing titles
+            
+            db.session.commit()
+
+            response_body['results'] = [post.serialize() for post in new_posts]
+            response_body['message'] = 'Publicaciones creadas'
+            return jsonify(response_body), 201
+
+        else:
+            return jsonify({'message': 'El formato de los datos debe ser una lista de publicaciones'}), 400
 
 @api.route('/posts/<int:post_id>', methods=['GET', 'PUT', 'DELETE'])
 def handle_post(post_id):
