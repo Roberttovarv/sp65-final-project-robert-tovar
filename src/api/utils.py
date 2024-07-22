@@ -43,3 +43,19 @@ def generate_sitemap(app):
                 """ + links_html + """
             </ul>
         </div>"""
+# utils.py
+
+# def get_pfp_url(index):
+#     urls = {
+#         0: "https://www.teleadhesivo.com/es/img/arc226-jpg/folder/products-listado-merchanthover/pegatinas-coches-motos-space-invaders-marciano-iii.jpg",
+#         1: "https://static.wikia.nocookie.net/rdr/images/2/2f/Arthur_Morgan.jpg/revision/latest?cb=20190108180248&path-prefix=es",
+#         2: "https://static.wikia.nocookie.net/unchartedpedia/images/1/1c/Nathan_Uncharted_4.png/revision/latest?cb=20200410030558&path-prefix=es",
+#         3: "https://www.mundodeportivo.com/alfabeta/hero/2024/07/god-of-war.1720271381.2074.jpg?width=1200",
+#         4: "https://hips.hearstapps.com/hmg-prod/images/the-last-of-us-2-esquire-2-1606823413.jpg",
+#         5: "https://static0.gamerantimages.com/wordpress/wp-content/uploads/2023/05/hollow-knight-fan-art.jpg",
+#         6: "https://deadline.com/wp-content/uploads/2022/05/FTr5XSZWUAE5fz3-e1653580675223.jpg?w=681&h=383&crop=1",
+#         7: "https://sm.ign.com/t/ign_es/blogroll/t/the-first-/the-first-15-minutes-of-the-witcher-3-wild-hunt-ig_q4g3.1200.jpg",
+#         8: "https://assetsio.gnwcdn.com/Zelda-Site_9uRMRw2.jpg?width=1200&height=1200&fit=bounds&quality=70&format=jpg&auto=webp",
+#         9: "https://www.mundodeportivo.com/alfabeta/hero/2020/07/Cyberpunk-2077.jpg?width=1200"
+#     }
+#     return urls.get(index, "https://example.com/default.jpg")  # URL por defecto si el índice no está en el diccionario

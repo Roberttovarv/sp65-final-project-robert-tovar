@@ -9,6 +9,8 @@ import { Footer } from "./component/Footer.jsx";
 // Custom Pages
 import { Home } from "./pages/Home.jsx";
 import Logout from "./pages/Logout.jsx";
+import { Loading } from "./component/Loading.jsx"
+import { LoadingMario } from "./component/LoadingMario.jsx"
 // 
 import { GamePanel } from "./pages/GamePanel.jsx"
 import { AdminPanel } from "./pages/AdminPanel.jsx"
@@ -19,7 +21,6 @@ import { Welcome } from "./component/Welcome.jsx";
 import { LandingPage } from "./pages/LandingPage.jsx";
 import { GameDetails } from "./pages/GameDetails.jsx";
 import { Reviews } from "./pages/Reviews.jsx";
-import { Tienda } from "./pages/Tienda.jsx";
 import { CategoriesPage } from "./pages/CategoriesPage.jsx";
 
 import { Profile } from "./pages/Profile.jsx";
@@ -54,11 +55,11 @@ const Layout = () => {
                         <Route element={<LandingPage />} path="/" />
                         <Route element={<GameDetails />} path="/game-details/:gameId" />
                         <Route element={<Reviews />} path="/reviews" />
-                        <Route element={<Tienda />} path="/store" />
                         <Route element={<CategoriesPage />} path="/categorias" />
                         <Route element={<LoginRegister />} path="/login-register" />
         
-                        
+                        <Route element={<Loading />} path="/loading" />
+                        <Route element={<LoadingMario />} path="/loadingmario" />
 
 
                       </Routes>

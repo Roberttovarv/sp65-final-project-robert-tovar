@@ -1,54 +1,51 @@
 import React, { useContext, useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 import { Context } from "../store/appContext.js";
-import "../../styles/index.css";
-
+import "../../styles/landing.css";
 
 export const Profile = () => {
     const { store, actions } = useContext(Context);
-    const [user, setUser] = useState([]);
-    const [currentUser, setCurrentUser] = useState(null);
     const [userEdit, setUserEdit] = useState(false);
 
     const host = `${process.env.BACKEND_URL}`;
 
-    
     const fetchProfile = async () => {
         const token = localStorage.getItem('token');
         if (!token) {
             console.log("No token found in localStorage");
             return;
         }
-        
+
         const response = await fetch(`${host}/api/profile`, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`
             }
         });
-        
+
         if (response.ok) {
             const data = await response.json();
-            setUser(data.results);
-            localStorage.setItem('is_admin', data.results.is_admin);
+            actions.setUser(data.results); // Actualiza el user en el store
+            console.log(data.results);
         } else {
             console.log("Failed to fetch profile");
         }
     };
+
     useEffect(() => {
         fetchProfile();
-    }, [
-    ]);
-    
-   const handleEdit = async (event) => {
+    }, []);
+
+    const handleEdit = async (event) => {
         event.preventDefault();
+        const user = store.user || {}; // Maneja el caso en el que store.user sea null
         const dataToSend = {
-            name: currentUser.name,
-            background_image: currentUser.background_image,
-            description: currentUser.description,
+            first_name: user.first_name || '',
+            last_name: user.last_name || '',
+            email: user.email || '',
+            username: user.username || '',
         };
 
-        const uri = host + `/api/users/${currentUser.id}`;
+        const uri = host + `/api/users/${user.id}`;
         const options = {
             method: 'PUT',
             body: JSON.stringify(dataToSend),
@@ -62,24 +59,25 @@ export const Profile = () => {
             return;
         }
 
-        getUsers();
-        setCurrentUser(null);
+        fetchProfile();
+        actions.setUser(dataToSend); // Actualiza el user en el store
         setUserEdit(false);
     };
 
-    const editUser = (item) => {
-        setCurrentUser(item);
+    const editUser = () => {
         setUserEdit(true);
     };
+
+    const user = store.user || {}; // Maneja el caso en el que store.user sea null
 
     return (
         <>
             <div className="container-fluid">
                 <div className="container rounded bg-white mt-5 mb-5">
-                    <div className="row d-flex justify-content-center">
+                    <div className="row d-flex justify-content-center rounded-5">
                         <div className="col-md-3 border-right">
                             <div className="d-flex flex-column align-items-center text-center p-3 py-5">
-                                <img className="rounded-circle mt-5" width="150px" src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg" alt="profile" />
+                                <img className="rounded-circle mt-5" width="150px" src={user.pfp} alt="profile" />
                             </div>
                         </div>
                         <div className="col-md-5 border-right">
@@ -92,20 +90,23 @@ export const Profile = () => {
                                         <div className="col-md-6">
                                             <label className="labels">Nombre</label>
                                             <input
+                                                disabled={!userEdit}
                                                 type="text"
                                                 className="form-control"
                                                 placeholder="Nombre"
-                                                value={user.first_name}
-                                                onChange={(e) => setCurrentUser({ ...currentUser, name: e.target.value })}
+                                                value={user.first_name || ''}
+                                                onChange={(e) => actions.setUser({ ...user, first_name: e.target.value })}
                                             />
                                         </div>
                                         <div className="col-md-6">
                                             <label className="labels">Apellido</label>
                                             <input
+                                                disabled={!userEdit}
                                                 type="text"
                                                 className="form-control"
                                                 placeholder="Apellido"
-                                                value={user.last_name}
+                                                value={user.last_name || ''}
+                                                onChange={(e) => actions.setUser({ ...user, last_name: e.target.value })}
                                             />
                                         </div>
                                     </div>
@@ -113,27 +114,32 @@ export const Profile = () => {
                                         <div className="col-md-12">
                                             <label className="labels">Correo Electrónico</label>
                                             <input
+                                                disabled={!userEdit}
                                                 type="email"
                                                 className="form-control"
                                                 placeholder="Correo Electrónico"
-                                                value={user.email}
+                                                value={user.email || ''}
+                                                onChange={(e) => actions.setUser({ ...user, email: e.target.value })}
                                             />
                                         </div>
                                         <div className="col-md-12">
                                             <label className="labels">Nombre de usuario</label>
                                             <input
+                                                disabled={!userEdit}
                                                 type="text"
                                                 className="form-control"
-                                                placeholder="Edad"
-                                                value={user.username}
-                                                onChange={(e) => setCurrentUser({ ...currentUser, edad: e.target.value })}
+                                                placeholder="Nombre de usuario"
+                                                value={user.username || ''}
+                                                onChange={(e) => actions.setUser({ ...user, username: e.target.value })}
                                             />
                                         </div>
                                     </div>
                                     <div className="mt-5 d-flex justify-content-center">
-                                        <button className="comic-button" type="submit" onClick={() => editUser }>
-                                            {`${!userEdit ? "Editar perfil" : "Guardar cambios"}`}
-                                        </button>
+                                        {!userEdit ?
+                                            <button className="comic-button" type="button" onClick={editUser}>Editar perfil</button>
+                                            :
+                                            <button className="comic-button" type="submit">Guardar cambios</button>
+                                        }
                                     </div>
                                 </form>
                             </div>

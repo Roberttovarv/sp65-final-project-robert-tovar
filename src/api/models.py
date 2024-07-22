@@ -19,6 +19,7 @@ class Users(db.Model):
     last_name = db.Column(db.String(), unique=False, nullable= True)
     username = db.Column(db.String(), unique=True, nullable=False)
     is_admin = db.Column(db.Boolean(), unique=False, nullable=True)
+    pfp = db.Column(db.String(), unique=False, nullable=True)
 
 
     def __repr__(self):
@@ -31,7 +32,8 @@ class Users(db.Model):
                 'first_name': self.first_name,
                 'last_name': self.last_name,
                 'username': self.username,
-                'is_admin': self.is_admin}
+                'is_admin': self.is_admin,
+                'pfp': self.pfp}
 
 
 class Posts(db.Model):

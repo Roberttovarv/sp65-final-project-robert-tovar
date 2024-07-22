@@ -9,8 +9,11 @@ export const AdminPanel = () => {
 
     return (
         <>
-            <div>
-                (
+        {!store.admin ?
+    (<h1 className="text-light">404 not found</h1>)
+    :
+            (<div>
+                
                 <div className="d-flex flex-column" style={{ height: "80vh" }}>
                     <div className="text-center my-3">
                         <h1>Panel de administrador</h1>
@@ -32,7 +35,9 @@ export const AdminPanel = () => {
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>)
+
+    }
         </>
     );
 };

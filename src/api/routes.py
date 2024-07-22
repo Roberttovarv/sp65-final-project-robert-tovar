@@ -14,7 +14,7 @@ def fetch_and_store_games():
     game_ids = request.json.get('game_ids')
     if not game_ids or not isinstance(game_ids, list):
         return jsonify({'error': 'No hay juegos o el formato es incorrecto'}), 400
-    api_key = '6b2c1174d36a4cf3beba7d9d088235c1'
+    api_key = '10fbe8c8bd844a3aa7087a6af5e439c2'
     stored_games = []
     errors = []
     for game_id in game_ids:
@@ -69,6 +69,7 @@ def handle_user(user_id):
         user.last_name = data.get('last_name', user.last_name)
         user.username = data.get('username', user.username)
         user.is_admin = data.get('is_admin', user.is_admin)
+        user.pfp = data.get('pfp', user.pfp)
         
         db.session.commit()
         response_body['message'] = 'Datos del usuario actualizados'
@@ -104,7 +105,7 @@ def handle_games():
             name=data['name'],
             description=data['description'],
             background_image=data['background_image'],
-            metacritic=data['metacritic']
+            # metacritic=data['metacritic']
         )
         db.session.add(new_game)
         db.session.commit()
@@ -245,7 +246,8 @@ def signup():
         first_name=data.get('first_name', None),
         last_name=data.get('last_name', None),
         username=username,
-        is_admin=False
+        is_admin=False,
+        pfp="https://www.teleadhesivo.com/es/img/arc226-jpg/folder/products-listado-merchanthover/pegatinas-coches-motos-space-invaders-marciano-iii.jpg"
     )
     db.session.add(new_user)
     db.session.commit()
@@ -268,6 +270,7 @@ def login():
         access_token = create_access_token(identity={'user_id': user.id, 'is_admin': user.is_admin})
         response_body['message'] = 'Usuario logueado'
         response_body['access_token'] = access_token
+        response_body['is_admin'] = user.is_admin
         response_body['results'] = user.serialize()
         return jsonify(response_body), 200
     else:

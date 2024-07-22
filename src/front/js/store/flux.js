@@ -1,20 +1,11 @@
-
-
 const getState = ({ getStore, getActions, setStore }) => {
     return {
         store: {
-            message: null,
-            counter: 2,
             token: null,
-            admin: false,
-            review: null,
-            games: [],
-            topGames: [],
-            bestRatedGames: [],
+            admin: null,
             user: null,
-            auth: false,
             currentGame: {},
-
+            isLogin: false,
         },
         actions: {
 
@@ -40,12 +31,10 @@ const getState = ({ getStore, getActions, setStore }) => {
                 if (data.access_token) {
                     setStore({ token: data.access_token });
                     localStorage.setItem('token', data.access_token);
-                    setStore({auth: true})
-                }
-                if (data.is_admin) {
-                    setStore({ admin: data.is_admin});
+                    getActions().setIsLogin(true);
+
+                    setStore({ admin: data.is_admin });
                     localStorage.setItem('admin', data.is_admin);
-                    setStore({admin: true})
                 }
                 return data;
             },
@@ -53,26 +42,32 @@ const getState = ({ getStore, getActions, setStore }) => {
             logout: () => {
                 setStore({ token: null });
                 localStorage.removeItem('token');
-                setStore({auth: false})
+                getActions().setIsLogin(false);
+            },
+
+            fetchProfile: () => {
+
             },
 
             setCurrentGame: (game) => {
-             
-                setStore({currentGame: game});
+                setStore({ currentGame: game });
+            },
+            
+            setIsLogin: (login) => {
+                setStore({ isLogin: login });
             },
 
-
-            changeColor: (index, color) => {
-                const store = getStore();  // Get the store
-                // We have to loop the entire demo array to look for the respective index and change its color
-                const demo = store.demo.map((element, i) => {
-                    if (i === index) element.background = color;
-                    return element;
-                });
-                setStore({ demo: demo });  // Reset the global store
+            setUser: (user) => {
+                const store = getStore();
+                setStore({ user });
             },
-          }
+
+            setCurrentUser: (user) => {
+                setStore({ user });
+            },
+
+        },
     };
+};
 
-}
 export default getState;

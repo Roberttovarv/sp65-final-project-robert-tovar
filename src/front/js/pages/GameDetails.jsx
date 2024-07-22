@@ -15,8 +15,19 @@ export const GameDetails = () => {
             </div>
             <img src={store.currentGame.background_image} className="card-img-top" alt={store.currentGame.name} />
             <div className="card-body ">
-              <p className="card-text text-light">Rating: {store.currentGame.metacritics}</p>
+              <p className="card-text text-light"><strong>Rating:</strong> {store.currentGame.metacritic}</p>
               <p className="card-text text-light">Description: {store.currentGame.description}</p>
+            </div>
+            <div>
+            <a
+              href={`https://store.steampowered.com/search/?term=${store.currentGame.name}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <button type="button" className="btn btn-secondary m-3">
+                Search in Steam
+              </button>
+              </a>
             </div>
           </div>
         </div>

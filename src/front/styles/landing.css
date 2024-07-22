@@ -1,7 +1,7 @@
 img{
     object-fit: fill;
 }
-.tarjeta{
+.tarjeta, .prof{
     padding: 0px;
     background-color: rgb(58, 58, 58);
     border-radius: 2%;
@@ -10,3 +10,7 @@ img{
     box-shadow: -5px 5px 20px rgba(255, 255, 255, 0.2);
   
 }
+
+/* Loader Code */
+
+/* HTML: <div class="loader"></div> */

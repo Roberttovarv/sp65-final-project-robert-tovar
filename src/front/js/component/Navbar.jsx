@@ -1,77 +1,90 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Context } from "./../store/appContext";
-import { useNavigate } from "react-router-dom"; 
-
-
+import { useNavigate } from "react-router-dom";
+import "../../styles/navbar.css";
 
 export const Navbar = () => {
-    const [user, setUser] = useState(null);
     const { store, actions } = useContext(Context);
 
-	const host = `${process.env.BACKEND_URL}`
-	
+    const host = `${process.env.BACKEND_URL}`;
+
+    const fetchProfile = async () => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            console.log("No token found in localStorage");
+            return;
+        }
+
+        const response = await fetch(`${host}/api/profile`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            console.log(data.results);
+        } else {
+            console.log("Failed to fetch profile");
+        }
+    };
+
     useEffect(() => {
-        let numeros = [];
-
-// Iteramos desde 1 hasta 20000
-for (let i = 1; i <= 20000; i++) {
-    numeros.push(i); // Añadimos el número actual al arreglo
-}
-
-// Ahora 'numeros' contendrá todos los números del 1 al 20000
-console.log(numeros);
-
-        const fetchProfile = async () => {
-            const token = localStorage.getItem('token');
-            if (!token) {
-                console.log("No token found in localStorage");
-                return;
-            }
-            
-            const response = await fetch(`${host}/api/profile`, {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                },
-            });
-            
-            if (response.ok) {
-                const data = await response.json();
-                setUser(data.results);
-                localStorage.setItem('token', data.access_token);
-                localStorage.setItem('is_admin', data.results.is_admin);
-            } else {
-                console.log("Failed to fetch profile");
-            }
-        };
         fetchProfile();
-    }, [
-    ]);
+    }, []);
 
-	return (
-		<div>
-			<nav className="navbar border border-bottom-3">
-				<div className="container">
-					<Link to="/">
-						<span className="navbar-brand mb-0 h1">Logo</span>
-					</Link>                    
-                    <div className="pointer h-100 div-btn"><Link to="/store"><span className="sombra-text"><button className="nav-btn  bordered-text">Tienda</button></span></Link></div>
-                    <div className="pointer h-100 div-btn"><Link to="/categories"><button className="nav-btn  bordered-text">Categorías</button></Link></div> 
-                    <div className="pointer h-100 div-btn"><Link to="/reviews"><button className="nav-btn  bordered-text">Reseñas</button></Link></div>
-                   { !store.token ? (
-                     <div className="pointer h-100 div-btn"><Link to="/login-register"><button className="nav-btn bordered-text">Ingresar</button></Link></div>
-				    ) : ( store.admin == true ? (
-                    <div className="pointer h-100 div-btn"><Link to="/adminpanel"><button className="admin-button">Admin Panel</button></Link></div> 
-                        ) : (
-                            <div className="pointer h-100 div-btn"><Link to="/profile"><button className="nav-btn  bordered-text">Perfil</button></Link></div>
-
-                        )
-                    )}
-				</div>
-
-			</nav>
-		</div>
-	);
+    return (
+        <div>
+            <nav className="navbar navst">
+                <div className="container navst d-flex m-auto align-items-center mb-1">
+                    <Link to="/">
+                        <img src="https://static.vecteezy.com/system/resources/previews/027/190/610/original/pixel-art-joy-controller-icon-png.png" alt="" style={{ height: "40px", width: "60px", objectFit: "cover" }} />
+                    </Link>
+                    <div className="pointer h-100 div-btn">
+                        <Link to="/store">
+                            <span className="sombra-text">
+                                <button className="nav-btn bordered-text">Tienda</button>
+                            </span>
+                        </Link>
+                    </div>
+                    <div className="pointer h-100 div-btn">
+                        <Link to="/categories">
+                            <button className="nav-btn bordered-text">Categorías</button>
+                        </Link>
+                    </div>
+                    <div className="pointer h-100 div-btn">
+                        <Link to="/reviews">
+                            <button className="nav-btn bordered-text">Reseñas</button>
+                        </Link>
+                    </div>
+                    {!store.isLogin ? (
+                        <div className="pointer h-100 div-btn">
+                            <Link to="/login-register">
+                                <button className="nav-btn bordered-text">Ingresar</button>
+                            </Link>
+                        </div>
+                    ) : (store.admin ? (
+                        <div className="pointer h-100 div-btn">
+                            <Link to="/adminpanel">
+                                <button className="admin-button">Admin Panel</button>
+                            </Link>
+                        </div>
+                    ) : (
+                        <div className="dropdown">
+                            <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                Perfil
+                            </button>
+                            <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                <li><Link to="/profile">Perfil</Link></li>
+                                <li><a className="dropdown-item" href="#">Favs</a></li>
+                                <li><a className="dropdown-item" onClick={actions.logout}>Logout</a></li>
+                            </ul>
+                        </div>
+                    ))}
+                </div>
+            </nav>
+        </div>
+    );
 };
-

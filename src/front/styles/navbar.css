@@ -1,0 +1,6 @@
+.navst {
+    padding: 0px;
+    background-color: rgb(58, 58, 58);
+    border-radius: 2%;
+    border: none; /* Corrige esto */
+}

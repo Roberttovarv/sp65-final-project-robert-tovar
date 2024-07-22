@@ -32,7 +32,7 @@ export const LoginRegister = () => {
     }
     const data = await actions.login(email, password);
     if (data) {
-      navigate('/home');
+      navigate('/');
     } else {
       setError("Credenciales incorrectas");
     }
@@ -61,7 +61,7 @@ export const LoginRegister = () => {
     }
     const data = await response.json();
     localStorage.setItem('token', data.access_token);
-    navigate('/');
+    navigate('/profile');
   };
 
   return (
