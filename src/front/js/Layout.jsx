@@ -11,6 +11,7 @@ import { Home } from "./pages/Home.jsx";
 import Logout from "./pages/Logout.jsx";
 import { Loading } from "./component/Loading.jsx"
 import { LoadingMario } from "./component/LoadingMario.jsx"
+import { NotFound } from "./component/NotFound.jsx"
 // 
 import { GamePanel } from "./pages/GamePanel.jsx"
 import { AdminPanel } from "./pages/AdminPanel.jsx"
@@ -42,7 +43,7 @@ const Layout = () => {
                     <Navbar />
                     <Routes>
                         <Route element={<Home />} path="/rigo" />
-                        <Route element={<h1>Not found!</h1>} path="*" />
+                        <Route element={<NotFound /></Route>} path="*" />
                         <Route element={<Logout />} path="/logout" />
                         <Route element={<Profile />} path="/profile" />
 
