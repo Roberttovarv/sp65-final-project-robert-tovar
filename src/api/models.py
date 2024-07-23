@@ -96,7 +96,6 @@ class Likes(db.Model):
         }
 
 
-
 class Games(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(), unique=True, nullable=False)
@@ -119,3 +118,29 @@ class Games(db.Model):
                 'description': self.clean_description(),
                 'metacritic': self.metacritic,
                 'released_at': self.released_at}
+
+
+class Comments(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    body = db.Column(db.String(), nullable=False)
+    date = db.Column(db.DateTime(), default=datetime.utcnow)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    post_id = db.Column(db.Integer, db.ForeignKey('posts.id'), nullable=True)
+    game_id = db.Column(db.Integer, db.ForeignKey('games.id'), nullable=True)
+    
+    user = db.relationship('Users', backref='comments')
+    post = db.relationship('Posts', backref='comments', foreign_keys=[post_id])
+    game = db.relationship('Games', backref='comments', foreign_keys=[game_id])
+
+    def __repr__(self):
+        return f'<Comment {self.body}>'
+
+    def serialize(self):
+        return {
+            'id': self.id,
+            'body': self.body,
+            'date': self.date,
+            'user_id': self.user_id,
+            'post_id': self.post_id,
+            'game_id': self.game_id
+        }
