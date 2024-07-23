@@ -43,7 +43,7 @@ const Layout = () => {
                     <Navbar />
                     <Routes>
                         <Route element={<Home />} path="/rigo" />
-                        <Route element={<NotFound /></Route>} path="*" />
+                        <Route element={<NotFound />} path="*" />
                         <Route element={<Logout />} path="/logout" />
                         <Route element={<Profile />} path="/profile" />
 

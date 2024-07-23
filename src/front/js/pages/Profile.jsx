@@ -8,36 +8,13 @@ export const Profile = () => {
 
     const host = `${process.env.BACKEND_URL}`;
 
-    const fetchProfile = async () => {
-        const token = localStorage.getItem('token');
-        if (!token) {
-            console.log("No token found in localStorage");
-            return;
-        }
-
-        const response = await fetch(`${host}/api/profile`, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        });
-
-        if (response.ok) {
-            const data = await response.json();
-            actions.setUser(data.results); // Actualiza el user en el store
-            console.log(data.results);
-        } else {
-            console.log("Failed to fetch profile");
-        }
-    };
-
     useEffect(() => {
-        fetchProfile();
+        actions.fetchProfile();
     }, []);
 
     const handleEdit = async (event) => {
         event.preventDefault();
-        const user = store.user || {}; // Maneja el caso en el que store.user sea null
+        const user = store.user || {}; 
         const dataToSend = {
             first_name: user.first_name || '',
             last_name: user.last_name || '',
@@ -59,8 +36,7 @@ export const Profile = () => {
             return;
         }
 
-        fetchProfile();
-        actions.setUser(dataToSend); // Actualiza el user en el store
+        await actions.fetchProfile();
         setUserEdit(false);
     };
 
@@ -68,7 +44,7 @@ export const Profile = () => {
         setUserEdit(true);
     };
 
-    const user = store.user || {}; // Maneja el caso en el que store.user sea null
+    const user = store.user || {};
 
     return (
         <>
@@ -77,7 +53,8 @@ export const Profile = () => {
                     <div className="row d-flex justify-content-center rounded-5">
                         <div className="col-md-3 border-right">
                             <div className="d-flex flex-column align-items-center text-center p-3 py-5">
-                                <img className="rounded-circle mt-5" width="150px" src={user.pfp} alt="profile" />
+                                <img className={`rounded-circle mt-5 border ${ store.admin ? "border-danger" : "border-dark" } border-5`} width="150px" height="150px" src={user.pfp} alt="profile"
+                                style={{objectFit: "cover"}} />
                             </div>
                         </div>
                         <div className="col-md-5 border-right">

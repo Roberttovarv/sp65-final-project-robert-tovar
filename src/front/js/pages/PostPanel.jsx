@@ -2,6 +2,8 @@ import React, { useContext, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Context } from "../store/appContext.js";
 import "../../styles/adminpanel.css";
+import { NotFound } from "../component/NotFound.jsx"
+
 
 /// Poner limite de texto a la url
 
@@ -145,7 +147,10 @@ export const PostPanel = () => {
 
   return (
     <>
-      <div>
+    {!store.admin ? 
+    (<NotFound />)
+  :
+      (<div>
         <div className="d-flex justify-content-end mx-3 my-3">
           <Link to="/adminpanel"><button className="admin-button">Admin Panel</button></Link>
         </div>
@@ -259,7 +264,8 @@ export const PostPanel = () => {
             </div>
           </>
         )}
-      </div>
+      </div>)
+  }
     </>
   );
 };

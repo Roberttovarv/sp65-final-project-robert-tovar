@@ -7,32 +7,10 @@ import "../../styles/navbar.css";
 export const Navbar = () => {
     const { store, actions } = useContext(Context);
 
-    const host = `${process.env.BACKEND_URL}`;
 
-    const fetchProfile = async () => {
-        const token = localStorage.getItem('token');
-        if (!token) {
-            console.log("No token found in localStorage");
-            return;
-        }
-
-        const response = await fetch(`${host}/api/profile`, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        });
-
-        if (response.ok) {
-            const data = await response.json();
-            console.log(data.results);
-        } else {
-            console.log("Failed to fetch profile");
-        }
-    };
 
     useEffect(() => {
-        fetchProfile();
+        actions.fetchProfile();
     }, []);
 
     return (
@@ -66,10 +44,16 @@ export const Navbar = () => {
                             </Link>
                         </div>
                     ) : (store.admin ? (
-                        <div className="pointer h-100 div-btn">
-                            <Link to="/adminpanel">
-                                <button className="admin-button">Admin Panel</button>
-                            </Link>
+                        <div className="dropdown">
+                            <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                Perfil
+                            </button>
+                            <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                <li className="text-danger"><Link to="/adminpanel">Admin Panel</Link></li>                             
+                                <li><Link to="/profile">Profile</Link></li>
+                                <li><a className="dropdown-item" href="#">Favs</a></li>
+                                <li><a className="dropdown-item" onClick={actions.logout}>Logout</a></li>
+                            </ul>
                         </div>
                     ) : (
                         <div className="dropdown">

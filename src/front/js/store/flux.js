@@ -45,8 +45,27 @@ const getState = ({ getStore, getActions, setStore }) => {
                 getActions().setIsLogin(false);
             },
 
-            fetchProfile: () => {
+            fetchProfile: async () => {
+                const token = getStore().token || localStorage.getItem('token');
+                if (!token) {
+                    console.log("No token found in localStorage");
+                    return;
+                }
 
+                const response = await fetch(`${process.env.BACKEND_URL}/api/profile`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log(data.results);
+                    setStore({ user: data.results }); // Assuming the profile data should be stored in user
+                } else {
+                    console.log("Failed to fetch profile");
+                }
             },
 
             setCurrentGame: (game) => {

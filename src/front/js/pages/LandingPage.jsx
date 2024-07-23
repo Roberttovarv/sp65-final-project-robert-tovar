@@ -63,7 +63,7 @@ export const LandingPage = () => {
                 {gamesDate.slice(0, 20).map((game, index) => (
                     <div key={index} className="tarjeta m-3" style={{ width: '18rem' }}>
                         <img src={game.background_image} className=" text-light rounded-1" 
-                        alt={game.name} style={{ width: "100%", maxHeight: "40%" }} />
+                        alt={game.name} style={{ width: "100%", maxHeight: "45%", objectFit: "cover" }} />
                         <div className="card-body">
                             <h5 className="card-title text-light rounded-1">{game.name}</h5>
                             <p className="card-text text-light rounded-1">Releasing date: {game.released_at}</p>
@@ -93,7 +93,8 @@ export const LandingPage = () => {
                 style={{ maxHeight: "55vh", minHeight: "30vh", width: "99%", overflowY: "auto", scrollbarColor: "white transparent", borderRadius: "15px"}}>
                 {gamesRate.slice(0, 20).map((game, index) => (
                     <div key={index} className="tarjeta m-3" style={{ width: '18rem' }}>
-                        <img src={game.background_image} className=" text-light rounded-1" alt={game.name} style={{ width: "99%", maxHeight: "45%" }} />
+                        <img src={game.background_image} className=" text-light rounded-1" 
+                        alt={game.name} style={{ width: "100%", maxHeight: "45%", objectFit: "cover"}} />
                         <div className="card-body">
                             <h5 className="card-title text-light rounded-1">{game.name}</h5>
                             <p className="card-text text-light rounded-1">Rating: {game.metacritic}</p>
