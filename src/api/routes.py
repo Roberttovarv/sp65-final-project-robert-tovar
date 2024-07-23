@@ -124,6 +124,7 @@ def handle_game(game_id):
     
     if request.method == 'GET':
         response_body['results'] = game.serialize()
+        response_body['comments'] = [comment.serialize() for comment in game.comments]
         response_body['message'] = 'Videojuego encontrado'
         return response_body, 200
     
@@ -133,7 +134,6 @@ def handle_game(game_id):
         game.background_image = data.get('background_image', game.background_image)
         game.released_at = data.get('released_at', game.released_at)
         game.metacritic = data.get('metacritic', game.metacritic)
-       
         
         db.session.commit()
         response_body['message'] = 'Datos del videojuego actualizados'
@@ -145,6 +145,7 @@ def handle_game(game_id):
         db.session.commit()
         response_body['message'] = 'Videojuego eliminado'
         return response_body, 200
+
     
 @api.route('/posts', methods=['GET', 'POST'])
 def handle_posts():
@@ -203,6 +204,7 @@ def handle_post(post_id):
     
     if request.method == 'GET':
         response_body['results'] = post.serialize()
+        response_body['comments'] = [comment.serialize() for comment in post.comments]
         response_body['message'] = 'Publicación encontrada'
         return response_body, 200
     
