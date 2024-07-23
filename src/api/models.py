@@ -78,13 +78,23 @@ def before_update(mapper, connection, target):
 class Likes(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    post_id = db.Column(db.Integer, db.ForeignKey('posts.id'), nullable=True)
+    game_id = db.Column(db.Integer, db.ForeignKey('games.id'), nullable=True)
     user_to = db.relationship('Users', foreign_keys=[user_id])
+    post_to = db.relationship('Posts', foreign_keys=[post_id])
+    game_to = db.relationship('Games', foreign_keys=[game_id])
+
     def __repr__(self):
         return f'<Like {self.id}>'
-        
+
     def serialize(self):
-        return {'id': self.id,
-                'user_id': self.user_id}
+        return {
+            'id': self.id,
+            'user_id': self.user_id,
+            'post_id': self.post_id,
+            'game_id': self.game_id
+        }
+
 
 
 class Games(db.Model):
