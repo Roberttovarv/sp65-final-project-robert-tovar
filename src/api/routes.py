@@ -302,3 +302,41 @@ def get_users():
     response_body['results'] = results
     response_body['message'] = 'Listado de Usuarios'
     return jsonify(response_body), 200
+
+@api.route('/like', methods=['POST', 'GET'])
+def handle_likes():
+    if request.method == 'POST':
+        user_id = request.json.get('user_id')
+        post_id = request.json.get('post_id')
+        game_id = request.json.get('game_id')
+
+        user = Users.query.get(user_id)
+        post = Posts.query.get(post_id) if post_id else None
+        game = Games.query.get(game_id) if game_id else None
+
+        if not user or (not post and not game):
+            return jsonify({'error': 'User or Resource not found'}), 404
+
+        if post_id and game_id:
+            return jsonify({'error': 'Cannot like both post and game at the same time'}), 400
+
+        like = Likes(user_id=user_id, post_id=post_id, game_id=game_id)
+        db.session.add(like)
+        db.session.commit()
+
+        return jsonify(like.serialize()), 201
+    
+    elif request.method == 'GET':
+        likes = Likes.query.all()
+        return jsonify([like.serialize() for like in likes]), 200
+
+@api.route('/like/<int:like_id>', methods=['DELETE'])
+def delete_like(like_id):
+    like = Likes.query.get(like_id)
+    if not like:
+        return jsonify({'error': 'Like not found'}), 404
+
+    db.session.delete(like)
+    db.session.commit()
+
+    return jsonify({'message': 'Like deleted'}), 200
