@@ -10,6 +10,10 @@ img{
     box-shadow: -5px 5px 20px rgba(255, 255, 255, 0.2);
   
 }
+.bgc {
+    background-color: rgb(58, 58, 58);
+
+}
 
 /* Loader Code */
 

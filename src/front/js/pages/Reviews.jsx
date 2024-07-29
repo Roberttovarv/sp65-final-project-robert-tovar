@@ -1,12 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Context } from "../store/appContext";
-import { Link } from "react-router-dom";
+import "../../styles/landing.css";
 
 export const Reviews = () => {
-const { store, actions } = useContext(Context);
-const [video, setVideo] = useState([]);
+    const { store, actions } = useContext(Context);
+    const [video, setVideo] = useState([]);
 
-        const host = `${process.env.BACKEND_URL}`
+    const host = `${process.env.BACKEND_URL}`;
 
     const getVideos = async () => {
         const uri = host + '/api/videos';
@@ -21,33 +21,27 @@ const [video, setVideo] = useState([]);
 
         const data = await response.json();
 
-        setVideo(data);
+        setVideo(data.results);
     };
 
     useEffect(() => {
         getVideos();
-          
     }, []);
-
 
     return (
         <div className="container">
-            {video.map((video, index) => (
-                <div key={index}>
-                    <h3 className="text-light">{video.title}</h3>
-                    <h6 className="text-light">{video.videogame}</h6>
-                    <iframe 
-                        width="560" 
-                        height="315" 
-                        src={video.embed}
-                        title="YouTube video player" 
-                        frameBorder="0" 
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-                        referrerPolicy="strict-origin-when-cross-origin" 
-                        allowFullScreen
-                    ></iframe>
-                </div>
-            ))}
+            <div className="row justify-content-center bgc ">
+                {video.map((video, index) => (
+                    <div key={index} className="col-md-8 mb-4 my-5 bgc">
+                        <h3 className="text-light text-start">{video.title}</h3>
+                        <h6 className="text-light text-start">{video.game_name}</h6>
+
+                        <div className="ratio ratio-16x9">
+                            <iframe src={video.embed} allowFullScreen style={{ width: "100%", height: "100%" }}></iframe>
+                        </div>
+                    </div>
+                ))}
+            </div>
         </div>
     );
 };

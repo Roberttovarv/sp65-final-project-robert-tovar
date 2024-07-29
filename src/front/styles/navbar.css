@@ -2,5 +2,11 @@
     padding: 0px;
     background-color: rgb(58, 58, 58);
     border-radius: 2%;
-    border: none; /* Corrige esto */
+
+}
+
+.navline {
+    box-shadow: -5px 5px 10px rgba(99, 25, 25, 0.2);
+    border-bottom: 3px solid black;
+    /* Se agregó 'solid' */
 }

@@ -14,7 +14,7 @@ export const Navbar = () => {
     }, []);
 
     return (
-        <div>
+        <div className="navline">
             <nav className="navbar navst">
                 <div className="container navst d-flex m-auto align-items-center mb-1">
                     <Link to="/">

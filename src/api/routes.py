@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required
-from api.models import db, Users, Games, Posts
+from api.models import db, Users, Games, Posts, Videos, Comments, Likes
 import requests
 from datetime import datetime
 from flask_cors import CORS
