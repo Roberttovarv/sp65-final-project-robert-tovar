@@ -43,12 +43,13 @@ export const News = () => {
                                         <p className="card-text">{lastPost.game_name}</p>
                                         <p className="card-text"><small className="text-muted">{lastPost.date}</small></p>
                                     </div>
-                                    <img src={lastPost.image_url} className="card-img-top" alt={lastPost.title} />
+                                    <img src={lastPost.image_url} className="card-img-top" alt={lastPost.game_name} />
                                 </div>
                             )}
                         </div>
                         <div className="col-4">
-                            <img src="https://cdn.prod.website-files.com/61eeba8765031c95bb83b2ea/6596d9e8efa34a1c48d0387e_-_g72O7K_BW4-2vMwWSs13CIkcYtc05SL3wz9hTuNArpP15ItoA4xHOmloHzA7JuGPB5cQozJjDq2R1uzYX49VZB-l-XOwflIhOYvDiXrBzVyqdTsyXyb4w5JOn8C82LGYij7LT7NY4mFvWAyqYkcIs.gif" alt="Publicidad" />
+                            <img src="https://cdn.prod.website-files.com/61eeba8765031c95bb83b2ea/6596d9e8efa34a1c48d0387e_-_g72O7K_BW4-2vMwWSs13CIkcYtc05SL3wz9hTuNArpP15ItoA4xHOmloHzA7JuGPB5cQozJjDq2R1uzYX49VZB-l-XOwflIhOYvDiXrBzVyqdTsyXyb4w5JOn8C82LGYij7LT7NY4mFvWAyqYkcIs.gif" 
+                            alt="Publicidad" style={{height: "75%"}}/>
                         </div>
                     </div>
                     <div className="row">

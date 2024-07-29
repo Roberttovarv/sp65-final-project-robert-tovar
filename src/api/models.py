@@ -43,8 +43,7 @@ class Posts(db.Model):
     body = db.Column(db.String(), unique=False, nullable=False)
     date = db.Column(db.Date(), unique=False, nullable=True)
     image_url = db.Column(db.String(), unique=False, nullable=True)
-    game_id = db.Column(db.Integer, db.ForeignKey('games.id'))
-    game_to = db.relationship('Games', foreign_keys=[game_id])
+ 
 
     def __repr__(self):
         return f'<Post {self.title}>'
@@ -57,22 +56,9 @@ class Posts(db.Model):
             'body': self.body,
             'date': self.date,
             'image_url': self.image_url,
-            'game_id': self.game_id
         }
 
-@event.listens_for(Posts, 'before_insert')
-def before_insert(mapper, connection, target):
-    if target.game_id:
-        game = Games.query.get(target.game_id)
-        if game:
-            target.game_name = game.name
 
-@event.listens_for(Posts, 'before_update')
-def before_update(mapper, connection, target):
-    if target.game_id:
-        game = Games.query.get(target.game_id)
-        if game:
-            target.game_name = game.name
 
 
 class Likes(db.Model):

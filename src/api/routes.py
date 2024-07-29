@@ -177,7 +177,7 @@ def handle_posts():
                 new_post = Posts(
                     title=post_data['title'],
                     body=post_data['body'],
-                    game_id=post_data.get('game_id'),
+                    game_name=post_data['game_name'],
                     image_url=post_data['image_url'],
                     date=datetime.today()
                 )
@@ -212,7 +212,7 @@ def handle_post(post_id):
         data = request.json
         post.title = data.get('title', post.title)
         post.body = data.get('body', post.body)
-        post.game_id = data.get('game_id', post.game_id)
+        post.game_namw = data.get('game_name', post.game_name)
         post.image_url = data.get('image_url', post.image_url)
         
         db.session.commit()
