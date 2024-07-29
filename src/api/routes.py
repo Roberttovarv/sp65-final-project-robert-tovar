@@ -342,3 +342,78 @@ def delete_like(like_id):
     db.session.commit()
 
     return jsonify({'message': 'Like deleted'}), 200
+
+@api.route('/videos', methods=['GET', 'POST'])
+def handle_videos():
+    response_body = {}
+
+    if request.method == 'GET':
+        videos = Videos.query.all()
+        results = [video.serialize() for video in videos]
+        response_body['results'] = results
+        response_body['message'] = 'Listado de Videos'
+        return jsonify(response_body), 200
+
+    if request.method == 'POST':
+        data = request.json
+
+        if not data:
+            return jsonify({'message': 'No se enviaron datos'}), 400
+
+        if isinstance(data, dict):
+            data = [data]  # Convertir a lista si es un solo objeto
+
+        if isinstance(data, list):
+            new_videos = []
+            for video_data in data:
+                required_fields = ['title', 'embed', 'game_name']
+                for field in required_fields:
+                    if field not in video_data:
+                        return jsonify({'message': f'Falta el campo requerido: {field}'}), 400
+                
+                new_video = Videos(
+                    title=video_data['title'],
+                    embed=video_data['embed'], 
+                    game_name=video_data['game_name']
+                )
+                db.session.add(new_video)
+                new_videos.append(new_video)
+            
+            db.session.commit()
+
+            response_body['results'] = [video.serialize() for video in new_videos]
+            response_body['message'] = 'Videos añadidos'
+            return jsonify(response_body), 201
+
+        else:
+            return jsonify({'message': 'El formato de los datos debe ser un objeto o una lista de objetos'}), 400
+
+@api.route('/videos/<int:video_id>', methods=['GET', 'PUT', 'DELETE'])
+def handle_video(video_id):
+    response_body = {}
+    video = Videos.query.get(video_id)  
+
+    if not video:
+        return jsonify({'message': 'Video inexistente', 'results': {}}), 404
+
+    if request.method == 'GET':
+        response_body['results'] = video.serialize()  
+        response_body['message'] = 'Video encontrado'
+        return jsonify(response_body), 200  # Corregido aquí
+
+    if request.method == 'PUT':
+        data = request.json
+        video.title = data.get('title', video.title)  
+        video.game_name = data.get('game_name', video.game_name)  # Corregido aquí
+        video.embed = data.get('embed', video.embed)  # Corregido aquí
+
+        db.session.commit()
+        response_body['message'] = 'Video actualizado'
+        response_body['results'] = video.serialize()  
+        return jsonify(response_body), 200  
+
+    if request.method == 'DELETE':
+        db.session.delete(video)
+        db.session.commit()
+        response_body['message'] = 'Video eliminado'
+        return jsonify(response_body), 200 

@@ -144,3 +144,36 @@ class Comments(db.Model):
             'post_id': self.post_id,
             'game_id': self.game_id
         }
+
+class Videos(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    embed = db.Column(db.String(), unique=True, nullable=False)
+    title = db.Column(db.String(), nullable=True)
+    game_name = db.Column(db.String(), nullable=True)
+    game_id = db.Column(db.Integer, db.ForeignKey('games.id'), nullable=True)
+    game = db.relationship('Games', foreign_keys=[game_id])
+
+    def __repr__(self):
+        return f'<Video {self.title}>'
+
+    def serialize(self):
+        return {
+            'id': self.id,
+            'title': self.title,
+            'embed': self.embed,
+            'game_name': self.game_name
+        }
+
+@event.listens_for(Videos, 'before_insert')
+def before_insert_video(mapper, connection, target):
+    if target.game_id:
+        game = Games.query.get(target.game_id)
+        if game:
+            target.game_name = game.name
+
+@event.listens_for(Videos, 'before_update')
+def before_update_video(mapper, connection, target):
+    if target.game_id:
+        game = Games.query.get(target.game_id)
+        if game:
+            target.game_name = game.name
