@@ -23,7 +23,8 @@ import { LandingPage } from "./pages/LandingPage.jsx";
 import { GameDetails } from "./pages/GameDetails.jsx";
 import { Reviews } from "./pages/Reviews.jsx";
 import { News } from "./pages/News.jsx";
-import { CategoriesPage } from "./pages/CategoriesPage.jsx";
+import { NewsDetails } from "./pages/NewsDetails.jsx";
+import { AllGames } from "./pages/AllGames.jsx";
 
 import { Profile } from "./pages/Profile.jsx";
 import { LoginRegister } from "./pages/LoginRegister.jsx";
@@ -53,13 +54,14 @@ const Layout = () => {
                         <Route element={<GamePanel />} path="/adminpanel/gamepanel" />
                         <Route element={<PostPanel />} path="/adminpanel/postpanel" />
 
-                        <Route element={<Welcome />} path="welcome" />
                         <Route element={<LandingPage />} path="/" />
                         <Route element={<GameDetails />} path="/game-details/:gameId" />
                         <Route element={<Reviews />} path="/reviews" />
                         <Route element={<News />} path="/news" />
-                        <Route element={<CategoriesPage />} path="/categorias" />
+                        <Route element={<NewsDetails />} path="/news-details/:news-title" />
                         <Route element={<LoginRegister />} path="/login-register" />
+                        <Route element={<AllGames />} path="/all-games" />
+                        
         
                         <Route element={<Loading />} path="/loading" />
                         <Route element={<LoadingMario />} path="/loadingmario" />

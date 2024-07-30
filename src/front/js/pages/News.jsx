@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Context } from "../store/appContext";
 import "../../styles/landing.css";
+import { Link } from "react-router-dom";
 
 export const News = () => {
     const { store, actions } = useContext(Context);
@@ -32,36 +33,49 @@ export const News = () => {
 
     return (
         <div className="container">
-            <div className="row justify-content-center bgc">
+            <div className="row justify-content-center bgc py-5">
                 <div className="container">
                     <div className="row">
                         <div className="col-8">
                             {lastPost && (
-                                <div className="card">
-                                    <div className="card-body">
-                                        <h5 className="card-title">{lastPost.title}</h5>
-                                        <p className="card-text">{lastPost.game_name}</p>
-                                        <p className="card-text"><small className="text-muted">{lastPost.date}</small></p>
+                                <div className="card px-3" style={{ backgroundColor: "transparent", border: "none" }} onClick={() => actions.setCurrentItem(lastPost)}>
+                                    <div className="card-body" style={{ backgroundColor: "transparent", border: "none" }}>
+                                        <Link to={`/news-details/${lastPost.title}`}>
+                                            <h5 className="card-title text-light text-start">{lastPost.title}</h5>
+                                            <p className="card-text text-light text-start">{lastPost.game_name}</p>
+                                        </Link>
                                     </div>
-                                    <img src={lastPost.image_url} className="card-img-top" alt={lastPost.game_name} />
+                                    <Link to={`/news-details/${lastPost.title}`}>
+                                        <img src={lastPost.image_url} className="card-img-top ms-1" alt={lastPost.game_name} />
+                                    </Link>
                                 </div>
                             )}
                         </div>
-                        <div className="col-4">
-                            <img src="https://cdn.prod.website-files.com/61eeba8765031c95bb83b2ea/6596d9e8efa34a1c48d0387e_-_g72O7K_BW4-2vMwWSs13CIkcYtc05SL3wz9hTuNArpP15ItoA4xHOmloHzA7JuGPB5cQozJjDq2R1uzYX49VZB-l-XOwflIhOYvDiXrBzVyqdTsyXyb4w5JOn8C82LGYij7LT7NY4mFvWAyqYkcIs.gif" 
-                            alt="Publicidad" style={{height: "75%"}}/>
+                        <div className="col-4 py-3">
+                            <img 
+                                src="https://cdn.prod.website-files.com/61eeba8765031c95bb83b2ea/6596d9e8efa34a1c48d0387e_-_g72O7K_BW4-2vMwWSs13CIkcYtc05SL3wz9hTuNArpP15ItoA4xHOmloHzA7JuGPB5cQozJjDq2R1uzYX49VZB-l-XOwflIhOYvDiXrBzVyqdTsyXyb4w5JOn8C82LGYij7LT7NY4mFvWAyqYkcIs.gif"
+                                alt="Publicidad" style={{ height: "86%" }} 
+                            />
                         </div>
                     </div>
                     <div className="row">
                         {post.slice(0, post.length - 1).map((post, index) => (
-                            <div key={index} className="col">
-                                <div className="card bg-dark text-white">
-                                    <img src={post.image_url} className="card-img" alt={post.game_name} />
-                                    <div className="card-img-overlay">
-                                        <h5 className="card-title">{post.title}</h5>
-                                        <p className="card-text">{post.date}</p>
+                            <div key={index} className="col-12 col-md-6 col-lg-4 my-3">
+                                <Link to={`/news-details/${post.title}`} onClick={() => actions.setCurrentItem(post)}>
+                                    <div className="card bg-dark text-white h-100">
+                                        <div className="ratio ratio-1x1">
+                                            <img 
+                                                src={post.image_url} 
+                                                className="card-img-top" 
+                                                alt={post.game_name} 
+                                                style={{ objectFit: "cover", height: "100%" }} 
+                                            />
+                                        </div>
+                                        <div className="card-img-overlay d-flex flex-column justify-content-end p-2">
+                                            <h4 className="card-title bg-dark bg-opacity-75 m-0 p-2" style={{ width: "100%" }}>{post.title}</h4>
+                                        </div>
                                     </div>
-                                </div>
+                                </Link>
                             </div>
                         ))}
                     </div>

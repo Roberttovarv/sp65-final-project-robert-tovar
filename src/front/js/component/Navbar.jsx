@@ -21,26 +21,26 @@ export const Navbar = () => {
                         <img src="https://static.vecteezy.com/system/resources/previews/027/190/610/original/pixel-art-joy-controller-icon-png.png" alt="" style={{ height: "40px", width: "60px", objectFit: "cover" }} />
                     </Link>
                     <div className="pointer h-100 div-btn">
-                        <Link to="/store">
+                        <Link to="/all-games">
                             <span className="sombra-text">
-                                <button className="nav-btn bordered-text">Tienda</button>
+                                <button className="nav-btn bordered-text">All games</button>
                             </span>
                         </Link>
                     </div>
                     <div className="pointer h-100 div-btn">
-                        <Link to="/categories">
-                            <button className="nav-btn bordered-text">Categorías</button>
+                        <Link to="/news">
+                            <button className="nav-btn bordered-text">News</button>
                         </Link>
                     </div>
                     <div className="pointer h-100 div-btn">
                         <Link to="/reviews">
-                            <button className="nav-btn bordered-text">Reseñas</button>
+                            <button className="nav-btn bordered-text">Reviews</button>
                         </Link>
                     </div>
                     {!store.isLogin ? (
                         <div className="pointer h-100 div-btn">
                             <Link to="/login-register">
-                                <button className="nav-btn bordered-text">Ingresar</button>
+                                <button className="nav-btn bordered-text">Log in</button>
                             </Link>
                         </div>
                     ) : (store.admin ? (

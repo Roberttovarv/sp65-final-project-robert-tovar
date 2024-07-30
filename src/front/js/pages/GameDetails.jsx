@@ -11,22 +11,22 @@ export const GameDetails = () => {
          <div className="col-6">
           <div className="card tarjeta">
             <div className="card-header">
-              <h2 className="text-light">{store.currentGame.name}</h2>
+              <h2 className="text-light">{store.currentItem.name}</h2>
             </div>
-            <img src={store.currentGame.background_image} className="card-img-top" alt={store.currentGame.name} />
+            <img src={store.currentItem.background_image} className="card-img-top" alt={store.currentItem.name} />
             <div className="card-body ">
-              <p className="card-text text-light"><strong>Rating:</strong> {store.currentGame.metacritic}</p>
-              <p className="card-text text-light">Description: {store.currentGame.description}</p>
+              <p className="card-text text-light"><strong>Rating:</strong> {store.currentItem.metacritic}</p>
+              <p className="card-text text-light">Description: {store.currentItem.description}</p>
             </div>
             <div>
             <a
-              href={`https://store.steampowered.com/search/?term=${store.currentGame.name}`}
+              href={`https://store.steampowered.com/search/?term=${store.currentItem.name}`}
               target="_blank"
               rel="noopener noreferrer"
             >
-              <button type="button" className="btn btn-secondary m-3">
-                Search in Steam
-              </button>
+              <button class="button m-3">
+ Search in Steam
+</button>
               </a>
             </div>
           </div>

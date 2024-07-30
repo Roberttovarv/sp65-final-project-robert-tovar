@@ -4,7 +4,7 @@ const getState = ({ getStore, getActions, setStore }) => {
             token: null,
             admin: null,
             user: null,
-            currentGame: {},
+            currentItem: {},
             isLogin: false,
         },
         actions: {
@@ -68,8 +68,8 @@ const getState = ({ getStore, getActions, setStore }) => {
                 }
             },
 
-            setCurrentGame: (game) => {
-                setStore({ currentGame: game });
+            setCurrentItem: (item) => {
+                setStore({ currentItem: item });
             },
             
             setIsLogin: (login) => {

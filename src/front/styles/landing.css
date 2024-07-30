@@ -14,7 +14,44 @@ img{
     background-color: rgb(58, 58, 58);
 
 }
+.flip-card__btn:active, .button-confirm:active {
+  box-shadow: 0px 0px var(--main-color);
+  transform: translate(3px, 3px);
+}
 
-/* Loader Code */
+.flip-card__btn {
+  margin: 20px 0 20px 0;
+  width: 120px;
+  height: 40px;
+  border-radius: 5px;
+  border: 2px solid var(--main-color);
+  background-color: var(--bg-color);
+  box-shadow: 4px 4px var(--main-color);
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--font-color);
+  cursor: pointer;
+}
 
-/* HTML: <div class="loader"></div> */
+/* Btn code  */
+
+.button {
+    --font-color: #fff;
+    --bg-color: #323232;
+    --main-color: #fff;
+    width: auto;
+    height: auto;
+    border-radius: 5px;
+    border: 1px solid var(--main-color);
+    background-color: var(--bg-color);
+    box-shadow: 2px 2px var(--main-color);
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--font-color);
+    cursor: pointer;
+  }
+  
+  .button:active {
+    box-shadow: 0px 0px var(--main-color);
+    transform: translate(3px, 3px);
+  }

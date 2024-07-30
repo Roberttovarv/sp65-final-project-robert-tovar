@@ -61,15 +61,17 @@ export const LandingPage = () => {
             (<div className="row flex-nowrap overflow-auto pb-2 d-flex px-3 m-auto justify-content-start" 
             style={{ maxHeight: "55vh", minHeight: "30vh", width: "99%", overflowY: "auto", scrollbarColor: "white transparent", borderRadius: "15px"}}>
                 {gamesDate.slice(0, 20).map((game, index) => (
-                    <div key={index} className="tarjeta m-3" style={{ width: '18rem' }}>
+                    <div key={index} className="tarjeta m-3 ratio ratio-1x1" style={{ width: '18rem' }}>
                         <img src={game.background_image} className=" text-light rounded-1" 
-                        alt={game.name} style={{ width: "100%", maxHeight: "45%", objectFit: "cover" }} />
-                        <div className="card-body">
-                            <h5 className="card-title text-light rounded-1">{game.name}</h5>
+                        alt={game.name} style={{ width: "100%", maxHeight: "60%", objectFit: "cover" }} />
+                        <div className="card-body align-content-end mt-2">
+                            <div className="align-content-between mb-2">
+                            <h5 className="card-title text-light rounded-1 d-flex">{game.name}</h5>
                             <p className="card-text text-light rounded-1">Releasing date: {game.released_at}</p>
-                            <div className="d-flex justify-content-between">
-                                <Link to={`/game-details/${game.id}`} >
-                                    <button className="btn btn-outline-secondary text-light rounded-1" onClick={() => actions.setCurrentGame(game)}>
+                            </div>
+                            <div className="d-flex justify-content-between align-items-end">
+                                <Link to={`/game-details/${game.name}`} >
+                                    <button className="button" onClick={() => actions.setCurrentItem(game)}>
                                         Details
                                     </button>
                                 </Link>
@@ -90,17 +92,21 @@ export const LandingPage = () => {
         :
         
             (<div className="row flex-nowrap overflow-auto pb-2 px-3 d-flex m-auto justify-content-start" 
-                style={{ maxHeight: "55vh", minHeight: "30vh", width: "99%", overflowY: "auto", scrollbarColor: "white transparent", borderRadius: "15px"}}>
+                style={{ maxHeight: "55vh", minHeight: "30vh", width: "99%", overflowY: "auto", scrollbarColor: "white transparent", borderRadius: "15px" }}>
                 {gamesRate.slice(0, 20).map((game, index) => (
-                    <div key={index} className="tarjeta m-3" style={{ width: '18rem' }}>
-                        <img src={game.background_image} className=" text-light rounded-1" 
-                        alt={game.name} style={{ width: "100%", maxHeight: "45%", objectFit: "cover"}} />
-                        <div className="card-body">
-                            <h5 className="card-title text-light rounded-1">{game.name}</h5>
-                            <p className="card-text text-light rounded-1">Rating: {game.metacritic}</p>
-                            <div className="d-flex justify-content-between">
-                                <Link to={`/game-details/${game.id}`} className="btn btn-outline-secondary text-light rounded-1">
-                                    Details
+                    <div key={index} className="tarjeta m-3 ratio ratio-1x1" style={{ width: '18rem' }}>
+                        <img src={game.background_image} className="text-light rounded-1" 
+                        alt={game.name} style={{ width: "100%", maxHeight: "60%", objectFit: "cover" }} />
+                        <div className="card-body align-content-end mt-2">
+                            <div className="align-content-between mb-2">
+                                <h5 className="card-title text-light rounded-1 d-flex">{game.name}</h5>
+                                <p className="card-text text-light rounded-1">Rating: {game.metacritic}</p>
+                            </div>
+                            <div className="d-flex justify-content-between align-items-end">
+                                <Link to={`/game-details/${game.id}`}>
+                                    <button className="button">
+                                        Details
+                                    </button>
                                 </Link>
                                 <span className="text-danger me-2">
                                     <i className="far fa-heart"></i>
@@ -109,7 +115,8 @@ export const LandingPage = () => {
                         </div>
                     </div>
                 ))}
-            </div>)
+            </div>
+            )
         }
         </div>
     );

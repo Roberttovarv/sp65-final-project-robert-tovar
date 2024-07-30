@@ -43,7 +43,7 @@ export const PostPanel = () => {
       title: title,
       image_url: imageURL,
       body: body,
-      game_id: gameId,
+      game_name: gameId,
       author_id: writer,
     };
 
@@ -89,7 +89,7 @@ export const PostPanel = () => {
       title: currentPost.title,
       image_url: currentPost.image_url,
       body: currentPost.body,
-      game_id: currentPost.game_id,
+      game_name: currentPost.game_name,
     };
 
     const uri = host + `/api/posts/${currentPost.id}`;
@@ -229,10 +229,10 @@ export const PostPanel = () => {
                                 />
                                 <input
                                   type="text"
-                                  value={currentPost.game_id}
+                                  value={currentPost.game_name}
                                   className="form-control me-2 mb-2"
                                   style={{ maxWidth: "150px" }}
-                                  onChange={(event) => setCurrentPost({ ...currentPost, game_id: event.target.value })}
+                                  onChange={(event) => setCurrentPost({ ...currentPost, game_name: event.target.value })}
                                 />
                                 <input
                                   type="text"
