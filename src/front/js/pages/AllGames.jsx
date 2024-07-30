@@ -48,7 +48,7 @@ setGames(data.results);
             ? 
             (<LoadingMario />)
             :
-            (<div className="row flex-nowrap overflow-auto pb-2 d-flex px-3 m-auto justify-content-start">
+            (<div className="row flex-nowrap pb-2 d-flex px-3 m-auto justify-content-center">
                 {games.map((game, index) => (
                     <div key={index} className="tarjeta m-3 ratio ratio-1x1" style={{ width: '18rem' }}>
                         <img src={game.background_image} className=" text-light rounded-1" 

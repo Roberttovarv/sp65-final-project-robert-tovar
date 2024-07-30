@@ -43,7 +43,12 @@ export const LandingPage = () => {
     console.log();
 
     return (
+        
         <div className="container">
+            <div class="form__group field float-end">
+    <input type="input" class="form__field" placeholder="Name" required="" />
+    <label for="name" class="form__label">Search</label>
+</div> <br /><br />
             <div className="m-5 d-flex justify-content-center">
             <a href="https://store.steampowered.com/steamdeck" target="_blank" className="image-container" style={{ position: 'relative', display: 'inline-block' }}>
           <img className="cursor" src="https://techcrunch.com/wp-content/uploads/2021/07/hero-banner-sequence-english.2021-07-15-13_49_51.gif" alt="Steam Deck Promotion"
