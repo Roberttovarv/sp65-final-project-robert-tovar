@@ -86,19 +86,27 @@ const getState = ({ getStore, getActions, setStore }) => {
             setCurrentUser: (user) => {
                 setStore({ user });
             },
+            setFilterItem: (item) => {
+                setStore({ filterItem: item });
+            },
+
+            setCurrentFilter: (results) => {
+                setStore({ currentFilter: results });
+            },
+
             filterSet: (item) => {
-               const results = filterItem.filter((element) => {
-                if (element.name.toString().toLowerCase().includes(item.toLowerCaase())
-                ||  element.title.toString().toLowerCase().includes(item.toLowerCaase())
-                ||  element.game_name.toString().toLowerCase().includes(item.toLowerCaase())
-                ||  element.username.toString().toLowerCase().includes(item.toLowerCaase())
-                ||  element.name.toString().toLowerCase().includes(item.toLowerCaase())    
-                   ){
-                    return element;
-                }
+                const store = getStore();
+                const results = store.filterItem.filter((element) => {
+                    return (
+                        element.name.toString().toLowerCase().includes(item.toLowerCase()) ||
+                        element.title.toString().toLowerCase().includes(item.toLowerCase()) ||
+                        element.game_name.toString().toLowerCase().includes(item.toLowerCase()) ||
+                        element.username.toString().toLowerCase().includes(item.toLowerCase())
+                    );
                 });
                 getActions().setCurrentFilter(results);
             },
+            
             handleChange: (event) => {
                 getActions().filterSet(event.target.value);
                 getActions().setFilterItem(event.target.value);
