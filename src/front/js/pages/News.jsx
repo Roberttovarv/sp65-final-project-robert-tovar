@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { Context } from "../store/appContext";
 import "../../styles/landing.css";
 import { Link } from "react-router-dom";
+import { NotFound } from "../component/NotFound.jsx"
 
 export const News = () => {
     const { store, actions } = useContext(Context);
@@ -46,8 +47,11 @@ export const News = () => {
                                         </Link>
                                     </div>
                                     <Link to={`/news-details/${lastPost.title}`}>
-                                        <img src={lastPost.image_url} className="card-img-top ms-1" alt={lastPost.game_name} />
-                                    </Link>
+                                    {lastPost.image_url ? (
+  <img src={lastPost.image_url} className="card-img-top ms-1" alt={lastPost.game_name} />
+) : (
+  <NotFound />
+)}                                    </Link>
                                 </div>
                             )}
                         </div>
