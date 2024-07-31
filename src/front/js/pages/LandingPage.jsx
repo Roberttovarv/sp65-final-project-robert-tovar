@@ -13,8 +13,14 @@ export const LandingPage = () => {
     const { store, actions } = useContext(Context);
     const [gamesDate, setGamesDate] = useState([]);
     const [gamesRate, setGamesRate] = useState([]);
+    const [search, setSearch] = useState('');
 
     const host = `${process.env.BACKEND_URL}`
+
+    const handleInputChange = (event) => {
+        setSearch(event.target.value);
+        actions.handleChange(event); 
+    };
 
     const getGames = async () => {
         const uri = host + '/api/games';
@@ -45,10 +51,18 @@ export const LandingPage = () => {
     return (
         
         <div className="container">
-            <div class="form__group field float-end">
-    <input type="input" className="form__field" placeholder="Search" value={search} onChange={actions.handleChange} />
-    <label for="name" class="form__label">Search</label>
-</div> <br /><br />
+            <div className="form__group field float-end">
+                <input 
+                    type="input" 
+                    className="form__field" 
+                    placeholder="Search" 
+                    value={search} 
+                    onChange={handleInputChange} // Usar la función manejadora local
+                />
+                <label htmlFor="name" className="form__label">Search</label>
+            </div>
+            <br />
+            <br />
             <div className="m-5 d-flex justify-content-center">
             <a href="https://store.steampowered.com/steamdeck" target="_blank" className="image-container" style={{ position: 'relative', display: 'inline-block' }}>
           <img className="cursor" src="https://techcrunch.com/wp-content/uploads/2021/07/hero-banner-sequence-english.2021-07-15-13_49_51.gif" alt="Steam Deck Promotion"
