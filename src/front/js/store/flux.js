@@ -6,6 +6,8 @@ const getState = ({ getStore, getActions, setStore }) => {
             user: null,
             currentItem: {},
             isLogin: false,
+            filterItem: {},
+            currentFilter: {},
         },
         actions: {
 
@@ -84,7 +86,23 @@ const getState = ({ getStore, getActions, setStore }) => {
             setCurrentUser: (user) => {
                 setStore({ user });
             },
-
+            filterSet: (item) => {
+               const results = filterItem.filter((element) => {
+                if (element.name.toString().toLowerCase().includes(item.toLowerCaase())
+                ||  element.title.toString().toLowerCase().includes(item.toLowerCaase())
+                ||  element.game_name.toString().toLowerCase().includes(item.toLowerCaase())
+                ||  element.username.toString().toLowerCase().includes(item.toLowerCaase())
+                ||  element.name.toString().toLowerCase().includes(item.toLowerCaase())    
+                   ){
+                    return element;
+                }
+                });
+                getActions().setCurrentFilter(results);
+            },
+            handleChange: (event) => {
+                getActions().filterSet(event.target.value);
+                getActions().setFilterItem(event.target.value);
+            },
         },
     };
 };
