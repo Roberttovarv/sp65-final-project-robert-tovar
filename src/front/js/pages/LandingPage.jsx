@@ -46,7 +46,7 @@ export const LandingPage = () => {
         
         <div className="container">
             <div class="form__group field float-end">
-    <input type="input" class="form__field" placeholder="Name" required="" />
+    <input type="input" className="form__field" placeholder="Search" value={search} onChange={actions.handleChange} />
     <label for="name" class="form__label">Search</label>
 </div> <br /><br />
             <div className="m-5 d-flex justify-content-center">
