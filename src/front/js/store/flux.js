@@ -6,8 +6,8 @@ const getState = ({ getStore, getActions, setStore }) => {
             user: null,
             currentItem: {},
             isLogin: false,
-            filterItem: {},
-            currentFilter: {},
+            filterItem: [],
+            currentFilter: [],
         },
         actions: {
 
@@ -96,6 +96,10 @@ const getState = ({ getStore, getActions, setStore }) => {
 
             filterSet: (item) => {
                 const store = getStore();
+                if (!Array.isArray(store.filterItem)) {
+                    console.error("filterItem is not an array");
+                    return;
+                }
                 const results = store.filterItem.filter((element) => {
                     return (
                         element.name.toString().toLowerCase().includes(item.toLowerCase()) ||
@@ -106,7 +110,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                 });
                 getActions().setCurrentFilter(results);
             },
-            
+
             handleChange: (event) => {
                 getActions().filterSet(event.target.value);
                 getActions().setFilterItem(event.target.value);
