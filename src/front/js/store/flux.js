@@ -113,10 +113,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 
             handleChange: (event) => {
                 getActions().filterSet(event.target.value);
-                getActions().setFilterItem(event.target.value);
             },
         },
     };
 };
-
 export default getState;
