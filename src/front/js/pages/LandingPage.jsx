@@ -8,14 +8,10 @@ export const LandingPage = () => {
     const { store, actions } = useContext(Context);
     const [gamesDate, setGamesDate] = useState([]);
     const [gamesRate, setGamesRate] = useState([]);
-    const [search, setSearch] = useState('');
 
     const host = `${process.env.BACKEND_URL}`;
 
-    const handleInputChange = (event) => {
-        setSearch(event.target.value);
-        actions.handleChange(event); 
-    };
+
 
     const getGames = async () => {
         const uri = host + '/api/games';
@@ -36,8 +32,6 @@ export const LandingPage = () => {
         setGamesDate(sortedByDate);
         setGamesRate(sortedByRate);
         
-        // Actualizar filterItem en el store
-        actions.setFilterItem(data.results); // Asegúrate de que data.results es un array
     };
 
     useEffect(() => {
@@ -46,24 +40,7 @@ export const LandingPage = () => {
     
     return (
         <div className="container">
-            <div className="form__group field float-end">
-                <input 
-                    type="input" 
-                    className="form__field" 
-                    placeholder="Search" 
-                    value={search} 
-                    onChange={handleInputChange} 
-                />
-                <label htmlFor="name" className="form__label">Search</label>
-            </div>
-            <br />
-            <br />
-            <div className="m-5 d-flex justify-content-center">
-                <a href="https://store.steampowered.com/steamdeck" target="_blank" className="image-container" style={{ position: 'relative', display: 'inline-block' }}>
-                    <img className="cursor" src="https://techcrunch.com/wp-content/uploads/2021/07/hero-banner-sequence-english.2021-07-15-13_49_51.gif" alt="Steam Deck Promotion"
-                        style={{ height: "400px", width: "850px", objectFit: "cover" }} />
-                </a>
-            </div>
+
             <h1 className="text-center text-light">Newest Games</h1>
 
             {gamesDate.length === 0 ? 
@@ -95,6 +72,13 @@ export const LandingPage = () => {
                 </div>)
             }
 
+            <div className="m-5 d-flex justify-content-center">
+                <a href="https://store.steampowered.com/steamdeck" target="_blank" className="image-container" style={{ position: 'relative', display: 'inline-block' }}>
+                    <img className="cursor" src="https://techcrunch.com/wp-content/uploads/2021/07/hero-banner-sequence-english.2021-07-15-13_49_51.gif" alt="Steam Deck Promotion"
+                        style={{ height: "400px", width: "850px", objectFit: "cover" }} />
+                </a>
+            </div>
+            
             <h1 className="text-center text-light">Best Rated</h1>
 
             {gamesRate.length === 0 ?

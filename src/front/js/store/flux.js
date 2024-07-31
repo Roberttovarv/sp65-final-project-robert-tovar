@@ -2,7 +2,7 @@ const getState = ({ getStore, getActions, setStore }) => {
     return {
         store: {
             token: null,
-            admin: null,
+            admin: true,
             user: null,
             currentItem: {},
             isLogin: false,
@@ -86,26 +86,25 @@ const getState = ({ getStore, getActions, setStore }) => {
             setCurrentUser: (user) => {
                 setStore({ user });
             },
-            setFilterItem: (item) => {
-                setStore({ filterItem: item });
+            setCurrentItem: (item) => {
+                setStore({ currentItem: item });
             },
 
-            setCurrentFilter: (results) => {
-                setStore({ currentFilter: results });
+            setFilterItem: (items) => {
+                setStore({ filterItem: items });
             },
 
-            filterSet: (item) => {
+            filterSet: (query) => {
                 const store = getStore();
-                if (!Array.isArray(store.filterItem)) {
-                    console.error("filterItem is not an array");
-                    return;
-                }
-                const results = store.filterItem.filter((element) => {
-                    return (
-                        element.name?.toString().toLowerCase().includes(item.toLowerCase()) 
-                    );
-                });
-                getActions().setCurrentFilter(results);
+                const filtered = store.filterItem.filter((element) =>
+                    element.name.toLowerCase().includes(query.toLowerCase()) ||
+                element.title.toLowerCase().includes(query.toLowerCase()) ||
+                element.game_name.toLowerCase().includes(query.toLowerCase()) ||
+                element.username.toLowerCase().includes(query.toLowerCase()) ||
+                element.last_name.toLowerCase().includes(query.toLowerCase()) ||
+                element.first_name.toLowerCase().includes(query.toLowerCase()) 
+                );
+                setStore({ currentFilter: filtered });
             },
 
             handleChange: (event) => {

@@ -24,7 +24,7 @@ export const GameDetails = () => {
               target="_blank"
               rel="noopener noreferrer"
             >
-              <button class="button m-3">
+              <button className="button m-3">
  Search in Steam
 </button>
               </a>

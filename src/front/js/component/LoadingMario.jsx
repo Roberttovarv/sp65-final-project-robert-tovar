@@ -9,7 +9,7 @@ export const LoadingMario = () => {
 
 return (
 <div className="d-flex m-0 justify-content-center">
-<div class="loader">
+<div className="loader">
 </div>  
 </div>
 )}

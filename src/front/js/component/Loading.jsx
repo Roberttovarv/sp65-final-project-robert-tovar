@@ -7,7 +7,7 @@ import "../../styles/loading.css";
 
 export const Loading = () => {
 
-return (<div class="spinner">
+return (<div className="spinner d-flex m-0 justify-content-center">
   <span>L</span>
   <span>O</span>
   <span>A</span>
