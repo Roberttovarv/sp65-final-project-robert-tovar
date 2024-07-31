@@ -102,10 +102,10 @@ const getState = ({ getStore, getActions, setStore }) => {
                 }
                 const results = store.filterItem.filter((element) => {
                     return (
-                        element.name.toString().toLowerCase().includes(item.toLowerCase()) ||
-                        element.title.toString().toLowerCase().includes(item.toLowerCase()) ||
-                        element.game_name.toString().toLowerCase().includes(item.toLowerCase()) ||
-                        element.username.toString().toLowerCase().includes(item.toLowerCase())
+                        (element.name?.toString().toLowerCase().includes(item.toLowerCase())) ||
+                        (element.title?.toString().toLowerCase().includes(item.toLowerCase())) ||
+                        (element.game_name?.toString().toLowerCase().includes(item.toLowerCase())) ||
+                        (element.username?.toString().toLowerCase().includes(item.toLowerCase()))
                     );
                 });
                 getActions().setCurrentFilter(results);
