@@ -9,6 +9,7 @@ export const AllGames = () => {
     const [games, setGames] = useState([]);
     const [search, setSearch] = useState("");
     const [filteredGames, setFilteredGames] = useState([]);
+    const [likedGames, setLikedGames] = useState(new Set()); // To track liked games
 
     const host = `${process.env.BACKEND_URL}`;
 
@@ -25,7 +26,7 @@ export const AllGames = () => {
 
         const data = await response.json();
         setGames(data.results);
-        setFilteredGames(data.results); 
+        setFilteredGames(data.results);
     };
 
     const handleInputChange = (event) => {
@@ -42,6 +43,49 @@ export const AllGames = () => {
         );
         setFilteredGames(filtered);
     }, [search, games]);
+
+    useEffect(() => {
+        // Fetch the list of liked games for the current user
+        const fetchLikedGames = async () => {
+            const response = await fetch(`${host}/api/user/likes`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${store.token}`
+                }
+            });
+            const data = await response.json();
+            const likedSet = new Set(data.likedGames.map(game => game.id));
+            setLikedGames(likedSet);
+        };
+
+        fetchLikedGames();
+    }, [store.token]);
+
+    const handleLike = async (gameId) => {
+        const isLiked = likedGames.has(gameId);
+
+        const method = isLiked ? 'DELETE' : 'POST';
+        const uri = `${host}/api/like/game/${gameId}`;
+
+        const response = await fetch(uri, {
+            method: method,
+            headers: {
+                'Authorization': `Bearer ${store.token}`
+            }
+        });
+
+        if (response.ok) {
+            const newLikedGames = new Set(likedGames);
+            if (isLiked) {
+                newLikedGames.delete(gameId);
+            } else {
+                newLikedGames.add(gameId);
+            }
+            setLikedGames(newLikedGames);
+        } else {
+            console.log("Error", response.status, response.statusText);
+        }
+    };
 
     return (
         <div className="container">
@@ -82,8 +126,12 @@ export const AllGames = () => {
                                             Details
                                         </button>
                                     </Link>
-                                    <span className="text-danger me-2">
-                                        <i className="far fa-heart"></i>
+                                    <span 
+                                        className={`text-danger me-2 ${likedGames.has(game.id) ? 'text-danger' : 'text-muted'}`} 
+                                        onClick={() => handleLike(game.id)}
+                                        style={{ cursor: 'pointer' }}
+                                    >
+                                        <i className={`far fa-heart ${likedGames.has(game.id) ? 'fas' : 'far'}`}></i>
                                     </span>
                                 </div>
                             </div>
