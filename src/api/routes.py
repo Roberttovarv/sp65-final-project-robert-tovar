@@ -1,5 +1,5 @@
 from flask import Flask, jsonify, request
-from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
+from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
 from datetime import datetime
 from models import db, Users, Games, Posts, Videos, Likes, Comments  # Asegúrate de importar los modelos necesarios
 
@@ -189,25 +189,33 @@ def login():
 
 # Rutas adicionales para manejar likes y comentarios
 
-@app.route('/profile/likes', methods=['GET'])
+@app.route('/profile/likes/posts', methods=['GET'])
 @jwt_required()
-def get_profile_with_likes():
+def get_liked_posts():
     current_user = get_jwt_identity()
-    user = Users.query.get(current_user['user_id'])
+    user_id = current_user['user_id']
+    liked_posts = Likes.query.filter_by(user_id=user_id, post_id!=None).all()
     
-    if user:
-        response_body = {
-            'message': 'Perfil encontrado',
-            'results': user.serialize()
-        }
-        response_body['results']['liked_posts'] = [like.post_to.serialize() for like in Likes.query.filter_by(user_id=user.id, post_id!=None).all()]
-        response_body['results']['liked_games'] = [like.game_to.serialize() for like in Likes.query.filter_by(user_id=user.id, game_id!=None).all()]
-        return jsonify(response_body), 200
-    else:
-        response_body = {
-            'message': 'Perfil no encontrado'
-        }
-        return jsonify(response_body), 404
+    response_body = {
+        'message': 'Publicaciones con like encontradas',
+        'results': [like.post_to.serialize() for like in liked_posts]
+    }
+    
+    return jsonify(response_body), 200
+
+@app.route('/profile/likes/games', methods=['GET'])
+@jwt_required()
+def get_liked_games():
+    current_user = get_jwt_identity()
+    user_id = current_user['user_id']
+    liked_games = Likes.query.filter_by(user_id=user_id, game_id!=None).all()
+    
+    response_body = {
+        'message': 'Juegos con like encontrados',
+        'results': [like.game_to.serialize() for like in liked_games]
+    }
+    
+    return jsonify(response_body), 200
 
 @app.route('/posts/<int:post_id>/comment', methods=['POST'])
 @jwt_required()
