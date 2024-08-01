@@ -4,9 +4,10 @@ from flask import request, jsonify
 from datetime import datetime
 import re
 
+
 def delete_html_tags(text):
-    clean = re.compile('<.*?>')
-    return re.sub(clean, '', text)
+        clean = re.compile('<.*?>')
+        return re.sub(clean, '', text)
 
 db = SQLAlchemy()
 
@@ -36,6 +37,7 @@ class Users(db.Model):
             'pfp': self.pfp
         }
 
+
 class Posts(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(), unique=False, nullable=False)
@@ -59,6 +61,9 @@ class Posts(db.Model):
             'comments': [comment.serialize() for comment in self.comments]
         }
 
+
+
+
 class Likes(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
@@ -78,6 +83,7 @@ class Likes(db.Model):
             'post_id': self.post_id,
             'game_id': self.game_id
         }
+
 
 class Games(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -104,6 +110,7 @@ class Games(db.Model):
             'likes': len(self.likes),
             'comments': [comment.serialize() for comment in self.comments]
         }
+
 
 class Comments(db.Model):
     id = db.Column(db.Integer, primary_key=True)
