@@ -65,7 +65,7 @@ export const AllGames = () => {
         const isLiked = likedGames.has(gameId);
 
         const method = isLiked ? 'DELETE' : 'POST';
-        const uri = `${host}/api/like/game/${gameId}`;
+        const uri = `${host}/api/games/${gameId}/like`;
 
         const response = await fetch(uri, {
             method: method,
@@ -82,6 +82,9 @@ export const AllGames = () => {
                 newLikedGames.add(gameId);
             }
             setLikedGames(newLikedGames);
+
+            // Optionally, you may need to refresh the games data to update the like count
+            getGames();
         } else {
             console.log("Error", response.status, response.statusText);
         }
@@ -133,6 +136,7 @@ export const AllGames = () => {
                                     >
                                         <i className={`far fa-heart ${likedGames.has(game.id) ? 'fas' : 'far'}`}></i>
                                     </span>
+                                    <span>{game.likes} Likes</span>
                                 </div>
                             </div>
                         </div>
