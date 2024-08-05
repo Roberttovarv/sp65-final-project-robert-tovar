@@ -1,13 +1,10 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Context } from "./../store/appContext";
-import { useNavigate } from "react-router-dom";
 import "../../styles/navbar.css";
 
 export const Navbar = () => {
     const { store, actions } = useContext(Context);
-
-
 
     useEffect(() => {
         actions.fetchProfile();
@@ -15,58 +12,58 @@ export const Navbar = () => {
 
     return (
         <div className="navline">
-            <nav className="navbar navst">
+            <nav className="navbar navst vt323-regular">
                 <div className="container navst d-flex m-auto align-items-center mb-1">
-                    <Link to="/">
-                        <img src="https://static.vecteezy.com/system/resources/previews/027/190/610/original/pixel-art-joy-controller-icon-png.png" alt="" style={{ height: "40px", width: "60px", objectFit: "cover" }} />
-                    </Link>
-                    <div className="pointer h-100 div-btn">
-                        <Link to="/all-games">
-                            <span className="sombra-text">
-                                <button className="nav-btn bordered-text">All games</button>
-                            </span>
+                    <div id="logo">
+                        <Link to="/">
+                            <img src="https://static.vecteezy.com/system/resources/previews/027/190/610/original/pixel-art-joy-controller-icon-png.png" alt="logo" style={{ height: "40px", width: "60px", objectFit: "cover" }} />
                         </Link>
                     </div>
-                    <div className="pointer h-100 div-btn">
-                        <Link to="/news">
-                            <button className="nav-btn bordered-text">News</button>
+                    <div id="menu" className="d-flex m-0 align-items-center justify-content-between">
+                        <div className="">
+                        <Link to="/all-games" className="pointer">
+                            <button className="nav-btn" style={{width: "auto"}}>All games</button>
                         </Link>
-                    </div>
-                    <div className="pointer h-100 div-btn">
-                        <Link to="/reviews">
-                            <button className="nav-btn bordered-text">Reviews</button>
+                        </div>
+                        <div className="mx-5">
+                        <Link to="/news" className="pointer">
+                            <button className="nav-btn ">News</button>
                         </Link>
+                        </div>
+                        <div className="">
+                        <Link to="/reviews" className="pointer">
+                            <button className="nav-btn ">Reviews</button>
+                        </Link>
+                        </div>
                     </div>
-                    {!store.isLogin ? (
-                        <div className="pointer h-100 div-btn">
-                            <Link to="/login-register">
-                                <button className="nav-btn bordered-text">Log in</button>
+                    <div id="login">
+                        {!store.isLogin ? (
+                            <Link to="/login-register" className="pointer">
+                                <button className="nav-btn" style={{width: "auto"}}>Log in</button>
                             </Link>
-                        </div>
-                    ) : (store.admin ? (
-                        <div className="dropdown">
-                            <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                                Perfil
-                            </button>
-                            <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                <li className="text-danger"><Link to="/adminpanel">Admin Panel</Link></li>                             
-                                <li><Link to="/profile">Profile</Link></li>
-                                <li><a className="dropdown-item" href="#">Favs</a></li>
-                                <li><a className="dropdown-item" onClick={actions.logout}>Logout</a></li>
+                        ) : (
+                            <div className="dropdown bgc">
+                            <img src={store.user?.pfp} className="dropdown-toggle rounded-circle" id="dropdownMenuButton1" 
+                                 data-bs-toggle="dropdown" height="35px" width="35px" style={{objectFit: "cover"}} />
+                            <ul className="dropdown-menu bgc border border-2 border-secondary" aria-labelledby="dropdownMenuButton1">
+                                {store.admin && 
+                                    <li className="text-danger">
+                                        <Link to="/adminpanel" className="dropdown-item text-danger">Admin Panel</Link>
+                                    </li>}
+                                <li>
+                                    <Link to="/profile" className="dropdown-item text-white">Profile</Link>
+                                </li>
+                                <li>
+                                    <a className="dropdown-item text-white" href="#">Favs</a>
+                                </li>
+                                <li>
+                                    <a className="dropdown-item text-white" onClick={actions.logout}>Logout</a>
+                                </li>
                             </ul>
                         </div>
-                    ) : (
-                        <div className="dropdown">
-                            <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                                Perfil
-                            </button>
-                            <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                <li><Link to="/profile">Perfil</Link></li>
-                                <li><a className="dropdown-item" href="#">Favs</a></li>
-                                <li><a className="dropdown-item" onClick={actions.logout}>Logout</a></li>
-                            </ul>
-                        </div>
-                    ))}
+                        
+                        )}
+                    </div>
                 </div>
             </nav>
         </div>

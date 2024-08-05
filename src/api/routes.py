@@ -144,7 +144,7 @@ def get_users():
     response_body['message'] = 'Listado de Usuarios'
     return jsonify(response_body), 200
 
-@app.route('/games', methods=['GET', 'POST'])
+@api.route('/games', methods=['GET', 'POST'])
 def handle_games():
     response_body = {}
     if request.method == 'GET':
@@ -169,7 +169,7 @@ def handle_games():
         response_body['results'] = new_game.serialize()
         return jsonify(response_body), 201
 
-@app.route('/games/<int:game_id>', methods=['GET', 'PUT', 'DELETE'])
+@api.route('/games/<int:game_id>', methods=['GET', 'PUT', 'DELETE'])
 def handle_game(game_id):
     response_body = {}
     game = Games.query.get(game_id)
@@ -201,9 +201,9 @@ def handle_game(game_id):
         return jsonify(response_body), 200
 
 
-@app.route('/games/<int:game_id>/comment', methods=['POST', 'GET', 'DELETE'])
+@api.route('/games/<int:game_id>/comment', methods=['POST', 'GET', 'DELETE'])
 @jwt_required()
-def handle_comment(game_id):
+def handle_comment_game(game_id):
     current_user = get_jwt_identity()
     user_id = current_user['user_id']
 
@@ -295,7 +295,7 @@ def handle_posts():
         else:
             return jsonify({'message': 'El formato de los datos debe ser una lista de publicaciones'}), 400
 
-@app.route('/posts/<int:post_id>', methods=['GET', 'PUT', 'DELETE'])
+@api.route('/posts/<int:post_id>', methods=['GET', 'PUT', 'DELETE'])
 def handle_post(post_id):
     response_body = {}
     post = Posts.query.get(post_id)
@@ -327,9 +327,9 @@ def handle_post(post_id):
         return jsonify(response_body), 200
 
 
-@app.route('/posts/<int:post_id>/comment', methods=['POST', 'GET', 'DELETE'])
+@api.route('/posts/<int:post_id>/comment', methods=['POST', 'GET', 'DELETE'])
 @jwt_required()
-def handle_comment(post_id):
+def handle_comment_post(post_id):
     current_user = get_jwt_identity()
     user_id = current_user['user_id']
 
@@ -391,13 +391,12 @@ def get_profile():
         response_body['message'] = 'Perfil no encontrado'
         return jsonify(response_body), 404
 
-@app.route('/profile/likes/posts', methods=['GET'])
+@api.route('/profile/likes/posts', methods=['GET'])
 @jwt_required()
 def get_liked_posts():
     current_user = get_jwt_identity()
     user_id = current_user['user_id']
-    liked_posts = Likes.query.filter_by(user_id=user_id, post_id!=None).all()
-    
+    liked_posts = Likes.query.filter(and_(Likes.user_id == user_id, Likes.post_id != None)).all()    
     response_body = {
         'message': 'Publicaciones con like encontradas',
         'results': [like.post_to.serialize() for like in liked_posts]
@@ -405,13 +404,12 @@ def get_liked_posts():
     
     return jsonify(response_body), 200
 
-@app.route('/profile/likes/games', methods=['GET'])
+@api.route('/profile/likes/games', methods=['GET'])
 @jwt_required()
 def get_liked_games():
     current_user = get_jwt_identity()
     user_id = current_user['user_id']
-    liked_games = Likes.query.filter_by(user_id=user_id, game_id!=None).all()
-    
+    liked_games = Likes.query.filter(and_(Likes.user_id == user_id, Likes.game_id != None)).all()    
     response_body = {
         'message': 'Juegos con like encontrados',
         'results': [like.game_to.serialize() for like in liked_games]
@@ -458,7 +456,7 @@ def delete_like(like_id):
     return jsonify({'message': 'Like deleted'}), 200
 
 
-@app.route('/posts/<int:post_id>/like', methods=['POST', 'DELETE'])
+@api.route('/posts/<int:post_id>/like', methods=['POST', 'DELETE'])
 @jwt_required()
 def like_post(post_id):
     current_user = get_jwt_identity()
@@ -482,7 +480,7 @@ def like_post(post_id):
         db.session.commit()
         return jsonify({'message': 'Like eliminado de la publicación'}), 200
 
-@app.route('/games/<int:game_id>/like', methods=['POST', 'DELETE'])
+@api.route('/games/<int:game_id>/like', methods=['POST', 'DELETE'])
 @jwt_required()
 def like_game(game_id):
     current_user = get_jwt_identity()
@@ -505,6 +503,19 @@ def like_game(game_id):
         db.session.delete(existing_like)
         db.session.commit()
         return jsonify({'message': 'Like eliminado del juego'}), 200
+
+
+@api.route('/api/user/<int:user_id>/likes', methods=['GET'])
+def get_user_likes(user_id):
+    user_likes = Likes.query.filter_by(user_id=user_id).all()
+    liked_games = [like.game_id for like in user_likes if like.game_id is not None]
+    liked_posts = [like.post_id for like in user_likes if like.post_id is not None]
+    
+    return jsonify({
+        'liked_games': liked_games,
+        'liked_posts': liked_posts
+    }), 200
+
         
 
 @api.route('/videos', methods=['GET', 'POST'])

@@ -53,12 +53,18 @@ export const AllGames = () => {
                     'Authorization': `Bearer ${store.token}`
                 }
             });
-            const data = await response.json();
-            const likedSet = new Set(data.likedGames.map(game => game.id));
-            setLikedGames(likedSet);
+            if (response.ok) {
+                const data = await response.json();
+                const likedSet = new Set(data.likedGames.map(game => game.id));
+                setLikedGames(likedSet);
+            } else {
+                console.log("Error fetching liked games", response.status, response.statusText);
+            }
         };
 
-        fetchLikedGames();
+        if (store.token) {
+            fetchLikedGames();
+        }
     }, [store.token]);
 
     const handleLike = async (gameId) => {

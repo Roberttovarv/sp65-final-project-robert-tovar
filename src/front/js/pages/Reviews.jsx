@@ -12,19 +12,22 @@ export const Reviews = () => {
     const host = `${process.env.BACKEND_URL}`;
 
     const getVideos = async () => {
-        const uri = host + '/api/videos';
-        const options = { method: 'GET' };
+        try {
+            const uri = host + '/api/videos';
+            const options = { method: 'GET' };
 
-        const response = await fetch(uri, options);
+            const response = await fetch(uri, options);
 
-        if (!response.ok) {
-            console.log("Error", response.status, response.statusText);
-            return;
+            if (!response.ok) {
+                console.error("Error", response.status, response.statusText);
+                return;
+            }
+
+            const data = await response.json();
+            setVideos(data.results);
+        } catch (error) {
+            console.error("Error fetching videos:", error);
         }
-
-        const data = await response.json();
-
-        setVideos(data.results);
     };
 
     useEffect(() => {
@@ -32,7 +35,7 @@ export const Reviews = () => {
     }, []);
 
     useEffect(() => {
-        const filtered = videos.filter(video => 
+        const filtered = videos.filter(video =>
             video.title.toLowerCase().includes(search.toLowerCase()) ||
             video.game_name?.toLowerCase().includes(search.toLowerCase())
         );
@@ -44,40 +47,38 @@ export const Reviews = () => {
     };
 
     return (
-        <div>
-            <div className="form__group field float-end">
-                <input 
-                    type="input" 
-                    className="form__field" 
-                    placeholder="Search" 
-                    value={search} 
-                    onChange={handleInputChange} 
-                />
-                <label htmlFor="name" className="form__label">Search</label>
-            </div>
-        
-            <div className="container">
-                <div className="row justify-content-center bgc border border-bottom-0 border-end-0 border-start-0 border-dark">
-                    {filteredItems.length === 0 ? 
-                        <Loading />
-                        :
-                        filteredItems.map((video, index) => (
-                            <div key={index} className="col-md-8 mb-4 my-5 bgc">
-                                <h3 className="text-light text-start">{video.title}</h3>
-                                <h6 className="text-light text-start">{video.game_name}</h6>
-
-                                <div className="ratio ratio-16x9">
-                                    <iframe 
-                                        src={video.embed} 
-                                        allowFullScreen 
-                                        style={{ width: "100%", height: "100%" }}
-                                        title={video.title}
-                                    ></iframe>
-                                </div>
-                            </div>
-                        ))
-                    }
+        <div className="container">
+            <div className="row justify-content-center bgc border border-bottom-0 border-end-0 border-start-0 border-dark">
+                <div className="row bgc justify-content-end">
+                    <div className="form__group field">
+                        <input
+                            type="text"
+                            className="form__field"
+                            placeholder="Search"
+                            value={search}
+                            onChange={handleInputChange}
+                        />
+                        <label htmlFor="name" className="form__label">Search</label>
+                    </div>
                 </div>
+                {filteredItems.length === 0 ? (
+                    <Loading />
+                ) : (
+                    filteredItems.map((video, index) => (
+                        <div key={index} className="col-md-8 mb-4 my-5 bgc">
+                            <h3 className="text-light text-start">{video.title}</h3>
+                            <h6 className="text-light text-start">{video.game_name}</h6>
+                            <div className="ratio ratio-16x9">
+                                <iframe
+                                    src={video.embed}
+                                    allowFullScreen
+                                    style={{ width: "100%", height: "100%" }}
+                                    title={video.title}
+                                ></iframe>
+                            </div>
+                        </div>
+                    ))
+                )}
             </div>
         </div>
     );

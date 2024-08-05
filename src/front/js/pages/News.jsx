@@ -47,7 +47,8 @@ export const News = () => {
 
     return (
         <div className="container">
-            <div className="form__group field float-end ps-5">
+            <div className="row justify-content-end px-5">
+            <div className="row form__group field float-end px-4">
                 <input 
                     type="input" 
                     className="form__field" 
@@ -57,9 +58,6 @@ export const News = () => {
                 />
                 <label htmlFor="name" className="form__label">Search</label>
             </div>
-            <br />
-            <br />
-            <div className="row justify-content-center py-5">
                 <div className="container">
                     <div className="row">
                         <div className="col-8">

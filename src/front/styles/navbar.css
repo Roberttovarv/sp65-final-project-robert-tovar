@@ -1,12 +1,16 @@
 .navst {
     padding: 0px;
-    background-color: rgb(58, 58, 58);
+    background-color: rgb(29, 29, 29);
     border-radius: 2%;
 
 }
 
-.navline {
-    box-shadow: -5px 5px 10px rgba(99, 25, 25, 0.2);
-    border-bottom: 3px solid black;
-    /* Se agregó 'solid' */
+
+.vt323-regular {
+    font-family: "VT323", monospace;
+    font-weight: 800;
+    font-style: normal;
+}
+.bgc{
+    background-color: rgb(29, 29, 29);
 }

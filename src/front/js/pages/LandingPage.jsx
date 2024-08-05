@@ -72,12 +72,6 @@ export const LandingPage = () => {
                 </div>)
             }
 
-            <div className="m-5 d-flex justify-content-center">
-                <a href="https://store.steampowered.com/steamdeck" target="_blank" className="image-container" style={{ position: 'relative', display: 'inline-block' }}>
-                    <img className="cursor" src="https://techcrunch.com/wp-content/uploads/2021/07/hero-banner-sequence-english.2021-07-15-13_49_51.gif" alt="Steam Deck Promotion"
-                        style={{ height: "400px", width: "850px", objectFit: "cover" }} />
-                </a>
-            </div>
             
             <h1 className="text-center text-light">Best Rated</h1>
 
@@ -109,6 +103,12 @@ export const LandingPage = () => {
                     ))}
                 </div>)
             }
+            <div className="m-5 d-flex justify-content-center">
+                <a href="https://store.steampowered.com/steamdeck" target="_blank" className="image-container" style={{ position: 'relative', display: 'inline-block' }}>
+                    <img id="publi" className="cursor" src="https://techcrunch.com/wp-content/uploads/2021/07/hero-banner-sequence-english.2021-07-15-13_49_51.gif" alt="Steam Deck Promotion"
+                        style={{ height: "400px", width: "850px", objectFit: "cover" }} />
+                </a>
+            </div>
         </div>
     );
 }

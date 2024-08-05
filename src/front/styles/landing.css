@@ -1,9 +1,9 @@
-img{
+#publi{
     object-fit: fill;
 }
 .tarjeta, .prof{
     padding: 0px;
-    background-color: rgb(58, 58, 58);
+    background-color:  rgb(29, 29, 29);
     border-radius: 2%;
 }
 .tarjeta {
@@ -11,7 +11,7 @@ img{
   
 }
 .bgc {
-    background-color: rgb(58, 58, 58);
+    background-color: rgb(29, 29, 29);
 
 }
 .flip-card__btn:active, .button-confirm:active {
