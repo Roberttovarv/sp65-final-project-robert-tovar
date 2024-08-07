@@ -9,7 +9,7 @@ export const AllGames = () => {
     const [games, setGames] = useState([]);
     const [search, setSearch] = useState("");
     const [filteredGames, setFilteredGames] = useState([]);
-    const [likedGames, setLikedGames] = useState(new Set()); // To track liked games
+    const [likedGames, setLikedGames] = useState(new Set());
 
     const host = `${process.env.BACKEND_URL}`;
 
@@ -45,7 +45,6 @@ export const AllGames = () => {
     }, [search, games]);
 
     useEffect(() => {
-        // Fetch the list of liked games for the current user
         const fetchLikedGames = async () => {
             const response = await fetch(`${host}/api/user/likes`, {
                 method: 'GET',
@@ -88,8 +87,6 @@ export const AllGames = () => {
                 newLikedGames.add(gameId);
             }
             setLikedGames(newLikedGames);
-
-            // Optionally, you may need to refresh the games data to update the like count
             getGames();
         } else {
             console.log("Error", response.status, response.statusText);
@@ -98,51 +95,55 @@ export const AllGames = () => {
 
     return (
         <div className="container">
-            <div className="form__group field float-end ps-5">
-                <input 
-                    type="input" 
-                    className="form__field" 
-                    placeholder="Search" 
-                    value={search} 
-                    onChange={handleInputChange} 
-                />
-                <label htmlFor="name" className="form__label">Search</label>
+            <div className="row">
+                <div className="col-12 text-end mb-4">
+                    <div className="form__group field float-end ps-5">
+                        <input 
+                            type="input" 
+                            className="form__field" 
+                            placeholder="Search" 
+                            value={search} 
+                            onChange={handleInputChange} 
+                        />
+                        <label htmlFor="name" className="form__label">Search</label>
+                    </div>
+                </div>
+                <div className="col-12 text-center mb-5">
+                    <h1 className="text-light">All Games</h1>
+                    <h4 className="text-light">Good luck finding your game, freak!</h4>
+                </div>
             </div>
-            <br />
-            <br />
-            <h1 className="text-center text-light">All Games</h1>
-            <h4 className="text-center text-light">Good luck finding your game, freak!</h4>
             {games.length === 0 ? (
                 <LoadingMario />
             ) : (
-                <div className="row flex-nowrap pb-2 d-flex px-3 m-auto justify-content-center">
+                <div className="row">
                     {filteredGames.map((game, index) => (
-                        <div key={index} className="tarjeta m-3 ratio ratio-1x1" style={{ width: '18rem' }}>
-                            <img 
-                                src={game.background_image} 
-                                className="text-light rounded-1" 
-                                alt={game.name} 
-                                style={{ width: "100%", maxHeight: "60%", objectFit: "cover" }} 
-                            />
-                            <div className="card-body align-content-end mt-2">
-                                <div className="align-content-between mb-2">
-                                    <h5 className="card-title text-light rounded-1 d-flex">{game.name}</h5>
-                                    <p className="card-text text-light rounded-1">Releasing date: {game.released_at}</p>
+                        <div key={index} className="col-lg-3 col-md-4 col-sm-6 col-12 mb-4 d-flex justify-content-center">
+                            <div className="card tarjeta d-flex flex-column justify-content-between" style={{ width: '18rem' }}>
+                                <div className="image-container">
+                                    <img 
+                                        src={game.background_image} 
+                                        className="card-img-top" 
+                                        alt={game.name} 
+                                    />
                                 </div>
-                                <div className="d-flex justify-content-between align-items-end">
-                                    <Link to={`/game-details/${game.name}`}>
-                                        <button className="button" onClick={() => actions.setCurrentItem(game)}>
-                                            Details
-                                        </button>
-                                    </Link>
-                                    <span 
-                                        className={`text-danger me-2 ${likedGames.has(game.id) ? 'text-danger' : 'text-muted'}`} 
-                                        onClick={() => handleLike(game.id)}
-                                        style={{ cursor: 'pointer' }}
-                                    >
-                                        <i className={`far fa-heart ${likedGames.has(game.id) ? 'fas' : 'far'}`}></i>
-                                    </span>
-                                    <span>{game.likes} Likes</span>
+                                <div className="card-body d-flex flex-column justify-content-end">
+                                    <h5 className="card-title text-light">{game.name}</h5>
+                                    <div className="d-flex justify-content-between align-items-center mt-auto">
+                                        <Link to={`/game-details/${game.name}`}>
+                                            <button className="btn btn-primary" onClick={() => actions.setCurrentItem(game)}>
+                                                Details
+                                            </button>
+                                        </Link>
+                                        <span 
+                                            className={`text-danger ${likedGames.has(game.id) ? 'text-danger' : 'text-muted'}`} 
+                                            onClick={() => handleLike(game.id)}
+                                            style={{ cursor: 'pointer' }}
+                                        >
+                                            <i className={`far fa-heart ${likedGames.has(game.id) ? 'fas' : 'far'}`}></i>
+                                        </span>
+                                        <span>{game.likes} Likes</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
