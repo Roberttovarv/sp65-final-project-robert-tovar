@@ -1,13 +1,13 @@
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required
-from api.models import db, Users, Games, Posts, Videos, Comments, Likes
+from api.models import db, Users, Games, Posts, Videos, Comments, Likes, ProfilePicture
+from sqlalchemy import and_
 import requests
 from datetime import datetime
 from flask_cors import CORS
 
 api = Blueprint('api', __name__)
 CORS(api)  # Allow CORS requests to this API
-
 
 @api.route('/apiexterna', methods=['POST'])
 def fetch_and_store_games():
@@ -26,7 +26,6 @@ def fetch_and_store_games():
         game_data = response.json()
 
         released_at = game_data.get('released')
-        
         metacritic = game_data.get('metacritic')
 
         if released_at is None or metacritic is None:
@@ -48,21 +47,25 @@ def fetch_and_store_games():
         'errors': errors
     }), 201
 
+
 @api.route('/signup', methods=['POST'])
 def signup():
     response_body = {}
     data = request.json
-    
+
     email = data.get("email", None).lower()
     password = data.get("password", None)
     username = data.get("username", None)
+    pfp_id = 1  # Assuming you are sending the pfp_id in the request
     existing_user = Users.query.filter_by(email=email).first()
-    
+
     if existing_user:
         response_body['error'] = 'El correo electrónico ya está registrado'
         return jsonify(response_body), 400
-    
-    print (request.json)
+
+    # Query the ProfilePicture instance
+    pfp = ProfilePicture.query.get(pfp_id)
+
     new_user = Users(
         email=email,
         password=password,
@@ -71,16 +74,18 @@ def signup():
         last_name=data.get('last_name', None),
         username=username,
         is_admin=False,
-        pfp="https://www.teleadhesivo.com/es/img/arc226-jpg/folder/products-listado-merchanthover/pegatinas-coches-motos-space-invaders-marciano-iii.jpg"
+        pfp=pfp  # Assign the ProfilePicture instance
     )
+
     db.session.add(new_user)
     db.session.commit()
-    
+
     access_token = create_access_token(identity={'user_id': new_user.id})
     response_body['message'] = 'Usuario registrado y logueado'
     response_body['access_token'] = access_token
-    
+
     return jsonify(response_body), 200
+
 
 @api.route("/login", methods=["POST"])
 def login():
@@ -100,7 +105,7 @@ def login():
     else:
         response_body['message'] = 'Correo o contraseña incorrectos'
         return jsonify(response_body), 401
-        
+
 @api.route('/users/<int:user_id>', methods=['GET', 'PUT', 'DELETE'])
 def handle_user(user_id):
     response_body = {}
@@ -112,28 +117,33 @@ def handle_user(user_id):
     if request.method == 'GET':
         response_body['results'] = user.serialize()
         response_body['message'] = 'Usuario encontrado'
-        return response_body, 200
+        return jsonify(response_body), 200
     
     if request.method == 'PUT':
         data = request.json
+        
+        # Actualizar los campos del usuario
         user.email = data.get('email', user.email)
         user.is_active = data.get('is_active', user.is_active)
         user.first_name = data.get('first_name', user.first_name)
         user.last_name = data.get('last_name', user.last_name)
         user.username = data.get('username', user.username)
         user.is_admin = data.get('is_admin', user.is_admin)
-        user.pfp = data.get('pfp', user.pfp)
+
+        # Actualizar el campo pfp con el objeto ProfilePicture correspondiente
+        pfp_id = data.get('pfp')
+        if pfp_id:
+            profile_picture = ProfilePicture.query.get(pfp_id)
+            if profile_picture:
+                user.pfp = profile_picture  # Asigna el objeto ProfilePicture en lugar de la URL
+            else:
+                return jsonify({'message': 'Imagen de perfil no encontrada', 'results': {}}), 404
         
         db.session.commit()
         response_body['message'] = 'Datos del usuario actualizados'
         response_body['results'] = user.serialize()
-        return response_body, 200
-    
-    if request.method == 'DELETE':
-        db.session.delete(user)
-        db.session.commit()
-        response_body['message'] = 'Usuario eliminado'
-        return response_body, 200
+        return jsonify(response_body), 200
+
 
 @api.route('/users', methods=['GET'])
 def get_users():
@@ -144,12 +154,33 @@ def get_users():
     response_body['message'] = 'Listado de Usuarios'
     return jsonify(response_body), 200
 
+@api.route("/profile", methods=["GET"])
+@jwt_required()
+def get_profile():
+    response_body = {}
+    current_user = get_jwt_identity()
+    print(current_user)
+    user = Users.query.get(current_user['user_id'])
+    
+    if user:
+        response_body['message'] = 'Perfil encontrado'
+        response_body['results'] = user.serialize()
+        return jsonify(response_body), 200
+    else:
+        response_body['message'] = 'Perfil no encontrado'
+        return jsonify(response_body), 404
+
+
 @api.route('/games', methods=['GET', 'POST'])
+@jwt_required(optional=True)
 def handle_games():
     response_body = {}
+    current_user = get_jwt_identity()
+    user_id = current_user['user_id'] if current_user else None
+
     if request.method == 'GET':
         games = Games.query.all()
-        results = [game.serialize() for game in games]
+        results = [game.serialize(user_id=user_id) for game in games]
         response_body['results'] = results
         response_body['message'] = 'Lista de videojuegos'
         return jsonify(response_body), 200
@@ -166,19 +197,23 @@ def handle_games():
         db.session.add(new_game)
         db.session.commit()
         response_body['message'] = 'Videojuego creado'
-        response_body['results'] = new_game.serialize()
+        response_body['results'] = new_game.serialize(user_id=user_id)
         return jsonify(response_body), 201
+    
 
 @api.route('/games/<int:game_id>', methods=['GET', 'PUT', 'DELETE'])
+@jwt_required(optional=True)
 def handle_game(game_id):
     response_body = {}
+    current_user = get_jwt_identity()
+    user_id = current_user['user_id'] if current_user else None
     game = Games.query.get(game_id)
     
     if not game:
         return jsonify({'message': 'Videojuego inexistente', 'results': {}}), 404
 
     if request.method == 'GET':
-        response_body['results'] = game.serialize()
+        response_body['results'] = game.serialize(user_id=user_id)
         response_body['message'] = 'Videojuego encontrado'
         return jsonify(response_body), 200
 
@@ -191,7 +226,7 @@ def handle_game(game_id):
         game.metacritic = data.get('metacritic', game.metacritic)
         db.session.commit()
         response_body['message'] = 'Datos del videojuego actualizados'
-        response_body['results'] = game.serialize()
+        response_body['results'] = game.serialize(user_id=user_id)
         return jsonify(response_body), 200
 
     if request.method == 'DELETE':
@@ -199,7 +234,6 @@ def handle_game(game_id):
         db.session.commit()
         response_body['message'] = 'Videojuego eliminado'
         return jsonify(response_body), 200
-
 
 @api.route('/games/<int:game_id>/comment', methods=['POST', 'GET', 'DELETE'])
 @jwt_required()
@@ -240,21 +274,18 @@ def handle_comment_game(game_id):
         if not comment:
             return jsonify({'message': 'Comentario no encontrado'}), 404
 
-        if comment.user_id != user_id:
-            return jsonify({'message': 'No tienes permiso para eliminar este comentario'}), 403
-
         db.session.delete(comment)
         db.session.commit()
 
-        return jsonify({'message': 'Comentario eliminado exitosamente'}), 200
-    
+        return jsonify({'message': 'Comentario eliminado'}), 200
+
 @api.route('/posts', methods=['GET', 'POST'])
 def handle_posts():
     response_body = {}
-
+    
     if request.method == 'GET':
         posts = Posts.query.all()
-        results = [post.serialize() for post in posts]
+        results = [post.serialize() for post in posts]  # Modificado para eliminar user_id
         response_body['results'] = results
         response_body['message'] = 'Listado de Publicaciones'
         return jsonify(response_body), 200
@@ -286,237 +317,53 @@ def handle_posts():
                 new_posts.append(new_post)
                 existing_images_url.add(post_data['title'])  # Add to the set of existing titles
             
-            db.session.commit()
+                db.session.commit()
 
-            response_body['results'] = [post.serialize() for post in new_posts]
-            response_body['message'] = 'Publicaciones creadas'
-            return jsonify(response_body), 201
+                response_body['results'] = [post.serialize() for post in new_posts]
+                response_body['message'] = 'Publicaciones creadas'
+                return jsonify(response_body), 201
 
-        else:
-            return jsonify({'message': 'El formato de los datos debe ser una lista de publicaciones'}), 400
-
+            else:
+                return jsonify({'message': 'El formato de los datos debe ser una lista de publicaciones'}), 400
+    
+    
 @api.route('/posts/<int:post_id>', methods=['GET', 'PUT', 'DELETE'])
+@jwt_required()
 def handle_post(post_id):
     response_body = {}
+    current_user = get_jwt_identity()
+    user_id = current_user['user_id']
     post = Posts.query.get(post_id)
-    
+
     if not post:
         return jsonify({'message': 'Publicación inexistente', 'results': {}}), 404
 
     if request.method == 'GET':
-        response_body['results'] = post.serialize()
+        response_body['results'] = post.serialize(user_id=user_id)
         response_body['message'] = 'Publicación encontrada'
         return jsonify(response_body), 200
 
     if request.method == 'PUT':
+        
         data = request.json
         post.title = data.get('title', post.title)
-        post.game_name = data.get('game_name', post.game_name)
         post.body = data.get('body', post.body)
-        post.date = datetime.strptime(data.get('date'), '%Y-%m-%d') if data.get('date') else post.date
+        post.game_namw = data.get('game_name', post.game_name)
         post.image_url = data.get('image_url', post.image_url)
+        
         db.session.commit()
-        response_body['message'] = 'Datos de la publicación actualizados'
+        response_body['message'] = 'Publicación actualizada'
         response_body['results'] = post.serialize()
-        return jsonify(response_body), 200
+        return response_body, 200
 
     if request.method == 'DELETE':
+
+
         db.session.delete(post)
         db.session.commit()
         response_body['message'] = 'Publicación eliminada'
         return jsonify(response_body), 200
 
-
-@api.route('/posts/<int:post_id>/comment', methods=['POST', 'GET', 'DELETE'])
-@jwt_required()
-def handle_comment_post(post_id):
-    current_user = get_jwt_identity()
-    user_id = current_user['user_id']
-
-    if request.method == 'POST':
-        data = request.json
-        body = data.get('body')
-
-        if not body:
-            return jsonify({'message': 'Falta el campo requerido: body'}), 400
-
-        new_comment = Comments(body=body, user_id=user_id, post_id=post_id)
-        db.session.add(new_comment)
-        db.session.commit()
-
-        return jsonify(new_comment.serialize()), 201
-
-    elif request.method == 'GET':
-        comment_id = request.args.get('comment_id')
-        if not comment_id:
-            return jsonify({'message': 'Falta el parámetro requerido: comment_id'}), 400
-
-        comment = Comments.query.filter_by(id=comment_id, post_id=post_id).first()
-        if not comment:
-            return jsonify({'message': 'Comentario no encontrado'}), 404
-
-        return jsonify(comment.serialize()), 200
-
-    elif request.method == 'DELETE':
-        comment_id = request.args.get('comment_id')
-        if not comment_id:
-            return jsonify({'message': 'Falta el parámetro requerido: comment_id'}), 400
-
-        comment = Comments.query.filter_by(id=comment_id, post_id=post_id).first()
-        if not comment:
-            return jsonify({'message': 'Comentario no encontrado'}), 404
-
-        if comment.user_id != user_id:
-            return jsonify({'message': 'No tienes permiso para eliminar este comentario'}), 403
-
-        db.session.delete(comment)
-        db.session.commit()
-
-        return jsonify({'message': 'Comentario eliminado exitosamente'}), 200
-
-
-@api.route("/profile", methods=["GET"])
-@jwt_required()
-def get_profile():
-    response_body = {}
-    current_user = get_jwt_identity()
-    print(current_user)
-    user = Users.query.get(current_user['user_id'])
-    
-    if user:
-        response_body['message'] = 'Perfil encontrado'
-        response_body['results'] = user.serialize()
-        return jsonify(response_body), 200
-    else:
-        response_body['message'] = 'Perfil no encontrado'
-        return jsonify(response_body), 404
-
-@api.route('/profile/likes/posts', methods=['GET'])
-@jwt_required()
-def get_liked_posts():
-    current_user = get_jwt_identity()
-    user_id = current_user['user_id']
-    liked_posts = Likes.query.filter(and_(Likes.user_id == user_id, Likes.post_id != None)).all()    
-    response_body = {
-        'message': 'Publicaciones con like encontradas',
-        'results': [like.post_to.serialize() for like in liked_posts]
-    }
-    
-    return jsonify(response_body), 200
-
-@api.route('/profile/likes/games', methods=['GET'])
-@jwt_required()
-def get_liked_games():
-    current_user = get_jwt_identity()
-    user_id = current_user['user_id']
-    liked_games = Likes.query.filter(and_(Likes.user_id == user_id, Likes.game_id != None)).all()    
-    response_body = {
-        'message': 'Juegos con like encontrados',
-        'results': [like.game_to.serialize() for like in liked_games]
-    }
-    
-    return jsonify(response_body), 200
-
-@api.route('/like', methods=['POST', 'GET'])
-def handle_likes():
-    if request.method == 'POST':
-        user_id = request.json.get('user_id')
-        post_id = request.json.get('post_id')
-        game_id = request.json.get('game_id')
-
-        user = Users.query.get(user_id)
-        post = Posts.query.get(post_id) if post_id else None
-        game = Games.query.get(game_id) if game_id else None
-
-        if not user or (not post and not game):
-            return jsonify({'error': 'User or Resource not found'}), 404
-
-        if post_id and game_id:
-            return jsonify({'error': 'Cannot like both post and game at the same time'}), 400
-
-        like = Likes(user_id=user_id, post_id=post_id, game_id=game_id)
-        db.session.add(like)
-        db.session.commit()
-
-        return jsonify(like.serialize()), 201
-    
-    elif request.method == 'GET':
-        likes = Likes.query.all()
-        return jsonify([like.serialize() for like in likes]), 200
-
-@api.route('/like/<int:like_id>', methods=['DELETE'])
-def delete_like(like_id):
-    like = Likes.query.get(like_id)
-    if not like:
-        return jsonify({'error': 'Like not found'}), 404
-
-    db.session.delete(like)
-    db.session.commit()
-
-    return jsonify({'message': 'Like deleted'}), 200
-
-
-@api.route('/posts/<int:post_id>/like', methods=['POST', 'DELETE'])
-@jwt_required()
-def like_post(post_id):
-    current_user = get_jwt_identity()
-    user_id = current_user['user_id']
-    existing_like = Likes.query.filter_by(user_id=user_id, post_id=post_id).first()
-    
-    if request.method == 'POST':
-        if existing_like:
-            return jsonify({'message': 'Ya has dado like a esta publicación'}), 400
-        
-        new_like = Likes(user_id=user_id, post_id=post_id)
-        db.session.add(new_like)
-        db.session.commit()
-        return jsonify({'message': 'Like agregado a la publicación'}), 201
-    
-    if request.method == 'DELETE':
-        if not existing_like:
-            return jsonify({'message': 'No has dado like a esta publicación'}), 400
-        
-        db.session.delete(existing_like)
-        db.session.commit()
-        return jsonify({'message': 'Like eliminado de la publicación'}), 200
-
-@api.route('/games/<int:game_id>/like', methods=['POST', 'DELETE'])
-@jwt_required()
-def like_game(game_id):
-    current_user = get_jwt_identity()
-    user_id = current_user['user_id']
-    existing_like = Likes.query.filter_by(user_id=user_id, game_id=game_id).first()
-    
-    if request.method == 'POST':
-        if existing_like:
-            return jsonify({'message': 'Ya has dado like a este juego'}), 400
-        
-        new_like = Likes(user_id=user_id, game_id=game_id)
-        db.session.add(new_like)
-        db.session.commit()
-        return jsonify({'message': 'Like agregado al juego'}), 201
-    
-    if request.method == 'DELETE':
-        if not existing_like:
-            return jsonify({'message': 'No has dado like a este juego'}), 400
-        
-        db.session.delete(existing_like)
-        db.session.commit()
-        return jsonify({'message': 'Like eliminado del juego'}), 200
-
-
-@api.route('/api/user/<int:user_id>/likes', methods=['GET'])
-def get_user_likes(user_id):
-    user_likes = Likes.query.filter_by(user_id=user_id).all()
-    liked_games = [like.game_id for like in user_likes if like.game_id is not None]
-    liked_posts = [like.post_id for like in user_likes if like.post_id is not None]
-    
-    return jsonify({
-        'liked_games': liked_games,
-        'liked_posts': liked_posts
-    }), 200
-
-        
 
 @api.route('/videos', methods=['GET', 'POST'])
 def handle_videos():
@@ -592,3 +439,124 @@ def handle_video(video_id):
         db.session.commit()
         response_body['message'] = 'Video eliminado'
         return jsonify(response_body), 200 
+    if request.method == 'DELETE':
+        db.session.delete(video)
+        db.session.commit()
+        response_body['message'] = 'Video eliminado'
+        return jsonify(response_body), 200
+
+@api.route('/like', methods=['POST', 'DELETE', 'GET'])
+@jwt_required()
+def handle_likes():
+    response_body = {}
+    current_user = get_jwt_identity()
+    user_id = current_user['user_id']
+    post_id = request.json.get('post_id')
+    game_id = request.json.get('game_id')
+
+    if post_id and game_id:
+        return jsonify({'error': 'Cannot like both post and game at the same time'}), 400
+    
+    if request.method == 'GET':
+        likes = Likes.query.filter_by(user_id=user_id).all()
+    
+        return jsonify([like.serialize() for like in likes]), 200
+
+    if request.method == 'POST':
+        if post_id:
+            existing_like = Likes.query.filter_by(user_id=user_id, post_id=post_id).first()
+            if existing_like:
+                return jsonify({'message': 'Ya has dado like a esta publicación'}), 400
+            new_like = Likes(user_id=user_id, post_id=post_id)
+        elif game_id:
+            existing_like = Likes.query.filter_by(user_id=user_id, game_id=game_id).first()
+            if existing_like:
+                return jsonify({'message': 'Ya has dado like a este juego'}), 400
+            new_like = Likes(user_id=user_id, game_id=game_id)
+        else:
+            return jsonify({'error': 'Debe proporcionar post_id o game_id'}), 400
+        
+        db.session.add(new_like)
+        db.session.commit()
+        return jsonify({'message': 'Like agregado'}), 201
+
+    if request.method == 'DELETE':
+        if post_id:
+            existing_like = Likes.query.filter_by(user_id=user_id, post_id=post_id).first()
+            if not existing_like:
+                return jsonify({'message': 'No has dado like a esta publicación'}), 400
+        elif game_id:
+            existing_like = Likes.query.filter_by(user_id=user_id, game_id=game_id).first()
+            if not existing_like:
+                return jsonify({'message': 'No has dado like a este juego'}), 400
+        else:
+            return jsonify({'error': 'Debe proporcionar post_id o game_id'}), 400
+        
+        db.session.delete(existing_like)
+        db.session.commit()
+        return jsonify({'message': 'Like eliminado'}), 200
+
+@api.route('/likes', methods=['GET'])
+@jwt_required()
+def get_likes():
+    current_user = get_jwt_identity()
+    user_id = current_user['user_id']
+    user_likes = Likes.query.filter_by(user_id=user_id).all()
+    liked_games = [like.game_to.serialize() for like in user_likes if like.game_id]
+    liked_posts = [like.post_to.serialize() for like in user_likes if like.post_id]
+    
+    return jsonify({
+        'liked_games': liked_games,
+        'liked_posts': liked_posts
+    }), 200
+
+
+@api.route('/profile_pictures', methods=['GET', 'POST'])
+def handle_profile_pictures():
+    response_body = {}
+    if request.method == 'GET':
+        profile_pictures = ProfilePicture.query.all()
+        results = [profile_picture.serialize() for profile_picture in profile_pictures]
+        response_body['results'] = results
+        response_body['message'] = 'Lista de pfps'
+        return jsonify(response_body), 200
+
+    if request.method == 'POST':
+        data = request.json
+        new_profile_picture = ProfilePicture(
+            name=data.get('name'),
+            url=data.get('url'),
+        )
+        db.session.add(new_profile_picture)
+        db.session.commit()
+        response_body['message'] = 'Pfp creada'
+        response_body['results'] = new_profile_picture.serialize()
+        return jsonify(response_body), 201
+
+@api.route('/profile_pictures/<int:profile_picture_id>', methods=['GET', 'PUT', 'DELETE'])
+def handle_profile_picture(profile_picture_id):
+    response_body = {}
+    profile_picture = ProfilePicture.query.get(profile_picture_id)
+    
+    if not profile_picture:
+        return jsonify({'message': 'Pfp inexistente', 'results': {}}), 404
+
+    if request.method == 'GET':
+        response_body['results'] = profile_picture.serialize()
+        response_body['message'] = 'Pfp encontrada'
+        return jsonify(response_body), 200
+
+    if request.method == 'PUT':
+        data = request.json
+        profile_picture.name = data.get('name', profile_picture.name)
+        profile_picture.url = data.get('url', profile_picture.url)
+        db.session.commit()
+        response_body['message'] = 'Datos de la pfp actualizados'
+        response_body['results'] = profile_picture.serialize()
+        return jsonify(response_body), 200
+
+    if request.method == 'DELETE':
+        db.session.delete(profile_picture)
+        db.session.commit()
+        response_body['message'] = 'Pfp eliminada'
+        return jsonify(response_body), 200

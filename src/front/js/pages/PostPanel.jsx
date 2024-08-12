@@ -93,12 +93,16 @@ export const PostPanel = () => {
     };
 
     const uri = host + `/api/posts/${currentPost.id}`;
+    const token = localStorage.getItem('token'); 
     const options = {
-      method: 'PUT',
-      body: JSON.stringify(dataToSend),
-      headers: { 'Content-Type': 'application/json' }
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(dataToSend),
     };
-
+    
     const response = await fetch(uri, options);
 
     if (!response.ok) {
@@ -114,8 +118,11 @@ export const PostPanel = () => {
 
   const deletePost = async (item) => {
     const uri = host + '/api/posts/' + item.id;
+    const token = localStorage.getItem('token'); 
+
     const options = {
-      method: 'DELETE'
+      method: 'DELETE',
+      headers: {'Authorization': `Bearer ${token}`}
     };
     const response = await fetch(uri, options);
 

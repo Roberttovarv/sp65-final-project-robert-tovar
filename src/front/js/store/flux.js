@@ -64,7 +64,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                 if (response.ok) {
                     const data = await response.json();
                     console.log(data.results);
-                    setStore({ user: data.results }); // Assuming the profile data should be stored in user
+                    setStore({ user: data.results }); 
                 } else {
                     console.log("Failed to fetch profile");
                 }
@@ -90,26 +90,6 @@ const getState = ({ getStore, getActions, setStore }) => {
                 setStore({ currentItem: item });
             },
 
-            setFilterItem: (items) => {
-                setStore({ filterItem: items });
-            },
-
-            filterSet: (query) => {
-                const store = getStore();
-                const filtered = store.filterItem.filter((element) =>
-                    element.name.toLowerCase().includes(query.toLowerCase()) ||
-                element.title.toLowerCase().includes(query.toLowerCase()) ||
-                element.game_name.toLowerCase().includes(query.toLowerCase()) ||
-                element.username.toLowerCase().includes(query.toLowerCase()) ||
-                element.last_name.toLowerCase().includes(query.toLowerCase()) ||
-                element.first_name.toLowerCase().includes(query.toLowerCase()) 
-                );
-                setStore({ currentFilter: filtered });
-            },
-
-            handleChange: (event) => {
-                getActions().filterSet(event.target.value);
-            },
         },
     };
 };
