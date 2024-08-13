@@ -17,8 +17,8 @@ import { GamePanel } from "./pages/GamePanel.jsx"
 import { AdminPanel } from "./pages/AdminPanel.jsx"
 import { UserPanel } from "./pages/UserPanel.jsx"
 import { PostPanel } from "./pages/PostPanel.jsx"
+import { Favs } from "./pages/Favs.jsx";
 
-import { Welcome } from "./component/Welcome.jsx";
 import { LandingPage } from "./pages/LandingPage.jsx";
 import { GameDetails } from "./pages/GameDetails.jsx";
 import { Reviews } from "./pages/Reviews.jsx";
@@ -48,6 +48,8 @@ const Layout = () => {
                         <Route element={<NotFound />} path="*" />
                         <Route element={<Logout />} path="/logout" />
                         <Route element={<Profile />} path="/profile" />
+                        <Route element={<Favs />} path="/favs" />
+             
 
                         <Route element={<UserPanel />} path="/adminpanel/userpanel" />
                         <Route element={<AdminPanel />} path="/adminpanel" />

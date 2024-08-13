@@ -44,7 +44,7 @@ export const Navbar = () => {
                         ) : (
                             <div className="dropdown bgc">
                             <img src={store.user?.pfp} className="dropdown-toggle rounded-circle" id="dropdownMenuButton1" 
-                                 data-bs-toggle="dropdown" height="35px" width="35px" style={{objectFit: "cover"}} />
+                                 data-bs-toggle="dropdown" height="35px" width="35px" style={{objectFit: "cover", cursor: "pointer"}} />
                             <ul className="dropdown-menu bgc border border-2 border-secondary" aria-labelledby="dropdownMenuButton1">
                                 {store.admin && 
                                     <li className="text-danger">
@@ -54,7 +54,7 @@ export const Navbar = () => {
                                     <Link to="/profile" className="dropdown-item text-white">Profile</Link>
                                 </li>
                                 <li>
-                                    <a className="dropdown-item text-white" href="#">Favs</a>
+                                <Link to="/favs" className="dropdown-item text-white">Favs</Link>
                                 </li>
                                 <li>
                                     <a className="dropdown-item text-white" onClick={actions.logout}>Logout</a>

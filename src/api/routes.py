@@ -159,16 +159,30 @@ def get_users():
 def get_profile():
     response_body = {}
     current_user = get_jwt_identity()
-    print(current_user)
-    user = Users.query.get(current_user['user_id'])
+    user_id = current_user['user_id']
+    
+    # Obtener la información del usuario
+    user = Users.query.get(user_id)
     
     if user:
+        # Obtener los likes del usuario
+        user_likes = Likes.query.filter_by(user_id=user_id).all()
+        liked_games = [like.game_to.serialize() for like in user_likes if like.game_id]
+        liked_posts = [like.post_to.serialize() for like in user_likes if like.post_id]
+        
+        # Construir la respuesta con la información del perfil y los likes
         response_body['message'] = 'Perfil encontrado'
         response_body['results'] = user.serialize()
+        response_body['results']['likes'] = {
+            'liked_games': liked_games,
+            'liked_posts': liked_posts
+        }
+        
         return jsonify(response_body), 200
     else:
         response_body['message'] = 'Perfil no encontrado'
         return jsonify(response_body), 404
+
 
 
 @api.route('/games', methods=['GET', 'POST'])
@@ -328,7 +342,6 @@ def handle_posts():
     
     
 @api.route('/posts/<int:post_id>', methods=['GET', 'PUT', 'DELETE'])
-@jwt_required()
 def handle_post(post_id):
     response_body = {}
     current_user = get_jwt_identity()
@@ -495,21 +508,6 @@ def handle_likes():
         db.session.delete(existing_like)
         db.session.commit()
         return jsonify({'message': 'Like eliminado'}), 200
-
-@api.route('/likes', methods=['GET'])
-@jwt_required()
-def get_likes():
-    current_user = get_jwt_identity()
-    user_id = current_user['user_id']
-    user_likes = Likes.query.filter_by(user_id=user_id).all()
-    liked_games = [like.game_to.serialize() for like in user_likes if like.game_id]
-    liked_posts = [like.post_to.serialize() for like in user_likes if like.post_id]
-    
-    return jsonify({
-        'liked_games': liked_games,
-        'liked_posts': liked_posts
-    }), 200
-
 
 @api.route('/profile_pictures', methods=['GET', 'POST'])
 def handle_profile_pictures():

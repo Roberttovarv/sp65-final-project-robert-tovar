@@ -11,7 +11,7 @@ export const LandingPage = () => {
 
     const host = `${process.env.BACKEND_URL}`;
 
-
+const user = store.user || {}
 
     const getGames = async () => {
         const uri = host + '/api/games';
@@ -62,9 +62,9 @@ export const LandingPage = () => {
                                             Details
                                         </button>
                                     </Link>
-                                    <span className="text-danger me-2">
-                                        <i className="far fa-heart"></i>
-                                    </span>
+                                    <span className="text-light">
+                                        {game.likes} &nbsp; <i className={`far fa-heart ${user.likes.liked_games ? "fas" : "far"}`} style={{ cursor: 'pointer' }}></i> 
+                                        </span>
                                 </div>
                             </div>
                         </div>
@@ -89,14 +89,14 @@ export const LandingPage = () => {
                                     <p className="card-text text-light rounded-1">Rating: {game.metacritic}</p>
                                 </div>
                                 <div className="d-flex justify-content-between align-items-end">
-                                    <Link to={`/game-details/${game.id}`}>
-                                        <button className="button">
+                                    <Link to={`/game-details/${game.name}`}>
+                                        <button className="button" onClick={() => actions.setCurrentItem(game)}>
                                             Details
                                         </button>
                                     </Link>
-                                    <span className="text-danger me-2">
-                                        <i className="far fa-heart"></i>
-                                    </span>
+                                    <span className="text-light">
+                                        {game.likes} &nbsp; <i className={`far fa-heart far`} style={{ cursor: 'pointer' }}></i> 
+                                        </span>
                                 </div>
                             </div>
                         </div>

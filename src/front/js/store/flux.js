@@ -6,8 +6,7 @@ const getState = ({ getStore, getActions, setStore }) => {
             user: null,
             currentItem: {},
             isLogin: false,
-            filterItem: [],
-            currentFilter: [],
+            likes: [],
         },
         actions: {
 
@@ -38,6 +37,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                     setStore({ admin: data.is_admin });
                     localStorage.setItem('admin', data.is_admin);
                 }
+                getActions().fetchProfile()
                 return data;
             },
             
@@ -79,17 +79,28 @@ const getState = ({ getStore, getActions, setStore }) => {
             },
 
             setUser: (user) => {
-                const store = getStore();
                 setStore({ user });
             },
 
             setCurrentUser: (user) => {
                 setStore({ user });
             },
-            setCurrentItem: (item) => {
-                setStore({ currentItem: item });
-            },
+            getLikes: async () => {
+                const host = `${process.env.BACKEND_URL}`
 
+                const uri = host + 'api/likes';
+                const options = {method: 'GET'}
+
+                const response = await fetch(uri, options)
+
+                if (!response.ok) {
+                    console.log("Error", response.status, response.statusText);
+                    return;                                      
+                }
+
+                const data = await response.json();
+                setStore({ likes: data.results})
+            },
         },
     };
 };
