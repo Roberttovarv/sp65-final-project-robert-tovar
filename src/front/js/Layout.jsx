@@ -2,7 +2,6 @@ import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import injectContext from "./store/appContext.js";
 // Custom Components
-import ScrollToTop from "./component/ScrollToTop.jsx";
 import { BackendURL } from "./component/BackendURL.jsx";
 import { Navbar } from "./component/Navbar.jsx";
 import { Footer } from "./component/Footer.jsx";
@@ -41,7 +40,6 @@ const Layout = () => {
     return (
         <div >
             <BrowserRouter basename={basename}>
-                <ScrollToTop>
                     <Navbar />
                     <Routes>
                         <Route element={<Home />} path="/rigo" />
@@ -71,7 +69,6 @@ const Layout = () => {
 
                       </Routes>
                     <Footer />
-                </ScrollToTop>
             </BrowserRouter>
         </div>
     );

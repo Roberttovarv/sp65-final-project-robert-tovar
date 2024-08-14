@@ -56,14 +56,13 @@ def signup():
     email = data.get("email", None).lower()
     password = data.get("password", None)
     username = data.get("username", None)
-    pfp_id = 1  # Assuming you are sending the pfp_id in the request
+    pfp_id = 1  
     existing_user = Users.query.filter_by(email=email).first()
 
     if existing_user:
         response_body['error'] = 'El correo electrónico ya está registrado'
         return jsonify(response_body), 400
 
-    # Query the ProfilePicture instance
     pfp = ProfilePicture.query.get(pfp_id)
 
     new_user = Users(
@@ -74,7 +73,7 @@ def signup():
         last_name=data.get('last_name', None),
         username=username,
         is_admin=False,
-        pfp=pfp  # Assign the ProfilePicture instance
+        pfp=pfp  
     )
 
     db.session.add(new_user)
@@ -122,7 +121,6 @@ def handle_user(user_id):
     if request.method == 'PUT':
         data = request.json
         
-        # Actualizar los campos del usuario
         user.email = data.get('email', user.email)
         user.is_active = data.get('is_active', user.is_active)
         user.first_name = data.get('first_name', user.first_name)
@@ -130,12 +128,11 @@ def handle_user(user_id):
         user.username = data.get('username', user.username)
         user.is_admin = data.get('is_admin', user.is_admin)
 
-        # Actualizar el campo pfp con el objeto ProfilePicture correspondiente
         pfp_id = data.get('pfp')
         if pfp_id:
             profile_picture = ProfilePicture.query.get(pfp_id)
             if profile_picture:
-                user.pfp = profile_picture  # Asigna el objeto ProfilePicture en lugar de la URL
+                user.pfp = profile_picture 
             else:
                 return jsonify({'message': 'Imagen de perfil no encontrada', 'results': {}}), 404
         
@@ -161,16 +158,13 @@ def get_profile():
     current_user = get_jwt_identity()
     user_id = current_user['user_id']
     
-    # Obtener la información del usuario
     user = Users.query.get(user_id)
     
     if user:
-        # Obtener los likes del usuario
         user_likes = Likes.query.filter_by(user_id=user_id).all()
         liked_games = [like.game_to.serialize() for like in user_likes if like.game_id]
         liked_posts = [like.post_to.serialize() for like in user_likes if like.post_id]
         
-        # Construir la respuesta con la información del perfil y los likes
         response_body['message'] = 'Perfil encontrado'
         response_body['results'] = user.serialize()
         response_body['results']['likes'] = {
@@ -299,7 +293,7 @@ def handle_posts():
     
     if request.method == 'GET':
         posts = Posts.query.all()
-        results = [post.serialize() for post in posts]  # Modificado para eliminar user_id
+        results = [post.serialize() for post in posts]  
         response_body['results'] = results
         response_body['message'] = 'Listado de Publicaciones'
         return jsonify(response_body), 200
@@ -308,18 +302,16 @@ def handle_posts():
         data = request.json
         if isinstance(data, list):
             new_posts = []
-            existing_images_url = {post.image_url for post in Posts.query.all()}  # Set of existing titles
+            existing_images_url = {post.image_url for post in Posts.query.all()}  
             for post_data in data:
                 required_fields = ['title', 'body', 'image_url']
-                # Check for missing fields
+        
                 for field in required_fields:
                     if field not in post_data:
                         return jsonify({'message': f'Falta el campo requerido: {field}'}), 400
                 
-                # Check for duplicate title
                 if post_data['image_url'] in existing_images_url:
-                    continue  # Ignore this post_data and proceed to the next
-
+                    continue  
                 new_post = Posts(
                     title=post_data['title'],
                     body=post_data['body'],
@@ -329,7 +321,7 @@ def handle_posts():
                 )
                 db.session.add(new_post)
                 new_posts.append(new_post)
-                existing_images_url.add(post_data['title'])  # Add to the set of existing titles
+                existing_images_url.add(post_data['title'])  
             
                 db.session.commit()
 
@@ -396,7 +388,7 @@ def handle_videos():
             return jsonify({'message': 'No se enviaron datos'}), 400
 
         if isinstance(data, dict):
-            data = [data]  # Convertir a lista si es un solo objeto
+            data = [data]  
 
         if isinstance(data, list):
             new_videos = []
@@ -434,13 +426,13 @@ def handle_video(video_id):
     if request.method == 'GET':
         response_body['results'] = video.serialize()  
         response_body['message'] = 'Video encontrado'
-        return jsonify(response_body), 200  # Corregido aquí
+        return jsonify(response_body), 200 
 
     if request.method == 'PUT':
         data = request.json
         video.title = data.get('title', video.title)  
-        video.game_name = data.get('game_name', video.game_name)  # Corregido aquí
-        video.embed = data.get('embed', video.embed)  # Corregido aquí
+        video.game_name = data.get('game_name', video.game_name) 
+        video.embed = data.get('embed', video.embed)  
 
         db.session.commit()
         response_body['message'] = 'Video actualizado'

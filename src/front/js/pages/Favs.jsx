@@ -90,7 +90,7 @@ export const Favs = () => {
                                                 <h6 className="card-title text-light rounded-1 d-flex">{game.name}</h6>
                                             </div>
                                             <span className="text-light">
-                                                {game.likes} &nbsp; <i className={`far fa-heart ${user.likes.liked_games ? "fas" : "far"}`} style={{ cursor: 'pointer' }}></i>
+                                                {game.likes} &nbsp; <i className={`far fa-heart ${!games.isLiked ? "fas" : "far"}`} style={{ cursor: 'pointer' }}></i>
                                             </span>
                                         </div>
                                     </div>

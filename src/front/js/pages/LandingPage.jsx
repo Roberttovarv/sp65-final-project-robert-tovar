@@ -8,10 +8,11 @@ export const LandingPage = () => {
     const { store, actions } = useContext(Context);
     const [gamesDate, setGamesDate] = useState([]);
     const [gamesRate, setGamesRate] = useState([]);
+    const [games, setGames] = useState([]);
+    
 
     const host = `${process.env.BACKEND_URL}`;
 
-const user = store.user || {}
 
     const getGames = async () => {
         const uri = host + '/api/games';
@@ -23,7 +24,7 @@ const user = store.user || {}
             console.log("Error", response.status, response.statusText);
             return;
         }
-
+        actions.fetchProfile()
         const data = await response.json();
 
         const sortedByDate = [...data.results].sort((a, b) => new Date(b.released_at) - new Date(a.released_at));
@@ -31,11 +32,17 @@ const user = store.user || {}
 
         setGamesDate(sortedByDate);
         setGamesRate(sortedByRate);
+        setGames(data.results)
+        console.log(data.results);
+        
         
     };
 
     useEffect(() => {
         getGames();
+        console.log("Games by date:", gamesDate);
+        console.log("Games by rate:", gamesRate);;
+        
     }, []);
     
     return (
@@ -63,7 +70,7 @@ const user = store.user || {}
                                         </button>
                                     </Link>
                                     <span className="text-light">
-                                        {game.likes} &nbsp; <i className={`far fa-heart ${user.likes.liked_games ? "fas" : "far"}`} style={{ cursor: 'pointer' }}></i> 
+                                        {game.likes} &nbsp; <i className={`far fa-heart ${game.is_liked ? "fas" : "far"}`} style={{ cursor: 'pointer' }}></i> 
                                         </span>
                                 </div>
                             </div>
@@ -95,8 +102,8 @@ const user = store.user || {}
                                         </button>
                                     </Link>
                                     <span className="text-light">
-                                        {game.likes} &nbsp; <i className={`far fa-heart far`} style={{ cursor: 'pointer' }}></i> 
-                                        </span>
+                                    {game.likes} &nbsp; <i className={`far fa-heart ${game.is_liked ? "fas" : "far"}`} style={{ cursor: 'pointer' }}></i> 
+                                    </span>
                                 </div>
                             </div>
                         </div>

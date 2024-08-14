@@ -56,7 +56,7 @@ export const Navbar = () => {
                                 <li>
                                 <Link to="/favs" className="dropdown-item text-white">Favs</Link>
                                 </li>
-                                <li>
+                                <li style={{cursor: "pointer"}}>
                                     <a className="dropdown-item text-white" onClick={actions.logout}>Logout</a>
                                 </li>
                             </ul>

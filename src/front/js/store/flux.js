@@ -2,7 +2,7 @@ const getState = ({ getStore, getActions, setStore }) => {
     return {
         store: {
             token: null,
-            admin: true,
+            admin: false,
             user: null,
             currentItem: {},
             isLogin: false,
@@ -63,7 +63,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 
                 if (response.ok) {
                     const data = await response.json();
-                    console.log(data.results);
                     setStore({ user: data.results }); 
                 } else {
                     console.log("Failed to fetch profile");

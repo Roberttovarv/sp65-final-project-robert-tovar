@@ -4,6 +4,7 @@ import "../../styles/landing.css"
 
 export const GameDetails = () => {
     const { store } = useContext(Context);
+    console.log(store.currentItem)
   
    
     return (
@@ -28,6 +29,10 @@ export const GameDetails = () => {
  Search in Steam
 </button>
               </a>
+
+              <span className="text-light">
+                                        {store.currentItem.likes} &nbsp; <i className={`far fa-heart ${store.currentItem.is_liked ? "fas text-warning" : "far"}`} style={{ cursor: 'pointer' }}></i> 
+                                        </span>
             </div>
           </div>
         </div>
