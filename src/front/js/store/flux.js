@@ -6,7 +6,6 @@ const getState = ({ getStore, getActions, setStore }) => {
             user: null,
             currentItem: {},
             isLogin: false,
-            likes: [],
             games: [],
         },
         actions: {
@@ -71,6 +70,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 
             setCurrentItem: (item) => {
                 setStore({ currentItem: item });
+                getActions().fetchProfile()
+                getActions().getGames()
             },
             
             setIsLogin: (login) => {
@@ -84,28 +85,13 @@ const getState = ({ getStore, getActions, setStore }) => {
             setCurrentUser: (user) => {
                 setStore({ user });
             },
-            getLikes: async () => {
-                const host = `${process.env.BACKEND_URL}`
 
-                const uri = host + 'api/likes';
-                const options = {method: 'GET'}
-
-                const response = await fetch(uri, options)
-
-                if (!response.ok) {
-                    console.log("Error", response.status, response.statusText);
-                    return;                                      
-                }
-
-                const data = await response.json();
-                setStore({ likes: data.results})
-            },
-            addLike: async (gameId) => {
+            addLike: async (itemId) => {
                 const store = getStore();
-                const token = store.token || localStorage.getItem('token')
+                const token = store.token 
                 const data = {
                     user_id: store.user.id,
-                    game_id: gameId
+                    game_id: itemId
                 };
 
                 const uri = `${process.env.BACKEND_URL}/api/like`;
@@ -126,23 +112,74 @@ const getState = ({ getStore, getActions, setStore }) => {
 
                 const result = await response.json();
 
-                console.log("Like añadido", result);
-                getActions().getGames();
+                console.log("Like añadido", result, getStore().games);
+
+                await getActions().getGames();
+                await getActions().fetchProfile();
             },
+            
+            deleteLike: async (itemId) => {
+
+                const token = getStore().token;        
+                const uri = `${process.env.BACKEND_URL}/api/like`;
+              
+                const options = {
+                  method: "DELETE",
+                  headers: { 
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                  },
+                  body: JSON.stringify({ game_id: itemId }) 
+                };
+              
+                const response = await fetch(uri, options);
+              
+                if (!response.ok) {
+                    console.log("Error", response.status, response.statusText);
+                    return;
+
+                }
+              
+                console.log("Like eliminado")
+                await getActions().getGames();
+                await getActions().fetchProfile();
+              },
+
+            likedId: () => {
+                const user = getStore().user
+
+                if (user && user.likes && user.likes.liked_games) {
+                    return user.likes.liked_games.map(game => game.id);
+                }
+                return [];
+            },
+
+            handleLike: async (gameId) => {
+
+                if (getActions().likedId().includes(gameId)) {
+
+                   await getActions().deleteLike(gameId);
+                }
+                else {
+                   await getActions().addLike(gameId);
+                }
+                await getActions().getGames();
+            },
+
             getGames: async () => {
                 const host = `${process.env.BACKEND_URL}`;
                 const uri = host + '/api/games';
                 const options = { method: 'GET' };
-
+            
                 const response = await fetch(uri, options);
-
+            
                 if (!response.ok) {
                     console.log("Error", response.status, response.statusText);
                     return;
                 }
                 const data = await response.json();
-
-                setStore({ games: data.results });
+            
+                setStore({ games: data.results });  
             },
         },
     };

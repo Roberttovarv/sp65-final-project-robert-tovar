@@ -20,18 +20,18 @@ export const AdminPanel = () => {
                         <div className="row justify-content-around mx-1 mx-sm-2 mx-md-4 mx-lg-5 align-items-center" style={{ height: "100%" }}>
                             <div className="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
                                 <Link to="/adminpanel/gamepanel">
-                                    <button className="comic-btn w-100" style={{ height: "30vh" }}>Videojuegos</button>
+                                    <button className="button w-100" style={{ height: "30vh" }}>Videojuegos</button>
                                 </Link>
                             </div>
 
                             <div className="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
                                 <Link to="/adminpanel/postpanel">
-                                    <button className="comic-btn w-100" style={{ height: "30vh" }}>Posts</button>
+                                    <button className="button w-100" style={{ height: "30vh" }}>Posts</button>
                                 </Link>
                             </div>
                             <div className="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
                                 <Link to="/adminpanel/userpanel">
-                                    <button className="comic-btn w-100" style={{ height: "30vh" }}>Usuarios</button>
+                                    <button className="button w-100" style={{ height: "30vh" }}>Usuarios</button>
                                 </Link>
                             </div>
                         </div>

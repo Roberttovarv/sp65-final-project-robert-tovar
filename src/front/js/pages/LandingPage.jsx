@@ -23,17 +23,12 @@ export const LandingPage = () => {
         setGamesRate(sortedByRate);
     };
 
-    const likedId = () => {
-        if (user && user.likes && user.likes.liked_games) {
-            return user.likes.liked_games.map(game => game.id);
-        }
-        return [];
-    };
-
     useEffect(() => {
         getGames();
+
+        actions.getGames()
         actions.fetchProfile();
-    }, []);
+    }, [store.games, store.user]);
     
     return (
         <div className="container">
@@ -55,16 +50,17 @@ export const LandingPage = () => {
                                 </div>
                                 <div className="d-flex justify-content-between align-items-end">
                                     <Link to={`/game-details/${game.name}`} >
-                                        <button className="button" onClick={() => actions.setCurrentItem(game)}>
+                                        <button className="button" onClick={() => {actions.setCurrentItem(game), getGames()}}>
                                             Details
                                         </button>
                                     </Link>
                                     <span className="text-light">
                                         {game.likes} &nbsp; 
                                         <i 
-                                            className={`far fa-heart ${likedId().includes(game.id) ? "fas" : "far"}`} 
-                                            style={{ cursor: 'pointer' }} 
-                                            onClick={() => actions.addLike(game.id)}
+                                            className={`far fa-heart ${actions.likedId().includes(game.id) ? "fas" : "far"}`} 
+                                            style={{ cursor: store.isLogin ? 'pointer' : 'not-allowed' }} 
+                                            onClick={() => actions.handleLike(game.id)}
+                                            title={store.isLogin ? '' : 'Debes estar logueado para realizar esta acción'}
                                         ></i> 
                                     </span>
                                 </div>
@@ -98,9 +94,9 @@ export const LandingPage = () => {
                                     <span className="text-light">
                                         {game.likes} &nbsp; 
                                         <i 
-                                            className={`far fa-heart ${likedId().includes(game.id) ? "fas" : "far"}`} 
-                                            style={{ cursor: 'pointer' }} 
-                                            onClick={() => actions.addLike(game.id)}
+                                            className={`far fa-heart ${actions.likedId().includes(game.id) ? "fas" : "far"}`} 
+                                            style={{ cursor: store.isLogin ? 'pointer' : 'not-allowed' }} 
+                                            onClick={() => actions.handleLike(game.id)}
                                         ></i> 
                                     </span>
                                 </div>
@@ -109,12 +105,17 @@ export const LandingPage = () => {
                     ))}
                 </div>)
             }
-            <div className="m-5 d-flex justify-content-center">
-                <a href="https://store.steampowered.com/steamdeck" target="_blank" className="image-container" style={{ position: 'relative', display: 'inline-block' }}>
-                    <img id="publi" className="cursor" src="https://techcrunch.com/wp-content/uploads/2021/07/hero-banner-sequence-english.2021-07-15-13_49_51.gif" alt="Steam Deck Promotion"
-                        style={{ height: "400px", width: "850px", objectFit: "cover" }} />
-                </a>
-            </div>
+<Link to="https://store.steampowered.com/steamdeck" target="_blank">
+    <div id="publi" className="d-flex justify-content-center align-items-center my-5">
+        <img
+            className="cursor"
+            src="https://techcrunch.com/wp-content/uploads/2021/07/hero-banner-sequence-english.2021-07-15-13_49_51.gif"
+            alt="Steam Deck Promotion"
+            style={{ width: "70%", height: "auto", objectFit: "cover" }}
+        />
+    </div>
+</Link>
+
         </div>
     );
 }

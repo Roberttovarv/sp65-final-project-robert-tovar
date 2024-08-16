@@ -161,14 +161,14 @@ export const PostPanel = () => {
             <div className="btn-group" role="group" aria-label="Basic outlined example">
               <button
                 type="button"
-                className={`btn btn-outline-primary comic-button dual ${pageAction ? "actual" : ""}`}
+                className={`btn btn-outline-secondary button dual ${pageAction ? "actual" : ""}`}
                 onClick={() => setPageAction(true)}
               >
                 Ver listado
               </button>
               <button
                 type="button"
-                className={`btn btn-outline-primary comic-button dual ${!pageAction ? "actual" : ""}`}
+                className={`btn btn-outline-secondary button dual ${!pageAction ? "actual" : ""}`}
                 onClick={() => setPageAction(false)}
               >
                 Crear nuevo
