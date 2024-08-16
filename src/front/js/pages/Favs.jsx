@@ -52,7 +52,14 @@ export const Favs = () => {
         getGames();
         getPosts();
         actions.fetchProfile();
+        
     }, []);
+
+    useEffect(() => {
+        if (user.likes && user.likes.liked_games) {
+            console.log(user.likes.liked_games.map(game => game.id));
+        }
+    }, [user]);
 
     useEffect(() => {
         const filtered = games.filter(game =>

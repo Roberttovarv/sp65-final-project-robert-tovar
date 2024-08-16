@@ -8,41 +8,31 @@ export const LandingPage = () => {
     const { store, actions } = useContext(Context);
     const [gamesDate, setGamesDate] = useState([]);
     const [gamesRate, setGamesRate] = useState([]);
-    const [games, setGames] = useState([]);
     
-
-    const host = `${process.env.BACKEND_URL}`;
-
+    const user = store.user || {}
 
     const getGames = async () => {
-        const uri = host + '/api/games';
-        const options = { method: 'GET' };
-
-        const response = await fetch(uri, options);
-
-        if (!response.ok) {
-            console.log("Error", response.status, response.statusText);
-            return;
+        if (store.games.length === 0) {
+            await actions.getGames();
         }
-        actions.fetchProfile()
-        const data = await response.json();
 
-        const sortedByDate = [...data.results].sort((a, b) => new Date(b.released_at) - new Date(a.released_at));
-        const sortedByRate = [...data.results].sort((a, b) => b.metacritic - a.metacritic);
+        const sortedByDate = [...store.games].sort((a, b) => new Date(b.released_at) - new Date(a.released_at));
+        const sortedByRate = [...store.games].sort((a, b) => b.metacritic - a.metacritic);
 
         setGamesDate(sortedByDate);
         setGamesRate(sortedByRate);
-        setGames(data.results)
-        console.log(data.results);
-        
-        
+    };
+
+    const likedId = () => {
+        if (user && user.likes && user.likes.liked_games) {
+            return user.likes.liked_games.map(game => game.id);
+        }
+        return [];
     };
 
     useEffect(() => {
         getGames();
-        console.log("Games by date:", gamesDate);
-        console.log("Games by rate:", gamesRate);;
-        
+        actions.fetchProfile();
     }, []);
     
     return (
@@ -70,8 +60,13 @@ export const LandingPage = () => {
                                         </button>
                                     </Link>
                                     <span className="text-light">
-                                        {game.likes} &nbsp; <i className={`far fa-heart ${game.is_liked ? "fas" : "far"}`} style={{ cursor: 'pointer' }}></i> 
-                                        </span>
+                                        {game.likes} &nbsp; 
+                                        <i 
+                                            className={`far fa-heart ${likedId().includes(game.id) ? "fas" : "far"}`} 
+                                            style={{ cursor: 'pointer' }} 
+                                            onClick={() => actions.addLike(game.id)}
+                                        ></i> 
+                                    </span>
                                 </div>
                             </div>
                         </div>
@@ -79,7 +74,6 @@ export const LandingPage = () => {
                 </div>)
             }
 
-            
             <h1 className="text-center text-light">Best Rated</h1>
 
             {gamesRate.length === 0 ?
@@ -102,7 +96,12 @@ export const LandingPage = () => {
                                         </button>
                                     </Link>
                                     <span className="text-light">
-                                    {game.likes} &nbsp; <i className={`far fa-heart ${game.is_liked ? "fas" : "far"}`} style={{ cursor: 'pointer' }}></i> 
+                                        {game.likes} &nbsp; 
+                                        <i 
+                                            className={`far fa-heart ${likedId().includes(game.id) ? "fas" : "far"}`} 
+                                            style={{ cursor: 'pointer' }} 
+                                            onClick={() => actions.addLike(game.id)}
+                                        ></i> 
                                     </span>
                                 </div>
                             </div>

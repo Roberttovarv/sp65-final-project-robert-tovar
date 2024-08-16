@@ -7,12 +7,12 @@ const getState = ({ getStore, getActions, setStore }) => {
             currentItem: {},
             isLogin: false,
             likes: [],
+            games: [],
         },
         actions: {
 
             login: async (email, password) => {
-                console.log("Intentando iniciar sesión con email:", email);
-                console.log("Contraseña:", password);
+
                 const url = process.env.BACKEND_URL + '/api/login';
 
                 const response = await fetch(url, {
@@ -99,6 +99,50 @@ const getState = ({ getStore, getActions, setStore }) => {
 
                 const data = await response.json();
                 setStore({ likes: data.results})
+            },
+            addLike: async (gameId) => {
+                const store = getStore();
+                const token = store.token || localStorage.getItem('token')
+                const data = {
+                    user_id: store.user.id,
+                    game_id: gameId
+                };
+
+                const uri = `${process.env.BACKEND_URL}/api/like`;
+                const options = {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json",
+                               "Authorization": `Bearer ${token}` 
+                     },
+                    body: JSON.stringify(data),
+                };
+
+                const response = await fetch(uri, options);
+
+                if (!response.ok) {
+                    console.log("Error", response.status, response.statusText);
+                    return;
+                }
+
+                const result = await response.json();
+
+                console.log("Like añadido", result);
+                getActions().getGames();
+            },
+            getGames: async () => {
+                const host = `${process.env.BACKEND_URL}`;
+                const uri = host + '/api/games';
+                const options = { method: 'GET' };
+
+                const response = await fetch(uri, options);
+
+                if (!response.ok) {
+                    console.log("Error", response.status, response.statusText);
+                    return;
+                }
+                const data = await response.json();
+
+                setStore({ games: data.results });
             },
         },
     };
