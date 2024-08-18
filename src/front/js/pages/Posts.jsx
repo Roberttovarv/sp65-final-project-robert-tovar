@@ -58,8 +58,8 @@ export const Posts = () => {
                                     <Link to={`/news-details/${lastPost.title}`} className="position-relative">
                                         <img src={lastPost.image_url} className="card-img-top ms-1" alt={lastPost.game_name} />
                                         <i
-                                            className={`far fa-heart ${lastPost.is_liked ? "fas text-danger" : "far text-light"} position-absolute bottom-0 end-0 m-3`}
-                                            style={{ cursor: 'pointer', fontSize: "3rem" }}
+                                            className={`bg-dark bg-opacity-50 far fa-heart ${lastPost.is_liked ? "fas text-danger" : "far text-light"} position-absolute bottom-0 end-0 m-3`}
+                                            style={{ cursor: 'pointer', fontSize: "3rem", borderRadius: "90px" }}
                                             onClick={(e) => {
                                                 e.preventDefault();
                                                 store.isLogin ? actions.handlePostLike(lastPost.id) : navigate("/login-register");

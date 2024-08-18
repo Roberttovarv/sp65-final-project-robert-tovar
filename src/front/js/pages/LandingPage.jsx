@@ -40,7 +40,7 @@ export const LandingPage = () => {
             {gamesDate.length === 0 ? 
                 (<LoadingMario />) : 
                 (<div className="row flex-nowrap overflow-auto pb-2 d-flex px-3 m-auto justify-content-start" 
-                    style={{ maxHeight: "55vh", minHeight: "30vh", width: "99%", overflowY: "auto", scrollbarColor: "white transparent", borderRadius: "15px"}}>
+                    style={{ maxHeight: "55vh", minHeight: "30vh", width: "99%", overflowY: "auto", scrollbarColor: "rgb(29, 29, 29) transparent", scrollbarWidth: "thin" }}>
                     {gamesDate.slice(0, 20).map((game, index) => (
                         <div key={index} className="tarjeta m-3 ratio ratio-1x1" style={{ width: '18rem' }}>
                             <img src={game.background_image} className=" text-light rounded-1" 
@@ -76,7 +76,7 @@ export const LandingPage = () => {
             {gamesRate.length === 0 ?
                 (<LoadingMario />) : 
                 (<div className="row flex-nowrap overflow-auto pb-2 px-3 d-flex m-auto justify-content-start" 
-                    style={{ maxHeight: "55vh", minHeight: "30vh", width: "99%", overflowY: "auto", scrollbarColor: "white transparent", borderRadius: "15px" }}>
+                    style={{ maxHeight: "55vh", minHeight: "30vh", width: "99%", overflowY: "auto", scrollbarColor: "rgb(29, 29, 29) transparent", scrollbarWidth: "thin" }}>
                     {gamesRate.slice(0, 20).map((game, index) => (
                         <div key={index} className="tarjeta m-3 ratio ratio-1x1" style={{ width: '18rem' }}>
                             <img src={game.background_image} className="text-light rounded-1" 
