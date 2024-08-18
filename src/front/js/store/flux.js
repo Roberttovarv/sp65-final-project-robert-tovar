@@ -7,6 +7,7 @@ const getState = ({ getStore, getActions, setStore }) => {
             currentItem: {},
             isLogin: false,
             games: [],
+            posts: [],
         },
         actions: {
 
@@ -85,6 +86,30 @@ const getState = ({ getStore, getActions, setStore }) => {
             setCurrentUser: (user) => {
                 setStore({ user });
             },
+            
+            getGames: async () => {
+                const token = getStore().token
+                const host = `${process.env.BACKEND_URL}`;
+                const uri = host + '/api/games';
+                const options = {
+                    method: 'GET',
+                    headers: {}
+                };
+                
+                if (token) {
+                    options.headers["Authorization"] = `Bearer ${token}`;
+                }
+
+                const response = await fetch(uri, options);
+
+                if (!response.ok) {
+                    console.log("Error", response.status, response.statusText);
+                    return;
+                }
+                const data = await response.json();
+
+                setStore({ games: data.results });
+            },
 
             addGameLike: async (itemId) => {
                 const store = getStore();
@@ -146,7 +171,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                 await getActions().fetchProfile();
             },
 
-            likedId: () => {
+            likedGameId: () => {
                 const user = getStore().user
 
                 if (user && user.likes && user.likes.liked_games) {
@@ -157,7 +182,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 
             handleGameLike: async (gameId) => {
 
-                if (getActions().likedId().includes(gameId)) {
+                if (getActions().likedGameId().includes(gameId)) {
 
                     await getActions().deleteGameLike(gameId);
                 }
@@ -167,18 +192,53 @@ const getState = ({ getStore, getActions, setStore }) => {
                 await getActions().getGames();
             },
 
-            getGames: async () => {
-                const token = getStore().token
+            getPosts: async () => {
+                const token = getStore().token || localStorage.getItem('token'); // Asegúrate de que el token esté disponible
                 const host = `${process.env.BACKEND_URL}`;
-                const uri = host + '/api/games';
+                const uri = host + '/api/posts';
                 const options = {
                     method: 'GET',
                     headers: {}
                 };
-                
+            
                 if (token) {
                     options.headers["Authorization"] = `Bearer ${token}`;
+                } else {
+                    console.log("No token available for getPosts");
                 }
+            
+                try {
+                    const response = await fetch(uri, options);
+            
+                    if (!response.ok) {
+                        console.log("Error in getPosts:", response.status, response.statusText);
+                        return;
+                    }
+            
+                    const data = await response.json();
+                    setStore({ posts: data.results });
+                } catch (error) {
+                    console.error("Fetch error in getPosts:", error);
+                }
+            },
+
+            addPostLike: async (itemId) => {
+              
+                const token = getStore().token
+                const data = {
+                    user_id: getStore().user.id,
+                    post_id: itemId
+                };
+
+                const uri = `${process.env.BACKEND_URL}/api/like`;
+                const options = {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`
+                    },
+                    body: JSON.stringify(data),
+                };
 
                 const response = await fetch(uri, options);
 
@@ -186,9 +246,61 @@ const getState = ({ getStore, getActions, setStore }) => {
                     console.log("Error", response.status, response.statusText);
                     return;
                 }
-                const data = await response.json();
 
-                setStore({ games: data.results });
+                const result = await response.json();
+
+                console.log("Like añadido", result, getStore().posts);
+
+                await getActions().getPosts();
+                await getActions().fetchProfile();
+            },
+
+            deletePostLike: async (itemId) => {
+
+                const token = getStore().token;
+                const uri = `${process.env.BACKEND_URL}/api/like`;
+
+                const options = {
+                    method: "DELETE",
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ post_id: itemId })
+                };
+
+                const response = await fetch(uri, options);
+
+                if (!response.ok) {
+                    console.log("Error", response.status, response.statusText);
+                    return;
+
+                }
+
+                console.log("Like eliminado")
+                await getActions().getPosts();
+                await getActions().fetchProfile();
+            },
+
+            likedPostId: () => {
+                const user = getStore().user
+
+                if (user && user.likes && user.likes.liked_posts) {
+                    return user.likes.liked_posts.map(post => post.id);
+                }
+                return [];
+            },
+
+            handlePostLike: async (postId) => {
+
+                if (getActions().likedPostId().includes(postId)) {
+
+                    await getActions().deletePostLike(postId);
+                }
+                else {
+                    await getActions().addPostLike(postId);
+                }
+                await getActions().getPosts();
             },
         },
     };

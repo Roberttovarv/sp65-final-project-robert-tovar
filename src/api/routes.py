@@ -288,12 +288,15 @@ def handle_comment_game(game_id):
         return jsonify({'message': 'Comentario eliminado'}), 200
 
 @api.route('/posts', methods=['GET', 'POST'])
+@jwt_required(optional=True)
 def handle_posts():
     response_body = {}
+    current_user = get_jwt_identity()
+    user_id = current_user['user_id'] if current_user else None
     
     if request.method == 'GET':
         posts = Posts.query.all()
-        results = [post.serialize() for post in posts]  
+        results = [post.serialize(user_id=user_id) for post in posts]
         response_body['results'] = results
         response_body['message'] = 'Listado de Publicaciones'
         return jsonify(response_body), 200

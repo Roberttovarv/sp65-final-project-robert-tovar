@@ -3,8 +3,10 @@ import { Context } from "../store/appContext";
 import { Link } from "react-router-dom";
 import "../../styles/landing.css";
 import { LoadingMario } from "../component/LoadingMario.jsx";
+import { useNavigate } from "react-router-dom";
 
 export const LandingPage = () => {
+    const navigate = useNavigate();
     const { store, actions } = useContext(Context);
     const [gamesDate, setGamesDate] = useState([]);
     const [gamesRate, setGamesRate] = useState([]);
@@ -54,12 +56,12 @@ export const LandingPage = () => {
                                             Details
                                         </button>
                                     </Link>
-                                    <span className="text-light">
-                                        {game.likes} &nbsp; 
+                                    <span >
+                                    <strong className="text-light">{game.likes} &nbsp;</strong> 
                                         <i 
-                                            className={`far fa-heart ${game.is_liked ? "fas" : "far"}`} 
-                                            style={{ cursor: store.isLogin ? 'pointer' : 'not-allowed' }} 
-                                            onClick={() => actions.handleGameLike(game.id)}
+                                        style={{cursor: 'pointer'}}
+                                                className={`far fa-heart ${game.is_liked ? "fas text-danger" : "far text-light"}`} 
+                                            onClick={() => store.isLogin ? actions.handleGameLike(game.id) : navigate("/login-register")}
                                         ></i> 
                                     </span>
                                 </div>

@@ -21,8 +21,8 @@ import { Favs } from "./pages/Favs.jsx";
 import { LandingPage } from "./pages/LandingPage.jsx";
 import { GameDetails } from "./pages/GameDetails.jsx";
 import { Reviews } from "./pages/Reviews.jsx";
-import { News } from "./pages/News.jsx";
-import { NewsDetails } from "./pages/NewsDetails.jsx";
+import { Posts } from "./pages/Posts.jsx";
+import { PostsDetails } from "./pages/PostsDetails.jsx";
 import { AllGames } from "./pages/AllGames.jsx";
 
 import { Profile } from "./pages/Profile.jsx";
@@ -57,8 +57,8 @@ const Layout = () => {
                         <Route element={<LandingPage />} path="/" />
                         <Route element={<GameDetails />} path="/game-details/:gameId" />
                         <Route element={<Reviews />} path="/reviews" />
-                        <Route element={<News />} path="/news" />
-                        <Route element={<NewsDetails />} path="/news-details/:news-title" />
+                        <Route element={<Posts />} path="/news" />
+                        <Route element={<PostsDetails />} path="/news-details/:news-title" />
                         <Route element={<LoginRegister />} path="/login-register" />
                         <Route element={<AllGames />} path="/all-games" />
                         

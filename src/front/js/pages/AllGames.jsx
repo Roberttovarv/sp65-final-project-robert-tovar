@@ -10,7 +10,6 @@ export const AllGames = () => {
     const [filteredGames, setFilteredGames] = useState([]);
 
     useEffect(() => {
-        // Fetch games from the backend via actions
         const fetchGames = async () => {
             if (store.games.length === 0) {
                 await actions.getGames();
@@ -21,7 +20,6 @@ export const AllGames = () => {
     }, [store.games, actions]);
 
     useEffect(() => {
-        // Filter games based on the search input
         const filtered = store.games.filter(game => 
             game.name.toLowerCase().includes(search.toLowerCase())
         );
@@ -75,13 +73,13 @@ export const AllGames = () => {
                                                 Details
                                             </button>
                                         </Link>
-                                        <span className="text-light">
-                                            {game.likes} &nbsp; 
+                                        <span>
+                                        <strong className="text-light">{game.likes} &nbsp;</strong> 
                                             <i 
-                                                className={`far fa-heart ${game.is_liked ? "fas" : "far"}`} 
-                                                style={{ cursor: store.isLogin ? 'pointer' : 'not-allowed' }} 
-                                                onClick={() =>actions.handleGameLike(game.id)}
-                                            ></i> 
+                                                className={`far fa-heart ${game.is_liked ? "fas text-danger" : "far text-light"}`} 
+                                                style={{ cursor: 'pointer' }} 
+                                                onClick={() => store.isLogin ? actions.handleGameLike(game.id) : navigate("/login-register")}
+                                                ></i> 
                                         </span>
                                     </div>
                                 </div>

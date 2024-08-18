@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { Context } from "../store/appContext";
 import "../../styles/landing.css";
 
-export const NewsDetails = () => {
+export const PostsDetails = () => {
     const { store } = useContext(Context);
 
     return (

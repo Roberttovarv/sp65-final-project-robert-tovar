@@ -46,7 +46,6 @@ class Posts(db.Model):
     date = db.Column(db.Date(), unique=False, nullable=True)
     image_url = db.Column(db.String(), unique=False, nullable=True)
 
-
     def __repr__(self):
         return f'<Post {self.title}>'
 
@@ -64,8 +63,9 @@ class Posts(db.Model):
             'image_url': self.image_url,
             'likes': len(self.likes),
             'comments': [comment.serialize() for comment in self.comments],
-            'isLiked': is_liked
+            'is_liked': is_liked
         }
+
 
 class Games(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -85,7 +85,6 @@ class Games(db.Model):
         is_liked = False
         if user_id:
             is_liked = Likes.query.filter_by(user_id=user_id, game_id=self.id).first() is not None
-            print(f"Game ID: {self.id}, User ID: {user_id}, Is Liked: {is_liked}")
 
         return {
             'id': self.id,
