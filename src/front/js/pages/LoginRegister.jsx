@@ -77,16 +77,16 @@ export const LoginRegister = () => {
               <form className="flip-card__form" action="">
                 <input className="flip-card__input" name="email" placeholder="Email" type="email" value={email} onChange={handleEmail} />
                 <input className="flip-card__input" name="password" placeholder="Password" type="password" value={password} onChange={handlePassword} />
-                <button className="flip-card__btn" onClick={handleLogin}>Ingresar</button>
+                <button className="flip-card__btn" onClick={handleLogin}>Let's go!</button>
               </form>
             </div>
             <div className="flip-card__back">
-              <div className="title">Registrarse</div>
+              <div className="title">Sign up</div>
               <form className="flip-card__form" action="">
                 <input className="flip-card__input" placeholder="Username" type="name" value={username} onChange={handleUsername} />
                 <input className="flip-card__input" name="email" placeholder="Email" type="email" value={email} onChange={handleEmail} />
                 <input className="flip-card__input" name="password" placeholder="Password" type="password" value={password} onChange={handlePassword} />
-                <button className="flip-card__btn" onClick={handleSubmitSignup}>Enviar</button>
+                <button className="flip-card__btn" onClick={handleSubmitSignup}>Let's go!</button>
               </form>
             </div>
           </div>

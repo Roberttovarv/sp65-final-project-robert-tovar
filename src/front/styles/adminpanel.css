@@ -1,60 +1,26 @@
-.comic-btn {
-    display: inline-block;
-    padding: 10px 20px;
-    font-size: 24px;
-    font-weight: bold;
-    text-align: center;
-    text-decoration: none;
-    color: #000;
-    background-color: #FF5353;
-    border: 2px solid #000;
-    border-radius: 10px;
-    box-shadow: 5px 5px 0px #000;
-    transition: all 0.3s ease;
-    cursor: pointer;
-  }
-  
-  .comic-btn:hover {
-    background-color: #fff;
-    color: #FF5353;
-    border: 2px solid #FF5353;
-    box-shadow: 5px 5px 0px #FF5353;
-  }
-  
-  .comic-btn:active {
-    background-color: #efffc1;
-    box-shadow: none;
-    transform: translateY(4px);
-  }
-  .actual   {
-    background-color: #fff;
-    color: #FF5353;
-    border: 2px solid #000;
-    box-shadow: 5px 5px 0px #000;
-}
-.admin-button {
-  height: auto;
-  font-weight: bold;
-  text-align: center;
-  text-decoration: none;
-  color: #000;
-  background-color: #FF5353;
-  border: 2px solid #000;
-  border-radius: 10px;
-  transition: all 0.3s ease;
+
+
+.pointer {
   cursor: pointer;
-}
-.admin-button:hover {
-  background-color: #fff;
-  color: #000;
-  border: 2px solid #000;
 }
 
-.admin-button:active {
-  background-color: #efffc1;
-  box-shadow: none;
-  transform: translateY(1px);
-}
-.pointer{
+.button {
+  --font-color: #fff;
+  --bg-color: #323232;
+  --main-color: #fff;
+  width: auto;
+  height: auto;
+  border-radius: 5px;
+  border: 1px solid var(--main-color);
+  background-color: var(--bg-color);
+  box-shadow: 2px 2px var(--main-color);
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--font-color);
   cursor: pointer;
+}
+
+.button:active {
+  box-shadow: 0px 0px var(--main-color);
+  transform: translate(3px, 3px);
 }

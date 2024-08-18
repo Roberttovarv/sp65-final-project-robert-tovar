@@ -48,6 +48,7 @@ export const GamePanel = () => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(gameData),
     };
+
     const response = await fetch(uri, options);
 
     if (!response.ok) {
@@ -124,21 +125,21 @@ export const GamePanel = () => {
           <div className="container-fluid bg-light">
             <div className="d-flex justify-content-end mb-3">
               <Link to="/adminpanel">
-                <button className="admin-button">Admin Panel</button>
+                <button className="button">Admin Panel</button>
               </Link>
             </div>
             <div className="d-flex justify-content-center mb-4">
               <div className="btn-group" role="group" aria-label="Basic outlined example">
                 <button
                   type="button"
-                  className={`btn btn-outline-primary comic-button dual ${pageAction ? "actual" : ""}`}
+                  className={`btn btn-outline-secondary button  ${pageAction ? "actual" : ""}`}
                   onClick={() => setPageAction(true)}
                 >
                   Ver listado
                 </button>
                 <button
                   type="button"
-                  className={`btn btn-outline-primary comic-button dual ${!pageAction ? "actual" : ""}`}
+                  className={`btn btn-outline-secondary button  ${!pageAction ? "actual" : ""}`}
                   onClick={() => setPageAction(false)}
                 >
                   Crear nuevo
@@ -157,7 +158,7 @@ export const GamePanel = () => {
                             <div>
                               <div>
                                 <span>
-                                  <strong>Item ID: </strong>{item.id}, <strong>Nombre: </strong>{item.name}, 
+                                  <strong>Item ID: </strong>{item.id}, <strong>Nombre: </strong>{item.name},
                                   <span className="d-inline-block align-bottom text-truncate" style={{ maxWidth: "20vw" }}>
                                     <strong>Foto: </strong>{item.background_image}
                                   </span>
@@ -192,7 +193,7 @@ export const GamePanel = () => {
                               </div>
                               <textarea className="form-control mb-3" placeholder="Descripción" value={currentGame.description} onChange={(event) => setCurrentGame({ ...currentGame, description: event.target.value })}></textarea>
                               <div className="d-flex justify-content-center">
-                                <button className="btn btn-light" onClick={handleEdit}>Enviar</button>
+                                <button className="button" onClick={handleEdit}>Enviar</button>
                               </div>
                             </div>
                           )
@@ -217,7 +218,7 @@ export const GamePanel = () => {
                     <textarea className="form-control mb-3" id="game-description" placeholder="Añada una descripción" value={description} onChange={(e) => setDescription(e.target.value)}></textarea>
 
                     <div className="d-flex justify-content-center">
-                      <button className="btn btn-light" onClick={handleSubmitGame}>Enviar</button>
+                      <button className="button" onClick={handleSubmitGame}>Enviar</button>
                     </div>
                   </div>
                 </div>

@@ -3,40 +3,34 @@ import { Context } from "../store/appContext";
 import { Link } from "react-router-dom";
 import "../../styles/landing.css";
 import { LoadingMario } from "../component/LoadingMario.jsx";
+import { useNavigate } from "react-router-dom";
 
 export const LandingPage = () => {
+    const navigate = useNavigate();
     const { store, actions } = useContext(Context);
     const [gamesDate, setGamesDate] = useState([]);
     const [gamesRate, setGamesRate] = useState([]);
-
-    const host = `${process.env.BACKEND_URL}`;
-
-
+    
+    const user = store.user || {}
 
     const getGames = async () => {
-        const uri = host + '/api/games';
-        const options = { method: 'GET' };
-
-        const response = await fetch(uri, options);
-
-        if (!response.ok) {
-            console.log("Error", response.status, response.statusText);
-            return;
+        if (store.games.length === 0) {
+            await actions.getGames();
         }
 
-        const data = await response.json();
-
-        const sortedByDate = [...data.results].sort((a, b) => new Date(b.released_at) - new Date(a.released_at));
-        const sortedByRate = [...data.results].sort((a, b) => b.metacritic - a.metacritic);
+        const sortedByDate = [...store.games].sort((a, b) => new Date(b.released_at) - new Date(a.released_at));
+        const sortedByRate = [...store.games].sort((a, b) => b.metacritic - a.metacritic);
 
         setGamesDate(sortedByDate);
         setGamesRate(sortedByRate);
-        
     };
 
     useEffect(() => {
         getGames();
-    }, []);
+
+        actions.getGames()
+        actions.fetchProfile();
+    }, [store.games, actions]);
     
     return (
         <div className="container">
@@ -58,12 +52,17 @@ export const LandingPage = () => {
                                 </div>
                                 <div className="d-flex justify-content-between align-items-end">
                                     <Link to={`/game-details/${game.name}`} >
-                                        <button className="button" onClick={() => actions.setCurrentItem(game)}>
+                                        <button className="button" onClick={() => {actions.setCurrentItem(game), getGames()}}>
                                             Details
                                         </button>
                                     </Link>
-                                    <span className="text-danger me-2">
-                                        <i className="far fa-heart"></i>
+                                    <span >
+                                    <strong className="text-light">{game.likes} &nbsp;</strong> 
+                                        <i 
+                                        style={{cursor: 'pointer'}}
+                                                className={`far fa-heart ${game.is_liked ? "fas text-danger" : "far text-light"}`} 
+                                            onClick={() => store.isLogin ? actions.handleGameLike(game.id) : navigate("/login-register")}
+                                        ></i> 
                                     </span>
                                 </div>
                             </div>
@@ -72,13 +71,6 @@ export const LandingPage = () => {
                 </div>)
             }
 
-            <div className="m-5 d-flex justify-content-center">
-                <a href="https://store.steampowered.com/steamdeck" target="_blank" className="image-container" style={{ position: 'relative', display: 'inline-block' }}>
-                    <img className="cursor" src="https://techcrunch.com/wp-content/uploads/2021/07/hero-banner-sequence-english.2021-07-15-13_49_51.gif" alt="Steam Deck Promotion"
-                        style={{ height: "400px", width: "850px", objectFit: "cover" }} />
-                </a>
-            </div>
-            
             <h1 className="text-center text-light">Best Rated</h1>
 
             {gamesRate.length === 0 ?
@@ -95,13 +87,18 @@ export const LandingPage = () => {
                                     <p className="card-text text-light rounded-1">Rating: {game.metacritic}</p>
                                 </div>
                                 <div className="d-flex justify-content-between align-items-end">
-                                    <Link to={`/game-details/${game.id}`}>
-                                        <button className="button">
+                                    <Link to={`/game-details/${game.name}`}>
+                                        <button className="button" onClick={() => actions.setCurrentItem(game)}>
                                             Details
                                         </button>
                                     </Link>
-                                    <span className="text-danger me-2">
-                                        <i className="far fa-heart"></i>
+                                    <span className="text-light">
+                                        {game.likes} &nbsp; 
+                                        <i 
+                                            className={`far fa-heart ${game.is_liked ? "fas" : "far"}`} 
+                                            style={{ cursor: store.isLogin ? 'pointer' : 'not-allowed' }} 
+                                            onClick={() => actions.handleGameLike(game.id)}
+                                        ></i> 
                                     </span>
                                 </div>
                             </div>
@@ -109,6 +106,17 @@ export const LandingPage = () => {
                     ))}
                 </div>)
             }
+<Link to="https://store.steampowered.com/steamdeck" target="_blank">
+    <div id="publi" className="d-flex justify-content-center align-items-center my-5">
+        <img
+            className="cursor"
+            src="https://techcrunch.com/wp-content/uploads/2021/07/hero-banner-sequence-english.2021-07-15-13_49_51.gif"
+            alt="Steam Deck Promotion"
+            style={{ width: "70%", height: "auto", objectFit: "cover" }}
+        />
+    </div>
+</Link>
+
         </div>
     );
 }

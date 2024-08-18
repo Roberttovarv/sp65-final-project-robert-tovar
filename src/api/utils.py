@@ -57,5 +57,6 @@ def generate_sitemap(app):
 #         7: "https://sm.ign.com/t/ign_es/blogroll/t/the-first-/the-first-15-minutes-of-the-witcher-3-wild-hunt-ig_q4g3.1200.jpg",
 #         8: "https://assetsio.gnwcdn.com/Zelda-Site_9uRMRw2.jpg?width=1200&height=1200&fit=bounds&quality=70&format=jpg&auto=webp",
 #         9: "https://www.mundodeportivo.com/alfabeta/hero/2020/07/Cyberpunk-2077.jpg?width=1200"
+#         10: "https://www.teleadhesivo.com/es/img/arc226-jpg/folder/products-listado-merchanthover/pegatinas-coches-motos-space-invaders-marciano-iii.jpg"
 #     }
 #     return urls.get(index, "https://example.com/default.jpg")  # URL por defecto si el índice no está en el diccionario

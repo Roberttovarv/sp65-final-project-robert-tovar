@@ -93,12 +93,16 @@ export const PostPanel = () => {
     };
 
     const uri = host + `/api/posts/${currentPost.id}`;
+    const token = localStorage.getItem('token'); 
     const options = {
-      method: 'PUT',
-      body: JSON.stringify(dataToSend),
-      headers: { 'Content-Type': 'application/json' }
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(dataToSend),
     };
-
+    
     const response = await fetch(uri, options);
 
     if (!response.ok) {
@@ -114,8 +118,11 @@ export const PostPanel = () => {
 
   const deletePost = async (item) => {
     const uri = host + '/api/posts/' + item.id;
+    const token = localStorage.getItem('token'); 
+
     const options = {
-      method: 'DELETE'
+      method: 'DELETE',
+      headers: {'Authorization': `Bearer ${token}`}
     };
     const response = await fetch(uri, options);
 
@@ -154,14 +161,14 @@ export const PostPanel = () => {
             <div className="btn-group" role="group" aria-label="Basic outlined example">
               <button
                 type="button"
-                className={`btn btn-outline-primary comic-button dual ${pageAction ? "actual" : ""}`}
+                className={`btn btn-outline-secondary button dual ${pageAction ? "actual" : ""}`}
                 onClick={() => setPageAction(true)}
               >
                 Ver listado
               </button>
               <button
                 type="button"
-                className={`btn btn-outline-primary comic-button dual ${!pageAction ? "actual" : ""}`}
+                className={`btn btn-outline-secondary button dual ${!pageAction ? "actual" : ""}`}
                 onClick={() => setPageAction(false)}
               >
                 Crear nuevo
