@@ -39,7 +39,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                 getActions().fetchProfile()
                 return data;
             },
-            
+
             logout: () => {
                 setStore({ token: null });
                 localStorage.removeItem('token');
@@ -62,7 +62,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 
                 if (response.ok) {
                     const data = await response.json();
-                    setStore({ user: data.results }); 
+                    setStore({ user: data.results });
                 } else {
                     console.log("Failed to fetch profile");
                 }
@@ -73,7 +73,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                 getActions().fetchProfile()
                 getActions().getGames()
             },
-            
+
             setIsLogin: (login) => {
                 setStore({ isLogin: login });
             },
@@ -86,9 +86,9 @@ const getState = ({ getStore, getActions, setStore }) => {
                 setStore({ user });
             },
 
-            addLike: async (itemId) => {
+            addGameLike: async (itemId) => {
                 const store = getStore();
-                const token = store.token 
+                const token = store.token
                 const data = {
                     user_id: store.user.id,
                     game_id: itemId
@@ -97,9 +97,10 @@ const getState = ({ getStore, getActions, setStore }) => {
                 const uri = `${process.env.BACKEND_URL}/api/like`;
                 const options = {
                     method: "POST",
-                    headers: { "Content-Type": "application/json",
-                               "Authorization": `Bearer ${token}` 
-                     },
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`
+                    },
                     body: JSON.stringify(data),
                 };
 
@@ -117,33 +118,33 @@ const getState = ({ getStore, getActions, setStore }) => {
                 await getActions().getGames();
                 await getActions().fetchProfile();
             },
-            
-            deleteLike: async (itemId) => {
 
-                const token = getStore().token;        
+            deleteGameLike: async (itemId) => {
+
+                const token = getStore().token;
                 const uri = `${process.env.BACKEND_URL}/api/like`;
-              
+
                 const options = {
-                  method: "DELETE",
-                  headers: { 
-                    "Authorization": `Bearer ${token}`,
-                    "Content-Type": "application/json"
-                  },
-                  body: JSON.stringify({ game_id: itemId }) 
+                    method: "DELETE",
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ game_id: itemId })
                 };
-              
+
                 const response = await fetch(uri, options);
-              
+
                 if (!response.ok) {
                     console.log("Error", response.status, response.statusText);
                     return;
 
                 }
-              
+
                 console.log("Like eliminado")
                 await getActions().getGames();
                 await getActions().fetchProfile();
-              },
+            },
 
             likedId: () => {
                 const user = getStore().user
@@ -154,32 +155,40 @@ const getState = ({ getStore, getActions, setStore }) => {
                 return [];
             },
 
-            handleLike: async (gameId) => {
+            handleGameLike: async (gameId) => {
 
                 if (getActions().likedId().includes(gameId)) {
 
-                   await getActions().deleteLike(gameId);
+                    await getActions().deleteGameLike(gameId);
                 }
                 else {
-                   await getActions().addLike(gameId);
+                    await getActions().addGameLike(gameId);
                 }
                 await getActions().getGames();
             },
 
             getGames: async () => {
+                const token = getStore().token
                 const host = `${process.env.BACKEND_URL}`;
                 const uri = host + '/api/games';
-                const options = { method: 'GET' };
-            
+                const options = {
+                    method: 'GET',
+                    headers: {}
+                };
+                
+                if (token) {
+                    options.headers["Authorization"] = `Bearer ${token}`;
+                }
+
                 const response = await fetch(uri, options);
-            
+
                 if (!response.ok) {
                     console.log("Error", response.status, response.statusText);
                     return;
                 }
                 const data = await response.json();
-            
-                setStore({ games: data.results });  
+
+                setStore({ games: data.results });
             },
         },
     };

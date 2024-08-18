@@ -6,43 +6,31 @@ import { LoadingMario } from "../component/LoadingMario.jsx";
 
 export const AllGames = () => {
     const { store, actions } = useContext(Context);
-    const [games, setGames] = useState([]);
     const [search, setSearch] = useState("");
     const [filteredGames, setFilteredGames] = useState([]);
 
-    const host = `${process.env.BACKEND_URL}`;
+    useEffect(() => {
+        // Fetch games from the backend via actions
+        const fetchGames = async () => {
+            if (store.games.length === 0) {
+                await actions.getGames();
+            }
+        };
 
-    const getGames = async () => {
-        const uri = host + '/api/games';
-        const options = { method: 'GET' };
+        fetchGames();
+    }, [store.games, actions]);
 
-        const response = await fetch(uri, options);
-
-        if (!response.ok) {
-            console.log("Error", response.status, response.statusText);
-            return;
-        }
-
-        const data = await response.json();
-        setGames(data.results);
-        setFilteredGames(data.results);
-    };
+    useEffect(() => {
+        // Filter games based on the search input
+        const filtered = store.games.filter(game => 
+            game.name.toLowerCase().includes(search.toLowerCase())
+        );
+        setFilteredGames(filtered);
+    }, [search, store.games]);
 
     const handleInputChange = (event) => {
         setSearch(event.target.value);
     };
-
-    useEffect(() => {
-        getGames();
-    }, []);
-
-    useEffect(() => {
-        const filtered = games.filter(game => 
-            game.name.toLowerCase().includes(search.toLowerCase())
-        );
-        setFilteredGames(filtered);
-    }, [search, games]);
-
 
 
     return (
@@ -65,7 +53,7 @@ export const AllGames = () => {
                     <h4 className="text-light">Good luck finding your game, freak!</h4>
                 </div>
             </div>
-            {games.length === 0 ? (
+            {store.games.length === 0 ? (
                 <LoadingMario />
             ) : (
                 <div className="row">
@@ -88,7 +76,12 @@ export const AllGames = () => {
                                             </button>
                                         </Link>
                                         <span className="text-light">
-                                        {game.likes} &nbsp; <i className={`far fa-heart far`} style={{ cursor: 'pointer' }}></i> 
+                                            {game.likes} &nbsp; 
+                                            <i 
+                                                className={`far fa-heart ${game.is_liked ? "fas" : "far"}`} 
+                                                style={{ cursor: store.isLogin ? 'pointer' : 'not-allowed' }} 
+                                                onClick={() =>actions.handleGameLike(game.id)}
+                                            ></i> 
                                         </span>
                                     </div>
                                 </div>

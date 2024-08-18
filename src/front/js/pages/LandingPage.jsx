@@ -28,7 +28,7 @@ export const LandingPage = () => {
 
         actions.getGames()
         actions.fetchProfile();
-    }, [store.games, store.user]);
+    }, [store.games, actions]);
     
     return (
         <div className="container">
@@ -57,10 +57,9 @@ export const LandingPage = () => {
                                     <span className="text-light">
                                         {game.likes} &nbsp; 
                                         <i 
-                                            className={`far fa-heart ${actions.likedId().includes(game.id) ? "fas" : "far"}`} 
+                                            className={`far fa-heart ${game.is_liked ? "fas" : "far"}`} 
                                             style={{ cursor: store.isLogin ? 'pointer' : 'not-allowed' }} 
-                                            onClick={() => actions.handleLike(game.id)}
-                                            title={store.isLogin ? '' : 'Debes estar logueado para realizar esta acción'}
+                                            onClick={() => actions.handleGameLike(game.id)}
                                         ></i> 
                                     </span>
                                 </div>
@@ -94,9 +93,9 @@ export const LandingPage = () => {
                                     <span className="text-light">
                                         {game.likes} &nbsp; 
                                         <i 
-                                            className={`far fa-heart ${actions.likedId().includes(game.id) ? "fas" : "far"}`} 
+                                            className={`far fa-heart ${game.is_liked ? "fas" : "far"}`} 
                                             style={{ cursor: store.isLogin ? 'pointer' : 'not-allowed' }} 
-                                            onClick={() => actions.handleLike(game.id)}
+                                            onClick={() => actions.handleGameLike(game.id)}
                                         ></i> 
                                     </span>
                                 </div>

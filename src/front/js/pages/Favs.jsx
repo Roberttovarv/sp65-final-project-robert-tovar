@@ -53,7 +53,7 @@ export const Favs = () => {
         getPosts();
         actions.fetchProfile();
         
-    }, []);
+    }, [games]);
 
     useEffect(() => {
         if (user.likes && user.likes.liked_games) {
@@ -76,7 +76,7 @@ export const Favs = () => {
         setFilteredGames(filtered);
     }, [search, post]);
 
-    const user = store.user || {}
+    const user = store.user
 
     return (
         <div className="container">

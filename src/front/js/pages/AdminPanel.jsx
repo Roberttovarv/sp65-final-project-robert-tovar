@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import { Context } from "../store/appContext.js";
-import "../../styles/adminpanel.css";
+import "../../styles/landing.css";
 import { NotFound } from "../component/NotFound.jsx";
 
 export const AdminPanel = () => {
