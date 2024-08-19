@@ -8,11 +8,10 @@ const getState = ({ getStore, getActions, setStore }) => {
             isLogin: false,
             games: [],
             posts: [],
+            comment: "",
         },
         actions: {
-
             login: async (email, password) => {
-
                 const url = process.env.BACKEND_URL + '/api/login';
 
                 const response = await fetch(url, {
@@ -37,7 +36,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                     setStore({ admin: data.is_admin });
                     localStorage.setItem('admin', data.is_admin);
                 }
-                getActions().fetchProfile()
+                getActions().fetchProfile();
                 return data;
             },
 
@@ -71,8 +70,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 
             setCurrentItem: (item) => {
                 setStore({ currentItem: item });
-                getActions().fetchProfile()
-                getActions().getGames()
+                getActions().fetchProfile();
+                getActions().getGames();
+                getActions().getPosts();
             },
 
             setIsLogin: (login) => {
@@ -88,7 +88,7 @@ const getState = ({ getStore, getActions, setStore }) => {
             },
             
             getGames: async () => {
-                const token = getStore().token
+                const token = getStore().token;
                 const host = `${process.env.BACKEND_URL}`;
                 const uri = host + '/api/games';
                 const options = {
@@ -113,7 +113,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 
             addGameLike: async (itemId) => {
                 const store = getStore();
-                const token = store.token
+                const token = store.token;
                 const data = {
                     user_id: store.user.id,
                     game_id: itemId
@@ -145,7 +145,6 @@ const getState = ({ getStore, getActions, setStore }) => {
             },
 
             deleteGameLike: async (itemId) => {
-
                 const token = getStore().token;
                 const uri = `${process.env.BACKEND_URL}/api/like`;
 
@@ -163,16 +162,15 @@ const getState = ({ getStore, getActions, setStore }) => {
                 if (!response.ok) {
                     console.log("Error", response.status, response.statusText);
                     return;
-
                 }
 
-                console.log("Like eliminado")
+                console.log("Like eliminado");
                 await getActions().getGames();
                 await getActions().fetchProfile();
             },
 
             likedGameId: () => {
-                const user = getStore().user
+                const user = getStore().user;
 
                 if (user && user.likes && user.likes.liked_games) {
                     return user.likes.liked_games.map(game => game.id);
@@ -181,19 +179,16 @@ const getState = ({ getStore, getActions, setStore }) => {
             },
 
             handleGameLike: async (gameId) => {
-
                 if (getActions().likedGameId().includes(gameId)) {
-
                     await getActions().deleteGameLike(gameId);
-                }
-                else {
+                } else {
                     await getActions().addGameLike(gameId);
                 }
                 await getActions().getGames();
             },
 
             getPosts: async () => {
-                const token = getStore().token || localStorage.getItem('token'); // Asegúrate de que el token esté disponible
+                const token = getStore().token || localStorage.getItem('token') || {}; // Asegúrate de que el token esté disponible
                 const host = `${process.env.BACKEND_URL}`;
                 const uri = host + '/api/posts';
                 const options = {
@@ -223,8 +218,7 @@ const getState = ({ getStore, getActions, setStore }) => {
             },
 
             addPostLike: async (itemId) => {
-              
-                const token = getStore().token
+                const token = getStore().token;
                 const data = {
                     user_id: getStore().user.id,
                     post_id: itemId
@@ -256,7 +250,6 @@ const getState = ({ getStore, getActions, setStore }) => {
             },
 
             deletePostLike: async (itemId) => {
-
                 const token = getStore().token;
                 const uri = `${process.env.BACKEND_URL}/api/like`;
 
@@ -274,16 +267,15 @@ const getState = ({ getStore, getActions, setStore }) => {
                 if (!response.ok) {
                     console.log("Error", response.status, response.statusText);
                     return;
-
                 }
 
-                console.log("Like eliminado")
+                console.log("Like eliminado");
                 await getActions().getPosts();
                 await getActions().fetchProfile();
             },
 
             likedPostId: () => {
-                const user = getStore().user
+                const user = getStore().user;
 
                 if (user && user.likes && user.likes.liked_posts) {
                     return user.likes.liked_posts.map(post => post.id);
@@ -292,17 +284,103 @@ const getState = ({ getStore, getActions, setStore }) => {
             },
 
             handlePostLike: async (postId) => {
-
                 if (getActions().likedPostId().includes(postId)) {
-
                     await getActions().deletePostLike(postId);
-                }
-                else {
+                } else {
                     await getActions().addPostLike(postId);
                 }
                 await getActions().getPosts();
             },
-        },
+
+            deleteGameComment: async (commentId) => {
+                const token = getStore().token;
+                const uri = `${process.env.BACKEND_URL}/api/games/${getStore().currentItem.id}/comment?comment_id=${commentId}`;
+                const options = {
+                    method: "DELETE",
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json"
+                    }
+                };
+
+                const response = await fetch(uri, options);
+
+                if (!response.ok) {
+                    console.log("Error", response.status, response.statusText);
+                    return;
+                }
+
+                // Actualiza la lista de comentarios después de eliminar uno.
+                await getActions().fetchGameComments();
+            },
+
+            addGameComment: async () => {
+                const { comment, token, currentItem } = getStore();
+
+                if (!comment || comment.trim() === "") {
+                    console.log("Comentario vacío");
+                    return;
+                }
+
+                const data = {
+                    comment
+                };
+
+                const uri = `${process.env.BACKEND_URL}/api/games/${currentItem.id}/comment`;
+                const options = {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`
+                    },
+                    body: JSON.stringify(data),
+                };
+
+                const response = await fetch(uri, options);
+
+                if (!response.ok) {
+                    console.log("Error", response.status, response.statusText);
+                    return;
+                }
+
+                const result = await response.json();
+
+                console.log("Comentario añadido", result);
+
+                await getActions().fetchGameComments();
+                getActions().setComment(""); // Limpiar el campo de comentario
+            },
+
+            setComment: (comment) => {
+                setStore({ comment });
+            },
+
+            handleGameComment: (event) => {
+                const comment = event.target.value;
+                getActions().setComment(comment);
+            },
+
+            fetchGameComments: async () => {
+                const { currentItem, token } = getStore();
+                const uri = `${process.env.BACKEND_URL}/api/games/${currentItem.id}/comments`;
+                const options = {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                };
+
+                const response = await fetch(uri, options);
+
+                if (response.ok) {
+                    const data = await response.json();
+                    setStore({ game: { comments: data.results } });
+                } else {
+                    console.log("Failed to fetch comments");
+                }
+            }
+        }
     };
 };
+
 export default getState;

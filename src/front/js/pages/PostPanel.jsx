@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Context } from "../store/appContext.js";
 import "../../styles/adminpanel.css";
 import { NotFound } from "../component/NotFound.jsx";
@@ -20,7 +20,10 @@ export const PostPanel = () => {
 
   const host = `${process.env.BACKEND_URL}`;
 
+  const navigate = useNavigate();
+
   useEffect(() => {
+    !store.admin ? navigate("/*") : '';
     getPosts();
   }, []);
 
@@ -148,27 +151,25 @@ export const PostPanel = () => {
 
   return (
     <>
-      {!store.admin ? (
-        <NotFound />
-      ) : (
+
         <div className="container-fluid bg-light min-vh-100 p-3">
           <div className="d-flex justify-content-end mb-3">
             <Link to="/adminpanel">
-              <button className="admin-button">Admin Panel</button>
+              <button className="buttonAdmin">Admin Panel</button>
             </Link>
           </div>
           <div className="d-flex justify-content-center mb-5">
             <div className="btn-group" role="group" aria-label="Basic outlined example">
               <button
                 type="button"
-                className={`btn btn-outline-secondary button dual ${pageAction ? "actual" : ""}`}
+                className={`btn btn-outline-secondary buttonAdmin dual ${pageAction ? "actual" : ""}`}
                 onClick={() => setPageAction(true)}
               >
                 Ver listado
               </button>
               <button
                 type="button"
-                className={`btn btn-outline-secondary button dual ${!pageAction ? "actual" : ""}`}
+                className={`btn btn-outline-secondary buttonAdmin dual ${!pageAction ? "actual" : ""}`}
                 onClick={() => setPageAction(false)}
               >
                 Crear nuevo
@@ -265,7 +266,7 @@ export const PostPanel = () => {
                                 onChange={(event) => setCurrentPost({ ...currentPost, body: event.target.value })}
                               ></textarea>
                               <div className="d-flex justify-content-center">
-                                <button className="btn btn-primary" onClick={handleEdit}>Enviar</button>
+                                <button className="buttonAdmin" onClick={handleEdit}>Enviar</button>
                               </div>
                             </div>
                           )
@@ -335,14 +336,13 @@ export const PostPanel = () => {
                     ></textarea>
                   </div>
                   <div className="d-flex justify-content-center mt-3">
-                    <button className="btn btn-primary" onClick={handleSubmitPost}>Enviar</button>
+                    <button className="buttonAdmin" onClick={handleSubmitPost}>Enviar</button>
                   </div>
                 </div>
               </div>
             </>
           )}
         </div>
-      )}
-    </>
+      </>
   );
 };

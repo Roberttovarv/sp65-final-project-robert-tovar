@@ -4,10 +4,10 @@
   cursor: pointer;
 }
 
-.button {
-  --font-color: #fff;
-  --bg-color: #323232;
-  --main-color: #fff;
+.buttonAdmin {
+  --font-color: #323232;
+  --bg-color: #fff;
+  --main-color: #323232;
   width: auto;
   height: auto;
   border-radius: 5px;
@@ -20,7 +20,7 @@
   cursor: pointer;
 }
 
-.button:active {
+.buttonAdmin:active {
   box-shadow: 0px 0px var(--main-color);
   transform: translate(3px, 3px);
 }

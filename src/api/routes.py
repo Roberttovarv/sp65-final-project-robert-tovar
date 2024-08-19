@@ -264,14 +264,16 @@ def handle_comment_game(game_id):
 
     elif request.method == 'GET':
         comment_id = request.args.get('comment_id')
-        if not comment_id:
-            return jsonify({'message': 'Falta el parámetro requerido: comment_id'}), 400
 
-        comment = Comments.query.filter_by(id=comment_id, game_id=game_id).first()
-        if not comment:
-            return jsonify({'message': 'Comentario no encontrado'}), 404
+        if comment_id:
+            comment = Comments.query.filter_by(id=comment_id, game_id=game_id).first()
+            if not comment:
+                return jsonify({'message': 'Comentario no encontrado'}), 404
+            return jsonify(comment.serialize()), 200
+        else:
+            comments = Comments.query.filter_by(game_id=game_id).all()
+            return jsonify([comment.serialize() for comment in comments]), 200
 
-        return jsonify(comment.serialize()), 200
 
     elif request.method == 'DELETE':
         comment_id = request.args.get('comment_id')

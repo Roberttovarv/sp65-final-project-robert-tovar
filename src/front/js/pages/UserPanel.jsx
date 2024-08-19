@@ -50,7 +50,7 @@ export const UserPanel = () => {
         (<div className="bg-light min-vh-100">
             <div className="d-flex justify-content-end p-3">
                 <Link to="/adminpanel">
-                    <button className="admin-button">Admin Panel</button>
+                    <button className="buttonAdmin">Admin Panel</button>
                 </Link>
             </div>
 

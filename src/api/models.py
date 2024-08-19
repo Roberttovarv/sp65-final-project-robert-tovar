@@ -140,7 +140,9 @@ class Comments(db.Model):
             'date': self.date,
             'user_id': self.user_id,
             'post_id': self.post_id,
-            'game_id': self.game_id
+            'game_id': self.game_id,
+            'username': self.user.username,
+            'user_pfp': self.user.pfp.url,
         }
 
 class Videos(db.Model):

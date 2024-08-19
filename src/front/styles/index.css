@@ -57,34 +57,7 @@
     display: none;
 }
 
-    .comic-button {
-    display: inline-block;
-    padding: 10px 20px;
-    font-size: 24px;
-    font-weight: bold;
-    text-align: center;
-    text-decoration: none;
-    color: #fff;
-    background-color: #74a7e4;
-    border: 2px solid #000;
-    border-radius: 10px;
-    box-shadow: 5px 5px 0px #000;
-    transition: all 0.3s ease;
-    cursor: pointer;
-  }
-  
-  .comic-button:hover {
-    background-color: #fff;
-    color: #74a7e4;
-    border: 2px solid #74a7e4;
-    box-shadow: 5px 5px 0px #74a7e4;
-  }
-  
-  .comic-button:active {
-    background-color: #efffc1;
-    box-shadow: none;
-    transform: translateY(4px);
-  }
+
 .navbar {
   background-color: #a3ccfd;
   text-shadow: 3px 3px 10px rgba(0, 0, 0, 0.7);
