@@ -32,10 +32,11 @@ export const LoginRegister = () => {
     }
     const data = await actions.login(email, password);
     if (data) {
-      navigate('/');
+      navigate(-1);
     } else {
       setError("Credenciales incorrectas");
     }
+    actions.fetchProfile();
   };
 
   const handleSubmitSignup = async (event) => {

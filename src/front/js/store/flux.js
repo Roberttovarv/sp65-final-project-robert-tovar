@@ -8,6 +8,7 @@ const getState = ({ getStore, getActions, setStore }) => {
             isLogin: false,
             games: [],
             posts: [],
+            pfps: [],
             comment: "",
         },
         actions: {
@@ -47,7 +48,7 @@ const getState = ({ getStore, getActions, setStore }) => {
             },
 
             fetchProfile: async () => {
-                const token = getStore().token || localStorage.getItem('token');
+                const token = getStore().token || localStorage.getItem('token') || {};
                 if (!token) {
                     console.log("No token found in localStorage");
                     return;
@@ -71,8 +72,6 @@ const getState = ({ getStore, getActions, setStore }) => {
             setCurrentItem: (item) => {
                 setStore({ currentItem: item });
                 getActions().fetchProfile();
-                getActions().getGames();
-                getActions().getPosts();
             },
 
             setIsLogin: (login) => {
@@ -86,7 +85,31 @@ const getState = ({ getStore, getActions, setStore }) => {
             setCurrentUser: (user) => {
                 setStore({ user });
             },
-            
+
+            getPfps: async () => {
+                const token = getStore().token;
+                const host = `${process.env.BACKEND_URL}`;
+                const uri = host + '/api/profile_pictures';
+                const options = {
+                    method: 'GET',
+                    headers: {}
+                };
+
+                if (token) {
+                    options.headers["Authorization"] = `Bearer ${token}`;
+                }
+
+                const response = await fetch(uri, options);
+
+                if (!response.ok) {
+                    console.log("Error", response.status, response.statusText);
+                    return;
+                }
+                const data = await response.json();
+
+                setStore({ pfps: data.results });
+            },
+
             getGames: async () => {
                 const token = getStore().token;
                 const host = `${process.env.BACKEND_URL}`;
@@ -95,7 +118,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                     method: 'GET',
                     headers: {}
                 };
-                
+
                 if (token) {
                     options.headers["Authorization"] = `Bearer ${token}`;
                 }
@@ -185,6 +208,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                     await getActions().addGameLike(gameId);
                 }
                 await getActions().getGames();
+                await getStore().currentItem;
             },
 
             getPosts: async () => {
@@ -195,21 +219,21 @@ const getState = ({ getStore, getActions, setStore }) => {
                     method: 'GET',
                     headers: {}
                 };
-            
+
                 if (token) {
                     options.headers["Authorization"] = `Bearer ${token}`;
                 } else {
                     console.log("No token available for getPosts");
                 }
-            
+
                 try {
                     const response = await fetch(uri, options);
-            
+
                     if (!response.ok) {
                         console.log("Error in getPosts:", response.status, response.statusText);
                         return;
                     }
-            
+
                     const data = await response.json();
                     setStore({ posts: data.results });
                 } catch (error) {
