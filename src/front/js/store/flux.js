@@ -340,16 +340,14 @@ const getState = ({ getStore, getActions, setStore }) => {
 
             addGameComment: async () => {
                 const { comment, token, currentItem } = getStore();
-
+            
                 if (!comment || comment.trim() === "") {
-                    console.log("Comentario vacío");
+                    console.log("Comentario vacío, no se puede enviar.");
                     return;
                 }
-
-                const data = {
-                    comment
-                };
-
+            
+                const data = { body: comment };
+            
                 const uri = `${process.env.BACKEND_URL}/api/games/${currentItem.id}/comment`;
                 const options = {
                     method: "POST",
@@ -359,22 +357,90 @@ const getState = ({ getStore, getActions, setStore }) => {
                     },
                     body: JSON.stringify(data),
                 };
-
-                const response = await fetch(uri, options);
-
-                if (!response.ok) {
-                    console.log("Error", response.status, response.statusText);
-                    return;
+            
+                try {
+                    const response = await fetch(uri, options);
+            
+                    if (!response.ok) {
+                        console.log(`Error al añadir comentario: ${response.status} - ${response.statusText}`);
+                        return;
+                    }
+            
+                    const result = await response.json();
+                    console.log("Comentario añadido con éxito:", result);
+            
+                    // Actualiza directamente la lista de comentarios en store.currentItem
+                    setStore({
+                        currentItem: {
+                            ...currentItem,
+                            comments: [...(currentItem.comments || []), result] // Añade el nuevo comentario
+                        }
+                    });
+            
+                    getActions().setComment(""); // Limpia el campo del comentario
+                } catch (error) {
+                    console.log("Error en la solicitud al añadir comentario:", error);
                 }
+            },
+            
+            deleteGameComment: async (commentId) => {
+                const { token, currentItem } = getStore();
+                const uri = `${process.env.BACKEND_URL}/api/games/${currentItem.id}/comment?comment_id=${commentId}`;
+                
+                const options = {
+                    method: "DELETE",
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json"
+                    }
+                };
 
-                const result = await response.json();
+                try {
+                    const response = await fetch(uri, options);
 
-                console.log("Comentario añadido", result);
+                    if (!response.ok) {
+                        console.log(`Error al eliminar comentario: ${response.status} - ${response.statusText}`);
+                        return;
+                    }
 
-                await getActions().fetchGameComments();
-                getActions().setComment(""); // Limpiar el campo de comentario
+                    console.log("Comentario eliminado con éxito");
+                    await getActions().fetchGameComments(); // Actualiza la lista de comentarios
+                } catch (error) {
+                    console.log("Error en la solicitud al eliminar comentario:", error);
+                }
             },
 
+            fetchGameComments: async () => {
+                const { currentItem, token } = getStore();
+                const uri = `${process.env.BACKEND_URL}/api/games/${currentItem.id}/comments`;
+            
+                const options = {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                };
+            
+                try {
+                    const response = await fetch(uri, options);
+            
+                    if (response.ok) {
+                        const data = await response.json();
+                        setStore({ 
+                            currentItem: {
+                                ...currentItem,
+                                comments: data.results // Actualiza los comentarios correctamente
+                            }
+                        });
+                        console.log("Comentarios obtenidos con éxito:", data.results);
+                    } else {
+                        console.log(`Error al obtener comentarios: ${response.status} - ${response.statusText}`);
+                    }
+                } catch (error) {
+                    console.log("Error en la solicitud al obtener comentarios:", error);
+                }
+            },
+            
             setComment: (comment) => {
                 setStore({ comment });
             },
@@ -384,26 +450,15 @@ const getState = ({ getStore, getActions, setStore }) => {
                 getActions().setComment(comment);
             },
 
-            fetchGameComments: async () => {
-                const { currentItem, token } = getStore();
-                const uri = `${process.env.BACKEND_URL}/api/games/${currentItem.id}/comments`;
-                const options = {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                };
-
-                const response = await fetch(uri, options);
-
-                if (response.ok) {
-                    const data = await response.json();
-                    setStore({ game: { comments: data.results } });
-                } else {
-                    console.log("Failed to fetch comments");
+            sendGameComent: async (event) => {
+                if (event.key === 'Enter') {
+                    event.preventDefault(); 
+                    await getActions().addGameComment(); 
+                    await getActions().fetchGameComments(); // Asegúrate de obtener los comentarios después de agregar uno
                 }
             }
-        }
+            
+        },
     };
 };
 

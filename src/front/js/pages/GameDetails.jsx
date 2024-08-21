@@ -9,13 +9,11 @@ export const GameDetails = () => {
   const comments = store.currentItem.comments || [];
   const navigate = useNavigate()
 
-  useEffect(() =>{
-  store.currentItem,
-  comments,
-  actions.fetchProfile()
-  console.log(store.currentItem);
+  useEffect(() => {
+    actions.fetchProfile(); // Asegúrate de que el perfil se obtenga correctamente.
+    console.log(store.currentItem.comments);
+  }, [store.currentItem, actions]); // Elimina `comments` de la dependencia, ya que ya está contenido dentro de `store.currentItem`
   
-  }, [comments, store.currentItem, actions]);
 
   return (
     <div className="row justify-content-center gamedet m-3">
@@ -59,6 +57,15 @@ export const GameDetails = () => {
           </div>
         </div>
       </div>
+      <div class="input-container col-8 mt-5">
+  <input placeholder="" class="input-field text-light" type="text"
+      value={store.comment} 
+      onChange={(e) => actions.handleGameComment(e)} 
+      onKeyDown={(e) => {store.isLogin ? actions.sendGameComent(e) : navigate('/login-register')}} />
+  <label for="input-field" class="input-label ps-3 pt-3">Add comment</label>
+  <span class="input-highlight"></span>
+</div>
+
       <div className="col-8 mt-5">
         <div className="d-flex flex-column align-items-center px-3">
           {comments.map((comment, index) => (

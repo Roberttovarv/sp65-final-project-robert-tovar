@@ -34,36 +34,41 @@ export const LandingPage = () => {
     
     return (
         <div className="container">
-
-            <h1 className="text-center text-light">Newest Games</h1>
+            <h1 className="text-center text-light my-5">Newest Games</h1>
 
             {gamesDate.length === 0 ? 
                 (<LoadingMario />) : 
                 (<div className="row flex-nowrap overflow-auto pb-2 d-flex px-3 m-auto justify-content-start" 
                     style={{ maxHeight: "55vh", minHeight: "30vh", width: "99%", overflowY: "auto", scrollbarColor: "rgb(29, 29, 29) transparent", scrollbarWidth: "thin" }}>
                     {gamesDate.slice(0, 20).map((game, index) => (
-                        <div key={index} className="tarjeta m-3 ratio ratio-1x1" style={{ width: '18rem' }}>
-                            <img src={game.background_image} className=" text-light rounded-1" 
-                            alt={game.name} style={{ width: "100%", maxHeight: "60%", objectFit: "cover" }} />
-                            <div className="card-body align-content-end mt-2">
-                                <div className="align-content-between mb-2">
-                                    <h5 className="card-title text-light rounded-1 d-flex">{game.name}</h5>
-                                    <p className="card-text text-light rounded-1">Releasing date: {game.released_at}</p>
+                        <div key={index} className="col-lg-3 col-md-4 col-sm-6 col-12 mb-4 d-flex justify-content-center">
+                            <div className="card tarjeta d-flex flex-column justify-content-between" style={{ width: '18rem' }}>
+                                <div className="image-container">
+                                    <img 
+                                        src={game.background_image} 
+                                        className="card-img-top" 
+                                        alt={game.name} 
+                                        style={{ width: "100%", maxHeight: "auto", objectFit: "cover" }} 
+                                    />
                                 </div>
-                                <div className="d-flex justify-content-between align-items-end">
-                                    <Link to={`/game-details/${game.name}`} >
-                                        <button className="button" onClick={() => {actions.setCurrentItem(game), getGames()}}>
-                                            Details
-                                        </button>
-                                    </Link>
-                                    <span >
-                                    <strong className="text-light">{game.likes} &nbsp;</strong> 
-                                        <i 
-                                        style={{cursor: 'pointer'}}
+                                <div className="card-body d-flex flex-column justify-content-end">
+                                    <h5 className="card-title text-light">{game.name}</h5>
+                                    <p className="card-text text-light">Releasing date: {game.released_at}</p>
+                                    <div className="d-flex justify-content-between align-items-center mt-auto">
+                                        <Link to={`/game-details/${game.name}`}>
+                                            <button className="button" onClick={() => actions.setCurrentItem(game)}>
+                                                Details
+                                            </button>
+                                        </Link>
+                                        <span>
+                                            <strong className="text-light">{game.likes} &nbsp;</strong> 
+                                            <i 
                                                 className={`far fa-heart ${game.is_liked ? "fas text-danger" : "far text-light"}`} 
-                                            onClick={() => store.isLogin ? actions.handleGameLike(game.id) : navigate("/login-register")}
-                                        ></i> 
-                                    </span>
+                                                style={{ cursor: 'pointer' }} 
+                                                onClick={() => store.isLogin ? actions.handleGameLike(game.id) : navigate("/login-register")}
+                                            ></i> 
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -71,52 +76,58 @@ export const LandingPage = () => {
                 </div>)
             }
 
-            <h1 className="text-center text-light">Best Rated</h1>
+            <h1 className="text-center text-light my-5">Best Rated</h1>
 
             {gamesRate.length === 0 ?
                 (<LoadingMario />) : 
                 (<div className="row flex-nowrap overflow-auto pb-2 px-3 d-flex m-auto justify-content-start" 
                     style={{ maxHeight: "55vh", minHeight: "30vh", width: "99%", overflowY: "auto", scrollbarColor: "rgb(29, 29, 29) transparent", scrollbarWidth: "thin" }}>
                     {gamesRate.slice(0, 20).map((game, index) => (
-                        <div key={index} className="tarjeta m-3 ratio ratio-1x1" style={{ width: '18rem' }}>
-                            <img src={game.background_image} className="text-light rounded-1" 
-                            alt={game.name} style={{ width: "100%", maxHeight: "60%", objectFit: "cover" }} />
-                            <div className="card-body align-content-end mt-2">
-                                <div className="align-content-between mb-2">
-                                    <h5 className="card-title text-light rounded-1 d-flex">{game.name}</h5>
-                                    <p className="card-text text-light rounded-1">Rating: {game.metacritic}</p>
+                        <div key={index} className="col-lg-3 col-md-4 col-sm-6 col-12 mb-4 d-flex justify-content-center">
+                            <div className="card tarjeta d-flex flex-column justify-content-between" style={{ width: '18rem' }}>
+                                <div className="image-container">
+                                    <img 
+                                        src={game.background_image} 
+                                        className="card-img-top" 
+                                        alt={game.name} 
+                                        style={{ width: "100%", maxHeight: "auto", objectFit: "cover" }} 
+                                    />
                                 </div>
-                                <div className="d-flex justify-content-between align-items-end">
-                                    <Link to={`/game-details/${game.name}`}>
-                                        <button className="button" onClick={() => actions.setCurrentItem(game)}>
-                                            Details
-                                        </button>
-                                    </Link>
-                                    <span className="text-light">
-                                        {game.likes} &nbsp; 
-                                        <i 
+                                <div className="card-body d-flex flex-column justify-content-end">
+                                    <h5 className="card-title text-light">{game.name}</h5>
+                                    <p className="card-text text-light">Rating: {game.metacritic}</p>
+                                    <div className="d-flex justify-content-between align-items-center mt-auto">
+                                        <Link to={`/game-details/${game.name}`}>
+                                            <button className="button" onClick={() => actions.setCurrentItem(game)}>
+                                                Details
+                                            </button>
+                                        </Link>
+                                        <span>
+                                            <strong className="text-light">{game.likes} &nbsp;</strong> 
+                                            <i 
                                                 className={`far fa-heart ${game.is_liked ? "fas text-danger" : "far text-light"}`} 
                                                 style={{ cursor: 'pointer' }} 
-                                            onClick={() => store.isLogin ? actions.handleGameLike(game.id) : navigate("/login-register")}
-                                        ></i> 
-                                    </span>
+                                                onClick={() => store.isLogin ? actions.handleGameLike(game.id) : navigate("/login-register")}
+                                            ></i> 
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     ))}
                 </div>)
             }
-<Link to="https://store.steampowered.com/steamdeck" target="_blank">
-    <div id="publi" className="d-flex justify-content-center align-items-center my-5">
-        <img
-            className="cursor"
-            src="https://techcrunch.com/wp-content/uploads/2021/07/hero-banner-sequence-english.2021-07-15-13_49_51.gif"
-            alt="Steam Deck Promotion"
-            style={{ width: "70%", height: "auto", objectFit: "cover" }}
-        />
-    </div>
-</Link>
 
+            <Link to="https://store.steampowered.com/steamdeck" target="_blank">
+                <div id="publi" className="d-flex justify-content-center align-items-center my-5">
+                    <img
+                        className="cursor"
+                        src="https://techcrunch.com/wp-content/uploads/2021/07/hero-banner-sequence-english.2021-07-15-13_49_51.gif"
+                        alt="Steam Deck Promotion"
+                        style={{ width: "70%", height: "auto", objectFit: "cover" }}
+                    />
+                </div>
+            </Link>
         </div>
     );
 }
