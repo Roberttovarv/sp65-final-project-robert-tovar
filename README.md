@@ -29,9 +29,9 @@ Geeks Corner aims to be a central hub for the gaming community, offering a compr
 
 ### Built With
 
-![My Skills](https://skillicons.dev/icons?i=js,html,css,js,react,bootstrap,flask,python)<img src="https://quintagroup.com/cms/python/images/sqlalchemy-logo.png/@@images/eca35254-a2db-47a8-850b-2678f7f8bc09.png
-" alt="SQL" width="50" height="50">
+![My Skills](https://skillicons.dev/icons?i=js,html,css,js,react,bootstrap,flask,python)<img src="https://miro.medium.com/v2/resize:fit:1400/0*WjSAJOw135lrf8__.jpg" alt="SQL" width="50" height="50">
 <p align="right">  (<a href="#readme-top">back to top</a>)</p>
+
 
 
 <!-- USAGE EXAMPLES -->
