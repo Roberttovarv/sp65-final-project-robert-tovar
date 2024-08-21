@@ -55,26 +55,26 @@ Geeks Corner aims to be a central hub for the gaming community, offering a compr
 <!-- USAGE EXAMPLES -->
 ### Functionality
 
-* # User Profiles:
+* #### User Profiles:
  Create a personalized profile with a unique username and profile picture (PFP) to represent yourself in the community.
 
-* # Latest News:
+* #### Latest News:
  Stay up to date with fresh and relevant news from the gaming industry.
 Game Exploration: Discover new games, check out detailed information, and explore trending titles.
 
-* # Ratings and Reviews:
+* #### Ratings and Reviews:
  Access user ratings and opinions on a variety of video games.
 
-* # Personal Library:
+* #### Personal Library:
  Save your favorite games and easily access them from your profile.
 
-* # Saved News:
+* #### Saved News:
  Bookmark the news articles that interest you the most for later reading.
 
-* # Comments:
+* #### Comments:
  Join discussions by leaving comments in each game section, sharing your thoughts and experiences.
 
-* # Steam Integration:
+* #### Steam Integration:
  Easily find the games you're interested in by clicking a button that redirects you to the game’s page on Steam.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -83,7 +83,7 @@ Game Exploration: Discover new games, check out detailed information, and explor
 <!-- CONTACT -->
 ## Contact
 
-Robert Tovar - [[![LinkedIn](https://skillicons.dev/icons?i=linkedin)](https://linkedin.com/in/roberttovarv)][[![Gmail](https://skillicons.dev/icons?i=gmail)](roberttovarv@gmail.com)]
+[![LinkedIn](https://skillicons.dev/icons?i=linkedin)](https://linkedin.com/in/roberttovarv)[![Gmail](https://skillicons.dev/icons?i=gmail)](roberttovarv@gmail.com)
 
 Project Link: [https://github.com/roberttovarv/GeeksCorner](https://github.com/github_username/repo_name)
 
