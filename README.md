@@ -65,9 +65,9 @@ Game Exploration: Discover new games, check out detailed information, and explor
 <!-- CONTACT -->
 ## Contact
 
-[![LinkedIn](https://skillicons.dev/icons?i=linkedin)](https://linkedin.com/in/roberttovarv)[![Gmail](https://skillicons.dev/icons?i=gmail)](roberttovarv@gmail.com)
+[![LinkedIn](https://skillicons.dev/icons?i=linkedin)](https://linkedin.com/in/roberttovarv)     [![Gmail](https://skillicons.dev/icons?i=gmail)](mailto:roberttovarv@gmail.com)
 
-Project Link: [https://github.com/roberttovarv/GeeksCorner](https://github.com/github_username/repo_name)
+Project Link: [https://github.com/roberttovarv/GeeksCorner]([https://github.com/github_username/repo_name](https://github.com/roberttovarv/GeeksCorner))
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
