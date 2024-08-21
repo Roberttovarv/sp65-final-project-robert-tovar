@@ -23,14 +23,14 @@
 
 Geeks Corner aims to be a central hub for the gaming community, offering a comprehensive experience to stay informed and share content about video games.
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
 
 
 
 ### Built With
 
 ![My Skills](https://skillicons.dev/icons?i=js,html,css,js,react,bootstrap,flask,python)      <img src="https://miro.medium.com/v2/resize:fit:1400/0*WjSAJOw135lrf8__.jpg" alt="SQL"  width="120" height="50" style="margin-left: 100px;">
-<p align="right">  (<a href="#readme-top">back to top</a>)</p>
+
 
 
 
@@ -67,9 +67,8 @@ Game Exploration: Discover new games, check out detailed information, and explor
 
 [![LinkedIn](https://skillicons.dev/icons?i=linkedin)](https://linkedin.com/in/roberttovarv)     [![Gmail](https://skillicons.dev/icons?i=gmail)](mailto:roberttovarv@gmail.com)
 
-Project Link: [https://github.com/roberttovarv/GeeksCorner]([https://github.com/github_username/repo_name](https://github.com/roberttovarv/GeeksCorner))
+Project Link: [https://github.com/roberttovarv/GeeksCorner](https://github.com/roberttovarv/GeeksCorner)
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
 
