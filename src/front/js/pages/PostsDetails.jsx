@@ -37,10 +37,16 @@ export const PostsDetails = () => {
                 </div>
             </div>
             <div class="input-container col-8 mt-5">
-  <input placeholder="" class="input-field text-light" type="text"
-      value={store.comment} 
-      onChange={(e) => actions.handlePostComment(e)} 
-      onKeyDown={(e) => {store.isLogin ? actions.sendPostComent(e) : navigate('/login-register')}} />
+ <input
+  placeholder=""
+  className="input-field text-light"
+  type="text"
+  onKeyDown={(e) =>
+    store.isLogin
+      ? actions.sendGameComent(e)
+      : navigate('/login-register')
+  }
+/>
   <label for="input-field" class="input-label ps-3 pt-3">Add comment</label>
   <span class="input-highlight"></span>
 </div>
