@@ -375,6 +375,53 @@ def handle_post(post_id):
         return jsonify(response_body), 200
 
 
+@api.route('/posts/<int:post_id>/comment', methods=['POST', 'GET', 'DELETE'])
+@jwt_required()
+def handle_comment_post(post_id):
+    current_user = get_jwt_identity()
+    user_id = current_user['user_id']
+
+    if request.method == 'POST':
+        data = request.json
+        body = data.get('body')
+
+        if not body:
+            return jsonify({'message': 'Falta el campo requerido: body'}), 400
+
+        new_comment = Comments(body=body, user_id=user_id, post_id=post_id)
+        db.session.add(new_comment)
+        db.session.commit()
+
+        return jsonify(new_comment.serialize()), 201
+
+    elif request.method == 'GET':
+        comment_id = request.args.get('comment_id')
+
+        if comment_id:
+            comment = Comments.query.filter_by(id=comment_id, post_id=post_id).first()
+            if not comment:
+                return jsonify({'message': 'Comentario no encontrado'}), 404
+            return jsonify(comment.serialize()), 200
+        else:
+            comments = Comments.query.filter_by(post_id=post_id).all()
+            return jsonify([comment.serialize() for comment in comments]), 200
+
+
+    elif request.method == 'DELETE':
+        comment_id = request.args.get('comment_id')
+        if not comment_id:
+            return jsonify({'message': 'Falta el parámetro requerido: comment_id'}), 400
+
+        comment = Comments.query.filter_by(id=comment_id, post_id=post_id).first()
+        if not comment:
+            return jsonify({'message': 'Comentario no encontrado'}), 404
+
+        db.session.delete(comment)
+        db.session.commit()
+
+        return jsonify({'message': 'Comentario eliminado'}), 200
+
+
 @api.route('/videos', methods=['GET', 'POST'])
 def handle_videos():
     response_body = {}
