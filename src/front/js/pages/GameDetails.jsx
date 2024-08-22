@@ -47,7 +47,7 @@ export const GameDetails = () => {
             </a>
 
             <span className="text-light m-2 me-4" style={{fontSize: "1.5rem"}}>
-              {store.currentItem.likes} &nbsp;{" "}
+              
               <i
  className={`far fa-heart ${actions.likedGameId().includes(store.currentItem.id) ? "fas text-danger" : "far text-light"}`} 
  onClick={() => store.isLogin ? actions.handleGameLike(store.currentItem.id) : navigate("/login-register")}
@@ -58,10 +58,12 @@ export const GameDetails = () => {
         </div>
       </div>
       <div class="input-container col-8 mt-5">
-  <input placeholder="" class="input-field text-light" type="text"
-      value={store.comment} 
-      onChange={(e) => actions.handleGameComment(e)} 
-      onKeyDown={(e) => {store.isLogin ? actions.sendGameComent(e) : navigate('/login-register')}} />
+        <input
+          placeholder=""
+          className="input-field text-light"
+          type="text"
+          onKeyDown={(e) => store.isLogin ? actions.sendGameComent(e) : navigate('/login-register')}
+        />
   <label for="input-field" class="input-label ps-3 pt-3">Add comment</label>
   <span class="input-highlight"></span>
 </div>
