@@ -10,9 +10,9 @@ export const GameDetails = () => {
   const navigate = useNavigate()
 
   useEffect(() => {
-    actions.fetchProfile(); // Asegúrate de que el perfil se obtenga correctamente.
+    actions.fetchProfile();
     console.log(store.currentItem.comments);
-  }, [store.currentItem, actions]); // Elimina `comments` de la dependencia, ya que ya está contenido dentro de `store.currentItem`
+  }, [store.currentItem, actions]); 
   
 
   return (

@@ -12,7 +12,6 @@ export const Profile = () => {
     const host = `${process.env.BACKEND_URL}`;
 
     useEffect(() => {
-        !store.token ? navigate('/login-register') : '';
         actions.fetchProfile();
         actions.getPfps();
         console.log(store.user);
@@ -150,7 +149,7 @@ export const Profile = () => {
                 </div>
             </div>
 
-            <div className="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div className="modal-dialog text-light">
                     <div className="modal-content bg-dark">
                         <div className="modal-header">
