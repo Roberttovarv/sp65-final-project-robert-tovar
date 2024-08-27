@@ -2,7 +2,7 @@ const getState = ({ getStore, getActions, setStore }) => {
     return {
         store: {
             token: null,
-            admin: false,
+            admin: true,
             user: null,
             currentItem: {},
             isLogin: false,
@@ -212,34 +212,36 @@ const getState = ({ getStore, getActions, setStore }) => {
             },
 
             getPosts: async () => {
-                const token = getStore().token || localStorage.getItem('token') || {}; 
                 const host = `${process.env.BACKEND_URL}`;
                 const uri = host + '/api/posts';
+                const store = getStore(); // Obtener el store para acceder al token
                 const options = {
                     method: 'GET',
                     headers: {}
                 };
-
-                if (token) {
-                    options.headers["Authorization"] = `Bearer ${token}`;
-                } else {
-                    console.log("No token available for getPosts");
+            
+                // Si existe un token, añádelo al header de la petición
+                if (store.token) {
+                    options.headers["Authorization"] = `Bearer ${store.token}`;
                 }
-
+            
                 try {
                     const response = await fetch(uri, options);
-
+            
                     if (!response.ok) {
                         console.log("Error in getPosts:", response.status, response.statusText);
                         return;
                     }
-
+            
                     const data = await response.json();
                     setStore({ posts: data.results });
                 } catch (error) {
                     console.error("Fetch error in getPosts:", error);
                 }
             },
+            
+            
+
 
             addPostLike: async (itemId) => {
                 const token = getStore().token;
@@ -336,7 +338,6 @@ const getState = ({ getStore, getActions, setStore }) => {
                     return;
                 }
 
-                // Actualiza la lista de comentarios después de eliminar uno.
                 await getActions().fetchGameComments();
             },
 
@@ -371,15 +372,14 @@ const getState = ({ getStore, getActions, setStore }) => {
                     const result = await response.json();
                     console.log("Comentario añadido con éxito:", result);
             
-                    // Actualiza directamente la lista de comentarios en store.currentItem
                     setStore({
                         currentItem: {
                             ...currentItem,
-                            comments: [...(currentItem.comments || []), result] // Añade el nuevo comentario
+                            comments: [...(currentItem.comments || []), result]
                         }
                     });
             
-                    getActions().setComment(""); // Limpia el campo del comentario
+                    getActions().setComment(""); 
                 } catch (error) {
                     console.log("Error en la solicitud al añadir comentario:", error);
                 }
@@ -406,7 +406,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                     }
 
                     console.log("Comentario eliminado con éxito");
-                    await getActions().fetchGameComments(); // Actualiza la lista de comentarios
+
                 } catch (error) {
                     console.log("Error en la solicitud al eliminar comentario:", error);
                 }
@@ -431,7 +431,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                         setStore({ 
                             currentItem: {
                                 ...currentItem,
-                                comments: data.results // Actualiza los comentarios correctamente
+                                comments: data.results 
                             }
                         });
                         console.log("Comentarios obtenidos con éxito:", data.results);
@@ -456,7 +456,6 @@ const getState = ({ getStore, getActions, setStore }) => {
                 if (event.key === 'Enter') {
                     event.preventDefault(); 
                     await getActions().addGameComment(); 
-                    await getActions().fetchGameComments(); // Asegúrate de obtener los comentarios después de agregar uno
                 }
             },
 
@@ -478,7 +477,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                     return;
                 }
             
-                // Actualiza la lista de comentarios después de eliminar uno.
+              
                 await getActions().fetchPostComments();
             },
             
@@ -513,15 +512,15 @@ const getState = ({ getStore, getActions, setStore }) => {
                     const result = await response.json();
                     console.log("Comentario añadido con éxito:", result);
             
-                    // Actualiza directamente la lista de comentarios en store.currentItem
+                   
                     setStore({
                         currentItem: {
                             ...currentItem,
-                            comments: [...(currentItem.comments || []), result] // Añade el nuevo comentario
+                            comments: [...(currentItem.comments || []), result] 
                         }
                     });
             
-                    getActions().setComment(""); // Limpia el campo del comentario
+                    getActions().setComment(""); 
                 } catch (error) {
                     console.log("Error en la solicitud al añadir comentario:", error);
                 }

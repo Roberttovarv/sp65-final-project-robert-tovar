@@ -12,11 +12,12 @@ import { Loading } from "./component/Loading.jsx"
 import { LoadingMario } from "./component/LoadingMario.jsx"
 import { NotFound } from "./component/NotFound.jsx"
 // 
-import { GamePanel } from "./pages/GamePanel.jsx"
-import { AdminPanel } from "./pages/AdminPanel.jsx"
-import { UserPanel } from "./pages/UserPanel.jsx"
-import { PostPanel } from "./pages/PostPanel.jsx"
-import { Favs } from "./pages/Favs.jsx";
+import { GamePanel } from "./pages/admin/GamePanel.jsx"
+import { AdminPanel } from "./pages/admin/AdminPanel.jsx"
+import { UserPanel } from "./pages/admin/UserPanel.jsx"
+import { PostPanel } from "./pages/admin/PostPanel.jsx"
+import { VideoPanel } from "./pages/admin/VideoPanel.jsx"
+import { PfpPanel } from "./pages/admin/PfpPanel.jsx"
 
 import { LandingPage } from "./pages/LandingPage.jsx";
 import { GameDetails } from "./pages/GameDetails.jsx";
@@ -24,6 +25,7 @@ import { Reviews } from "./pages/Reviews.jsx";
 import { Posts } from "./pages/Posts.jsx";
 import { PostsDetails } from "./pages/PostsDetails.jsx";
 import { AllGames } from "./pages/AllGames.jsx";
+import { Favs } from "./pages/Favs.jsx";
 
 import { Profile } from "./pages/Profile.jsx";
 import { LoginRegister } from "./pages/LoginRegister.jsx";
@@ -40,35 +42,37 @@ const Layout = () => {
     return (
         <div >
             <BrowserRouter basename={basename}>
-                    <Navbar />
-                    <Routes>
-                        <Route element={<Home />} path="/rigo" />
-                        <Route element={<NotFound />} path="*" />
-                        <Route element={<Logout />} path="/logout" />
-                        <Route element={<Profile />} path="/profile" />
-                        <Route element={<Favs />} path="/favs" />
-             
-
-                        <Route element={<UserPanel />} path="/adminpanel/userpanel" />
-                        <Route element={<AdminPanel />} path="/adminpanel" />
-                        <Route element={<GamePanel />} path="/adminpanel/gamepanel" />
-                        <Route element={<PostPanel />} path="/adminpanel/postpanel" />
-
-                        <Route element={<LandingPage />} path="/" />
-                        <Route element={<GameDetails />} path="/game-details/:gameId" />
-                        <Route element={<Reviews />} path="/reviews" />
-                        <Route element={<Posts />} path="/news" />
-                        <Route element={<PostsDetails />} path="/news-details/:news-title" />
-                        <Route element={<LoginRegister />} path="/login-register" />
-                        <Route element={<AllGames />} path="/all-games" />
-                        
-        
-                        <Route element={<Loading />} path="/loading" />
-                        <Route element={<LoadingMario />} path="/loadingmario" />
+                <Navbar />
+                <Routes>
+                    <Route element={<Home />} path="/rigo" />
+                    <Route element={<NotFound />} path="*" />
+                    <Route element={<Logout />} path="/logout" />
+                    <Route element={<Profile />} path="/profile" />
+                    <Route element={<Favs />} path="/favs" />
 
 
-                      </Routes>
-                    <Footer />
+                    <Route element={<UserPanel />} path="/adminpanel/userpanel" />
+                    <Route element={<AdminPanel />} path="/adminpanel" />
+                    <Route element={<GamePanel />} path="/adminpanel/gamepanel" />
+                    <Route element={<PostPanel />} path="/adminpanel/postpanel" />
+                    <Route element={<VideoPanel />} path="/adminpanel/videopanel" />
+                    <Route element={<PfpPanel />} path="/adminpanel/pfppanel" />
+
+                    <Route element={<LandingPage />} path="/" />
+                    <Route element={<GameDetails />} path="/game-details/:gameId" />
+                    <Route element={<Reviews />} path="/reviews" />
+                    <Route element={<Posts />} path="/news" />
+                    <Route element={<PostsDetails />} path="/news-details/:news-title" />
+                    <Route element={<LoginRegister />} path="/login-register" />
+                    <Route element={<AllGames />} path="/all-games" />
+
+
+                    <Route element={<Loading />} path="/loading" />
+                    <Route element={<LoadingMario />} path="/loadingmario" />
+
+
+                </Routes>
+                <Footer />
             </BrowserRouter>
         </div>
     );

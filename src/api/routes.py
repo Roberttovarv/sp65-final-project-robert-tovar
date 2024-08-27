@@ -56,7 +56,7 @@ def signup():
     email = data.get("email", None).lower()
     password = data.get("password", None)
     username = data.get("username", None)
-    pfp_id = 1  
+    pfp_id = 13  
     existing_user = Users.query.filter_by(email=email).first()
 
     if existing_user:
@@ -305,38 +305,44 @@ def handle_posts():
 
     if request.method == 'POST':
         data = request.json
-        if isinstance(data, list):
-            new_posts = []
-            existing_images_url = {post.image_url for post in Posts.query.all()}  
-            for post_data in data:
-                required_fields = ['title', 'body', 'image_url']
         
-                for field in required_fields:
-                    if field not in post_data:
-                        return jsonify({'message': f'Falta el campo requerido: {field}'}), 400
-                
-                if post_data['image_url'] in existing_images_url:
-                    continue  
-                new_post = Posts(
-                    title=post_data['title'],
-                    body=post_data['body'],
-                    game_name=post_data['game_name'],
-                    image_url=post_data['image_url'],
-                    date=datetime.today()
-                )
-                db.session.add(new_post)
-                new_posts.append(new_post)
-                existing_images_url.add(post_data['title'])  
+        # Si los datos no son una lista, conviértelos en una lista
+        if not isinstance(data, list):
+            data = [data]
+        
+        new_posts = []
+        existing_images_url = {post.image_url for post in Posts.query.all()}  
+        
+        for post_data in data:
+            required_fields = ['title', 'body', 'image_url']
+        
+            for field in required_fields:
+                if field not in post_data:
+                    return jsonify({'message': f'Falta el campo requerido: {field}'}), 400
             
-                db.session.commit()
+            if post_data['image_url'] in existing_images_url:
+                continue  
+            
+            new_post = Posts(
+                title=post_data['title'],
+                body=post_data['body'],
+                game_name=post_data.get('game_name', None),  # game_name es opcional
+                image_url=post_data['image_url'],
+                date=datetime.today()
+            )
+            db.session.add(new_post)
+            new_posts.append(new_post)
+            existing_images_url.add(post_data['image_url'])  
+        
+        db.session.commit()
+        
+        if new_posts:
+            response_body['results'] = [post.serialize() for post in new_posts]
+            response_body['message'] = 'Publicaciones creadas'
+            return jsonify(response_body), 201
+        else:
+            return jsonify({'message': 'No se creó ninguna publicación. Posiblemente las imágenes ya existían.'}), 200
 
-                response_body['results'] = [post.serialize() for post in new_posts]
-                response_body['message'] = 'Publicaciones creadas'
-                return jsonify(response_body), 201
-
-            else:
-                return jsonify({'message': 'El formato de los datos debe ser una lista de publicaciones'}), 400
-    
     
 @api.route('/posts/<int:post_id>', methods=['GET', 'PUT', 'DELETE'])
 def handle_post(post_id):

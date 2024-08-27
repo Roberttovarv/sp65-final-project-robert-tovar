@@ -8,7 +8,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 30vh; /* Ocupa toda la altura de la pantalla */
+  height: 10vh; /* Ocupa toda la altura de la pantalla */
 }
 
 .switch {

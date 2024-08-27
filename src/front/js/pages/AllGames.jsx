@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Context } from "../store/appContext";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "../../styles/landing.css";
 import { LoadingMario } from "../component/LoadingMario.jsx";
 
@@ -8,6 +8,7 @@ export const AllGames = () => {
     const { store, actions } = useContext(Context);
     const [search, setSearch] = useState("");
     const [filteredGames, setFilteredGames] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchGames = async () => {
