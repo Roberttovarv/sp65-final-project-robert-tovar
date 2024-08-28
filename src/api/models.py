@@ -100,7 +100,7 @@ class Games(db.Model):
 
 class Likes(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'))
     post_id = db.Column(db.Integer, db.ForeignKey('posts.id'), nullable=True)
     game_id = db.Column(db.Integer, db.ForeignKey('games.id'), nullable=True)
     user_to = db.relationship('Users', foreign_keys=[user_id])
@@ -122,7 +122,7 @@ class Comments(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     body = db.Column(db.String(), nullable=False)
     date = db.Column(db.DateTime(), default=datetime.utcnow)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'), nullable=False,)
     post_id = db.Column(db.Integer, db.ForeignKey('posts.id'), nullable=True)
     game_id = db.Column(db.Integer, db.ForeignKey('games.id'), nullable=True)
     

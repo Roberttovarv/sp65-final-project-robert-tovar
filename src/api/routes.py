@@ -106,6 +106,7 @@ def login():
         return jsonify(response_body), 401
 
 @api.route('/users/<int:user_id>', methods=['GET', 'PUT', 'DELETE'])
+@jwt_required()
 def handle_user(user_id):
     response_body = {}
     user = Users.query.get(user_id)
@@ -135,10 +136,27 @@ def handle_user(user_id):
                 user.pfp = profile_picture 
             else:
                 return jsonify({'message': 'Imagen de perfil no encontrada', 'results': {}}), 404
+    
         
         db.session.commit()
         response_body['message'] = 'Datos del usuario actualizados'
         response_body['results'] = user.serialize()
+        return jsonify(response_body), 200
+    
+    if request.method == 'DELETE':
+
+        comments = Comments.query.filter_by(user_id=user_id).all()
+        for comment in comments:
+            db.session.delete(comment)
+
+        likes = Likes.query.filter_by(user_id=user_id).all()
+        for like in likes:
+            db.session.delete(like)
+
+
+        db.session.delete(user)
+        db.session.commit()
+        response_body['message'] = 'Publicación eliminada'
         return jsonify(response_body), 200
 
 
@@ -306,7 +324,6 @@ def handle_posts():
     if request.method == 'POST':
         data = request.json
         
-        # Si los datos no son una lista, conviértelos en una lista
         if not isinstance(data, list):
             data = [data]
         
@@ -345,6 +362,7 @@ def handle_posts():
 
     
 @api.route('/posts/<int:post_id>', methods=['GET', 'PUT', 'DELETE'])
+@jwt_required()
 def handle_post(post_id):
     response_body = {}
     current_user = get_jwt_identity()

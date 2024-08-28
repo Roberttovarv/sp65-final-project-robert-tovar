@@ -31,7 +31,8 @@ export const UserPanel = () => {
     const deleteUser = async (item) => {
         const uri = host + '/api/users/' + item.id;
         const options = {
-            method: 'DELETE'
+            method: 'DELETE',
+            headers: {'Authorization': `Bearer ${store.token}`}
         };
         const response = await fetch(uri, options);
 
