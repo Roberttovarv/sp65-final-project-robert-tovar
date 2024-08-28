@@ -8,8 +8,8 @@ export const Arrow = () => {
 	return (
 		<div className="text-center mt-5 text-white">
 			<i 
-            class="fa-solid fa-arrow-left" 
-            onClick={navigate(-1)}
+            className="fa-solid fa-arrow-left" 
+            onClick={() => navigate(-1)}
             style={{cursor: "pointer"}}></i>
 		</div>
 	);

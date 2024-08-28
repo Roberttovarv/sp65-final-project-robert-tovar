@@ -73,7 +73,7 @@ class Games(db.Model):
     background_image = db.Column(db.String(), unique=False, nullable=True) 
     description = db.Column(db.String(), unique=False, nullable=False)
     released_at = db.Column(db.String(), unique=False, nullable=True)
-    metacritic = db.Column(db.Integer(), unique=False, nullable=True)
+    metacritic = db.Column(db.Float(), unique=False, nullable=True)
 
     def __repr__(self):
         return f'<Game {self.name}>'
@@ -141,8 +141,8 @@ class Comments(db.Model):
             'user_id': self.user_id,
             'post_id': self.post_id,
             'game_id': self.game_id,
-            'username': self.user.username,
-            'user_pfp': self.user.pfp.url,
+            'username': self.user.username if self.user else None,
+            'user_pfp': self.user.pfp.url if self.user and self.user.pfp else None,
         }
 
 class Videos(db.Model):
