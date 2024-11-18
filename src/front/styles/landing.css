@@ -10,7 +10,7 @@
 }
 
 .tarjeta {
-  box-shadow: -5px 5px 20px rgba(255, 255, 255, 0.2);
+  box-shadow: -5px 5px 1px rgba(255, 255, 255, .3);
 
 }
 
@@ -50,7 +50,7 @@
   border-radius: 5px;
   border: 1px solid var(--main-color);
   background-color: var(--bg-color);
-  box-shadow: 2px 2px var(--main-color);
+  box-shadow: -2px 2px var(--main-color);
   font-size: 17px;
   font-weight: 600;
   color: var(--font-color);

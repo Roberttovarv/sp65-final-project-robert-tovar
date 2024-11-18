@@ -25,12 +25,8 @@ def fetch_and_store_games():
             continue
         game_data = response.json()
 
-        released_at = game_data.get('released')
+        released_at = game_data.get('released') or ''
         metacritic = game_data.get('metacritic')
-
-        if released_at is None or metacritic is None:
-            errors.append({'game_id': game_id, 'error': 'Datos incompletos: falta released_at o metacritic'})
-            continue
 
         new_game = Games(
             name=game_data.get('name'),
@@ -41,11 +37,13 @@ def fetch_and_store_games():
         )
         db.session.add(new_game)
         stored_games.append(new_game)
+
     db.session.commit()
     return jsonify({
         'stored_games': [game.serialize() for game in stored_games],
         'errors': errors
     }), 201
+
 
 
 @api.route('/signup', methods=['POST'])
@@ -56,7 +54,7 @@ def signup():
     email = data.get("email", None).lower()
     password = data.get("password", None)
     username = data.get("username", None)
-    pfp_id = 13  
+    pfp_id = 1  
     existing_user = Users.query.filter_by(email=email).first()
 
     if existing_user:

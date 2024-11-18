@@ -31,7 +31,7 @@ export const Posts = () => {
 
     return (
         <div className="container">
-            <div className="row justify-content-end px-5">
+            <div className="row justify-content-end px-5 bg-black bg-opacity-10">
                 <div className="row form__group field float-end px-4">
                     <input
                         type="input"
@@ -45,8 +45,8 @@ export const Posts = () => {
                 <div className="container">
                     <div className="row">
                         <div className="col-8">
-                        {!search && lastPost ? (
-                                <div className="card px-3" style={{ backgroundColor: "transparent", border: "none" }} onClick={() => actions.setCurrentItem(lastPost)}>
+                            {!search && lastPost ? (
+                                <div className="card" style={{ backgroundColor: "transparent", border: "none" }} onClick={() => actions.setCurrentItem(lastPost)}>
                                     <div className="card-body" style={{ backgroundColor: "transparent", border: "none" }}>
                                         <Link to={`/news-details/${lastPost.title}`} style={{ textDecoration: "none", color: "white" }}>
                                             <h5 className="card-title text-light text-start">
@@ -56,15 +56,33 @@ export const Posts = () => {
                                         </Link>
                                     </div>
                                     <Link to={`/news-details/${lastPost.title}`} className="position-relative">
-                                        <img src={lastPost.image_url} className="card-img-top ms-1" alt={lastPost.game_name} />
+                                        <div className="ratio ratio-1x1 ">
+
+                                            <img
+                                                src={lastPost.image_url}
+                                                className="card-img-top ms-1 rounded-1"
+                                                alt={lastPost.game_name}
+                                                style={{ objectFit: "cover", height: "100%" }} />
+                                        </div>
+                                        <div className="d-flex justify-content-center align-items-center">
                                         <i
-                                            className={`bg-dark bg-opacity-50 far fa-heart ${lastPost.is_liked ? "fas text-danger" : "far text-light"} position-absolute bottom-0 end-0 m-3`}
-                                            style={{ cursor: 'pointer', fontSize: "3rem", borderRadius: "90px" }}
+                                            className={`far fa-heart fas text-black-50 position-absolute bottom-0 end-0 m-3`}
+                                                style={{ cursor: 'pointer', fontSize: "3rem"}}
+                                                onClick={(e) => {
+                                                    e.preventDefault();
+                                                    store.isLogin ? actions.handlePostLike(lastPost.id) : navigate("/login-register");
+                                                }}
+                                                ></i>
+                                                                                <i
+                                            className={`far fa-heart ${lastPost.is_liked ? "fas text-danger" : "far text-light"} 
+                                            position-absolute bottom-0 end-0 m-3`}
+                                            style={{ cursor: 'pointer', fontSize: "3rem"}}
                                             onClick={(e) => {
                                                 e.preventDefault();
                                                 store.isLogin ? actions.handlePostLike(lastPost.id) : navigate("/login-register");
                                             }}
-                                        ></i>
+                                            ></i>
+                                            </div>
                                     </Link>
                                 </div>
                             ) : (
@@ -97,7 +115,7 @@ export const Posts = () => {
                                 ))
                             )}
                         </div>
-                        <div className="col-4 pt-5 mt-5">
+                        <div className="col-4 pt-5 mt-5 d-block align-content-center">
                             <img
                                 src="https://cdn.prod.website-files.com/61eeba8765031c95bb83b2ea/6596d9e8efa34a1c48d0387e_-_g72O7K_BW4-2vMwWSs13CIkcYtc05SL3wz9hTuNArpP15ItoA4xHOmloHzA7JuGPB5cQozJjDq2R1uzYX49VZB-l-XOwflIhOYvDiXrBzVyqdTsyXyb4w5JOn8C82LGYij7LT7NY4mFvWAyqYkcIs.gif"
                                 alt="Publicidad" style={{ height: "86%", width: "100%" }}
@@ -118,7 +136,9 @@ export const Posts = () => {
                                             />
                                         </div>
                                         <div className="card-img-overlay d-flex flex-column justify-content-end p-2">
-                                            <h4 className="card-title bg-dark bg-opacity-75 m-0 p-2 d-flex justify-content-between align-items-end" style={{ width: "100%" }}>
+                                            <h4 
+                                            className="card-title bg-dark bg-opacity-75 m-0 p-2 d-flex justify-content-between align-items-end rounded-1" 
+                                            style={{ width: "100%" }}>
                                                 {post.title}
                                                 <i
                                                     className={`far fa-heart ${post.is_liked ? "fas text-danger" : "far text-light"}`}

@@ -33,9 +33,9 @@ export const AllGames = () => {
 
 
     return (
-        <div className="container">
+        <div className="container bg-black bg-opacity-10">
             <div className="row">
-                <div className="col-12 text-end mb-4">
+                <div className="col-12 text-end">
                     <div className="form__group field float-end ps-5">
                         <input 
                             type="input" 

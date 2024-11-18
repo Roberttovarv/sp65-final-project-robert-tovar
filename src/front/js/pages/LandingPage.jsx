@@ -27,19 +27,17 @@ export const LandingPage = () => {
 
     useEffect(() => {
         getGames();
-
-        actions.getGames()
         actions.fetchProfile();
-    }, [store.games, actions]);
+    }, [actions]);
     
     return (
-        <div className="container">
-            <h1 className="text-center text-light my-5">Newest Games</h1>
+        <div className="container bg-black bg-opacity-10">
+            <h1 className="text-center text-light py-5">Newest Games</h1>
 
             {gamesDate.length === 0 ? 
                 (<LoadingMario />) : 
-                (<div className="row flex-nowrap overflow-auto pb-2 d-flex px-3 m-auto justify-content-start" 
-                    style={{ maxHeight: "55vh", minHeight: "30vh", width: "99%", overflowY: "auto", scrollbarColor: "rgb(29, 29, 29) transparent", scrollbarWidth: "thin" }}>
+                (<div className="row flex-nowrap overflow-auto pb-2 d-flex pe-3 m-auto justify-content-start" 
+                    style={{ maxHeight: "55vh", minHeight: "30vh", width: "99%", overflowY: "auto", scrollbarColor: "rgba(255, 255, 255, 0.3) transparent", scrollbarWidth: "thin" }}>
                     {gamesDate.slice(0, 20).map((game, index) => (
                         <div key={index} className="col-lg-3 col-md-4 col-sm-6 col-12 mb-4 d-flex justify-content-center">
                             <div className="card tarjeta d-flex flex-column justify-content-between" style={{ width: '18rem' }}>
@@ -80,8 +78,8 @@ export const LandingPage = () => {
 
             {gamesRate.length === 0 ?
                 (<LoadingMario />) : 
-                (<div className="row flex-nowrap overflow-auto pb-2 px-3 d-flex m-auto justify-content-start" 
-                    style={{ maxHeight: "55vh", minHeight: "30vh", width: "99%", overflowY: "auto", scrollbarColor: "rgb(29, 29, 29) transparent", scrollbarWidth: "thin" }}>
+                (<div className="row flex-nowrap overflow-auto pb-2 pe-3 d-flex m-auto justify-content-start" 
+                    style={{ maxHeight: "55vh", minHeight: "30vh", width: "99%", overflowY: "auto", scrollbarColor: "rgba(255, 255, 255, 0.3) transparent", scrollbarWidth: "thin" }}>
                     {gamesRate.slice(0, 20).map((game, index) => (
                         <div key={index} className="col-lg-3 col-md-4 col-sm-6 col-12 mb-4 d-flex justify-content-center">
                             <div className="card tarjeta d-flex flex-column justify-content-between" style={{ width: '18rem' }}>
@@ -119,7 +117,7 @@ export const LandingPage = () => {
             }
 
             <Link to="https://store.steampowered.com/steamdeck" target="_blank">
-                <div id="publi" className="d-flex justify-content-center align-items-center my-5">
+                <div id="publi" className="d-flex justify-content-center align-items-center py-5">
                     <img
                         className="cursor"
                         src="https://techcrunch.com/wp-content/uploads/2021/07/hero-banner-sequence-english.2021-07-15-13_49_51.gif"

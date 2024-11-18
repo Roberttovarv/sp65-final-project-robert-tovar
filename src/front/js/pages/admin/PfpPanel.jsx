@@ -241,7 +241,7 @@ export const PfpPanel = () => {
                 <input type="text" className="form-control mb-3" id="image-url" placeholder="URL" value={url} onChange={(e) => setUrl(e.target.value)} />
 
                 <div className="d-flex justify-content-center">
-                  <button className="buttonAdmin" onClick={handleSubmitPfp}>Send</button>
+                  <button className="buttonAdmin" onClick={() => {handleSubmitPfp(), setPageAction(true)}}>Send</button>
                   <button className="buttonAdmin ms-2 text-danger" onClick={resetData}>Cancel</button>
 
                 </div>

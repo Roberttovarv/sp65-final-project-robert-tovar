@@ -48,8 +48,8 @@ export const Reviews = () => {
 
     return (
         <div className="container">
-            <div className="row justify-content-center bgc border border-bottom-0 border-end-0 border-start-0 border-dark">
-                <div className="row bgc justify-content-end">
+            <div className="row justify-content-center bg-black bg-opacity-10">
+                <div className="row bgtransparent justify-content-end">
                     <div className="form__group field">
                         <input
                             type="text"
@@ -65,7 +65,7 @@ export const Reviews = () => {
                     <Loading />
                 ) : (
                     filteredItems.map((video, index) => (
-                        <div key={index} className="col-md-8 mb-4 my-5 bgc">
+                        <div key={index} className="col-md-8 mb-4 my-5 bg-transparent">
                             <h3 className="text-light text-start">{video.title}</h3>
                             <h6 className="text-light text-start">{video.game_name}</h6>
                             <div className="ratio ratio-16x9">
