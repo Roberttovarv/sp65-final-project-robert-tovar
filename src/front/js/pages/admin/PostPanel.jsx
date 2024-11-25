@@ -196,15 +196,15 @@ export const PostPanel = () => {
                       <>
                         <div className="d-flex align-items-center justify-content-between w-100">
                           <div className="mb-2 mb-md-0">
-                            <div>
-                              <span className="d-flex align-items-center justify-content-between w-100">
-                                <strong>ID: </strong>{item.id},
-                                <strong> Game name </strong>{item.game_name},
-                                <strong> Title: </strong>{item.title}, 
-                                <span className="d-inline-block text-truncate" style={{ maxWidth: "300px" }}>
-                                  <strong> Photo: </strong>{item.image_url}
-                                </span>
-                              </span>
+                            <div className="d-flex align-items-center justify-content-between w-100 text-truncate" style={{ maxWidth: "50vh" }}>
+                              
+                                <strong>ID: &nbsp; </strong>{item.id},&nbsp;
+                                <strong> Game name:&nbsp; </strong>{item.game_name},&nbsp;
+                                <strong> Title:&nbsp; </strong>{item.title},&nbsp;
+                                
+                                  <strong> Photo: &nbsp;</strong>{item.image_url}
+                               
+                              
                             </div>
                             <div className={`${showBodyId === item.id ? "" : "d-none"}`}>
                               <span>{item.body}</span>

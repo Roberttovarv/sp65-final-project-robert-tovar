@@ -170,7 +170,6 @@ export const Profile = () => {
                                             <button className="button me-2" type="submit" onClick={(e) => { handleEdit(e); setUserEdit(false) }}>Save changes</button>
                                             <button className="button" type="button" onClick={(e) => { resetData(e); setUserEdit(false); }}>Cancel</button>
                                             </>)
-
                                         }
                                     </div>
                                 </div>

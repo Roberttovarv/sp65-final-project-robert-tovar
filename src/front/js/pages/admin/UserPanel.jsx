@@ -55,7 +55,7 @@ export const UserPanel = () => {
                         </Link>
                     </div>
 
-                    <h3 className="text-center">Lista de usuarios</h3>
+                    <h3 className="text-center">Users List</h3>
                     <div className="mx-3 mx-md-5 d-flex justify-content-center">
                         <ul className="list-group" style={{ width: "100%", maxWidth: "800px" }}>
                             {users.map((item) => (
@@ -64,10 +64,10 @@ export const UserPanel = () => {
                                         <div>
                                             <span>
                                                 <strong>ID: </strong>{item.id},
-                                                <strong> Nombre:</strong> {item.first_name},
-                                                <strong> Apellido:</strong> {item.last_name},
+                                                <strong> Name:</strong> {item.first_name},
+                                                <strong> Last Name:</strong> {item.last_name},
                                                 <strong> Email:</strong> {item.email},
-                                                <strong> Admin:</strong> {`${item.is_admin ? "Sí" : "No"}`}
+                                                <strong> Admin:</strong> {`${item.is_admin ? "Yes" : "No"}`}
                                             </span>
                                         </div>
                                         <div className="d-flex">

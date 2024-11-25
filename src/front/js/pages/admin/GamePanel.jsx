@@ -179,16 +179,11 @@ export const GamePanel = () => {
                       {!pageEdit || (pageEdit && currentGame && currentGame.id !== item.id) ? (
                         <div className="d-flex align-items-center justify-content-between w-100">
                           <div>
-                            <div>
-                              <span className="d-flex align-items-center justify-content-between w-100">
-                                <strong class>Item ID: </strong>{item.id}, &nbsp; <strong>Name: </strong>{item.name},&nbsp;
-                                <span
-                                  className="d-inline-block text-truncate"
-                                  style={{ maxWidth: "20vw" }}
-                                >
-                                  <strong>Foto: </strong>{item.background_image}&nbsp;
-                                </span>
-                              </span>
+                            <div className="d-flex align-items-center justify-content-between w-100 text-truncate"
+                                  style={{ maxWidth: "30vw" }}>
+                                <strong class>Item ID:&nbsp; </strong> {item.id}, &nbsp; <strong>Name:&nbsp; </strong>{item.name},&nbsp;
+                                                            <strong>Photo:&nbsp; </strong>{item.background_image}&nbsp;
+
                             </div>
                             <div className={`${showDescriptionId === item.id ? "" : "d-none"}`}>
                               <span>{item.description}</span>

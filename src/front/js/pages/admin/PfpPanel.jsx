@@ -11,6 +11,8 @@ export const PfpPanel = () => {
   const [currentPfp, setCurrentPfp] = useState(null);
   const [url, setUrl] = useState("");
   const [name, setName] = useState("");
+  const [showEmbedId, setShowEmbedId] = useState(null);
+
   const host = `${process.env.BACKEND_URL}`;
 
   const navigate = useNavigate();
@@ -100,6 +102,10 @@ export const PfpPanel = () => {
     setPageAction(true)
   }
 
+  const toggleEmbed = (id) => {
+    setShowEmbedId(showEmbedId === id ? null : id);
+  };
+
   const deletePfp = async (item) => {
     const uri = `${host}/api/profile_pictures/${item.id}`;
     const options = {
@@ -162,19 +168,35 @@ export const PfpPanel = () => {
                       {!pageEdit || (pageEdit && currentPfp && currentPfp.id !== item.id) ? (
                         <div className="d-flex justify-content-between w-100 flex-wrap">
                           <div style={{ minWidth: "240px" }}>
-                            <div>
-                              <span className="d-flex align-items-center"> 
-                                <strong>Item ID: </strong>{item.id}, <strong>Name:&nbsp;</strong>{item.name},&nbsp;
-                                <span
-                                  className="d-inline-block text-truncate"
-                                  style={{ maxWidth: "20vw" }}
-                                >
-                                  <strong>URL: </strong>{item.url}
-                                </span>
-                              </span>
+                            <div className="d-flex align-items-center text-truncate"
+                              style={{ maxWidth: "25vw" }}>
+                              <strong>Item ID:&nbsp;</strong>{item.id},&nbsp;<strong>Name:&nbsp;</strong>{item.name},&nbsp;
+                              <strong>URL:&nbsp; </strong>{item.url}
                             </div>
+                            <div
+                              className={`${showEmbedId === item.id ? "" : "d-none"} ratio ratio-1x1`}
+                              style={{ width: "400px", padding: "10px" }}
+                            >
+                              <img
+                                className="m-auto p-5 d-flex justify-content-end"
+                                src={item.url}
+                                alt={item.name}
+                                style={{
+                                  objectFit: "cover",
+                                  width: "100%",
+                                  height: "100%",
+                                }}
+                              />
+                            </div>
+
                           </div>
                           <div className="d-flex">
+                            <div>
+                              <i
+                                className={`fa-solid ${showEmbedId !== item.id ? "fa-eye" : "fa-eye-slash"} pointer`}
+                                onClick={() => toggleEmbed(item.id)}
+                              ></i>
+                            </div>
                             <div className="mx-2">
                               <i className="fa-solid fa-pencil pointer" onClick={() => editPfp(item)}></i>
                             </div>
@@ -241,7 +263,7 @@ export const PfpPanel = () => {
                 <input type="text" className="form-control mb-3" id="image-url" placeholder="URL" value={url} onChange={(e) => setUrl(e.target.value)} />
 
                 <div className="d-flex justify-content-center">
-                  <button className="buttonAdmin" onClick={() => {handleSubmitPfp(), setPageAction(true)}}>Send</button>
+                  <button className="buttonAdmin" onClick={() => { handleSubmitPfp(), setPageAction(true) }}>Send</button>
                   <button className="buttonAdmin ms-2 text-danger" onClick={resetData}>Cancel</button>
 
                 </div>
