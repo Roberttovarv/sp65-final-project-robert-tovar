@@ -48,8 +48,8 @@ export const Reviews = () => {
 
     return (
         <div className="container">
-            <div className="row justify-content-center bg-black bg-opacity-10">
-                <div className="row bgtransparent justify-content-end">
+            <div className="row justify-content-center">
+                <div className="row justify-content-end">
                     <div className="form__group field">
                         <input
                             type="text"
@@ -61,15 +61,21 @@ export const Reviews = () => {
                         <label htmlFor="name" className="form__label">Search</label>
                     </div>
                 </div>
+                <div className="col-12 text-center mb-3">
+                    <h1 className="text-light">Video Reviews</h1>
+                </div>
                 {filteredItems.length === 0 ? (
                     <Loading />
                 ) : (
                     filteredItems.map((video, index) => (
-                        <div key={index} className="col-md-8 mb-4 my-5 bg-transparent">
-                            <h3 className="text-light text-start">{video.title}</h3>
-                            <h6 className="text-light text-start">{video.game_name}</h6>
+                        <div key={index} 
+                        className="col-md-8 my-4 bg-dark pt-3 pb-4 px-4 rounded-4"
+                        style={{boxShadow: "-5px 5px 1px rgba(255, 255, 255, .3)"}}>
+                            <h3 className="text-light text-start ms-1">{video.title}</h3>
+                            <h6 className="text-light text-start ms-1 mb-4">&nbsp; {video.game_name}</h6>
                             <div className="ratio ratio-16x9">
                                 <iframe
+                                    className="rounded-4"
                                     src={video.embed}
                                     allowFullScreen
                                     style={{ width: "100%", height: "100%" }}
