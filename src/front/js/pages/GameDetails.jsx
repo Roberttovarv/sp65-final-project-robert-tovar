@@ -49,7 +49,7 @@ export const GameDetails = () => {
             <span className="text-light m-2 me-4" style={{fontSize: "1.5rem"}}>
               
               <i
- className={`far fa-heart ${actions.likedGameId().includes(store.currentItem.id) ? "fas text-danger" : "far text-light"}`} 
+ className={`far fa-heart hover-shadow ${actions.likedGameId().includes(store.currentItem.id) ? "fas text-danger" : "far text-light"}`} 
  onClick={() => store.isLogin ? actions.handleGameLike(store.currentItem.id) : navigate("/login-register")}
                 style={{ cursor: "pointer", fontSize: "1.5rem" }}
               ></i>

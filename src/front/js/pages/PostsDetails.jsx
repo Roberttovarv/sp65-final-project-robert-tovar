@@ -23,16 +23,6 @@ export const PostsDetails = () => {
                     <div className="card-body">
                         <p className="card-text text-light">{store.currentItem.body}</p>
                     </div>
-                    <div className="d-flex justify-content-center m-3">
-                        <div style={{ width: "70%", height: "60%", overflow: "hidden" }} className="d-flex justify-content-center align-items-center">
-                            <img
-                                src="https://i.ytimg.com/vi/fj245xMr-BM/maxresdefault.jpg"
-                                className="img-fluid"
-                                alt="Nvidia Publicidad"
-                                style={{ objectFit: "cover", height: "100%", width: "auto" }}
-                            />
-                        </div>
-                    </div>
                 </div>
             </div>
             <div className="input-container col-8 mt-5">
@@ -74,6 +64,16 @@ export const PostsDetails = () => {
                             </div>
                         </div>
                     ))}
+                                    <div className="d-flex justify-content-center m-3">
+                                        <div style={{ width: "70%", height: "60%", overflow: "hidden" }} className="d-flex justify-content-center align-items-center">
+                                            <img
+                                                src="https://i.ytimg.com/vi/fj245xMr-BM/maxresdefault.jpg"
+                                                className="img-fluid"
+                                                alt="Nvidia Publicidad"
+                                                style={{ objectFit: "cover", height: "100%", width: "auto" }}
+                                            />
+                                        </div>
+                                    </div>
                 </div>
             </div>
         </div>
