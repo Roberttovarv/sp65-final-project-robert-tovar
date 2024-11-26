@@ -12,7 +12,6 @@ export const Favs = () => {
     const [filteredPosts, setFilteredPosts] = useState([]);
     const user = store.user || {};
 
-    // Fetch games and posts from store if not available
     useEffect(() => {
         if (!store.token) {
             navigate("/login-register");
@@ -25,14 +24,13 @@ export const Favs = () => {
             if (!store.posts.length) {
                 await actions.getPosts();
             }
-            actions.fetchProfile(); // Asegúrate de que fetchProfile sea necesario
+            actions.fetchProfile(); 
         };
         fetchData();
     }, [store.token, navigate, actions]);
 
     useEffect(() => {
         if (user.likes) {
-            // Filtra los juegos basados en los juegos que el usuario ha dado like
             const likedGames = store.games.filter(game =>
                 user.likes.liked_games.some(likedGame => likedGame.id === game.id)
             );
@@ -42,7 +40,6 @@ export const Favs = () => {
 
     useEffect(() => {
         if (user.likes) {
-            // Filtra los posts basados en los posts que el usuario ha dado like
             const likedPosts = store.posts.filter(post =>
                 user.likes.liked_posts.some(likedPost => likedPost.id === post.id)
             );
@@ -51,7 +48,6 @@ export const Favs = () => {
     }, [store.posts, user.likes]);
 
     useEffect(() => {
-        // Filtra los juegos basados en la búsqueda
         const filteredGames = store.games.filter(game =>
             user.likes.liked_games.some(likedGame => likedGame.id === game.id) &&
             game.name.toLowerCase().includes(search.toLowerCase())
@@ -60,7 +56,6 @@ export const Favs = () => {
     }, [search, store.games, user.likes]);
 
     useEffect(() => {
-        // Filtra los posts basados en la búsqueda
         const filteredPosts = store.posts.filter(post =>
             user.likes.liked_posts.some(likedPost => likedPost.id === post.id) &&
             (post.title.toLowerCase().includes(search.toLowerCase()) ||
@@ -74,12 +69,11 @@ export const Favs = () => {
     };
 
     if (!user.likes) {
-        return <LoadingMario />; // Opcional: Mostrar un loading o un mensaje si user.likes no está disponible
+        return <LoadingMario />;
     }
 
     return (
         <div className="container">
-            {/* Barra de búsqueda */}
             <div className="row mb-4">
                 <div className="col-12 text-end">
                     <div className="form__group field float-end ps-5">
@@ -95,7 +89,6 @@ export const Favs = () => {
                 </div>
             </div>
 
-            {/* Juegos favoritos */}
             <h4 className="text-start text-light">Liked Games</h4>
             {filteredGames.length === 0 ? (
                 <LoadingMario />
@@ -113,7 +106,7 @@ export const Favs = () => {
                                             <span className="card-text text-light">
                                                 {game.likes} &nbsp;
                                                 <i
-                                                    className={`far fa-heart ${game.is_liked ? "fas text-danger" : "far text-light"}`}
+                                                    className={`far fa-heart hover-shadow ${game.is_liked ? "fas text-danger" : "far text-light"}`}
                                                     style={{ cursor: 'pointer' }}
                                                     onClick={(e) => {e.preventDefault(); actions.handleGameLike(game.id);}}
                                                 ></i>
@@ -127,8 +120,7 @@ export const Favs = () => {
                 </div>
             )}
 
-            {/* Publicaciones favoritas */}
-            <h4 className="text-start text-light">Liked Posts</h4>
+            <h4 className="text-start text-light mt-4">Liked Posts</h4>
             {filteredPosts.length === 0 ? (
                 <LoadingMario />
             ) : (
@@ -145,7 +137,7 @@ export const Favs = () => {
                                             <span className="card-text text-light">
                                                 {post.likes} &nbsp;
                                                 <i
-                                                    className={`far fa-heart ${post.is_liked ? "fas text-danger" : "far text-light"}`}
+                                                    className={`far fa-heart hover-shadow ${post.is_liked ? "fas text-danger" : "far text-light"}`}
                                                     style={{ cursor: 'pointer' }}
                                                     onClick={(e) => {e.preventDefault(); actions.handlePostLike(post.id);}}
                                                 ></i>

@@ -37,7 +37,7 @@ export const Profile = () => {
         setName(store.user.first_name)
         setLastName(store.user.last_name)
         console.log(store.user)
-        
+
     }
 
     const handleEdit = async (event) => {
@@ -85,7 +85,7 @@ export const Profile = () => {
                 <div className="container rounded bgc mt-5 mb-5">
                     <div className="row d-flex justify-content-center rounded-5">
                         <div className="col-md-3 border-right d-block align-items-center justify-content-center">
-                            <div className="d-flex flex-column align-items-center justify-content-center text-center p-3 py-5 position-relative">
+                            <div className="d-flex flex-column align-items-center justify-content-center text-center p-3 py-5">
                                 <div className="position-relative">
                                     <img
                                         className={`rounded-circle mt-5 border ${store.admin ? "border-danger" : "border-secondary"} border-5`}
@@ -97,12 +97,19 @@ export const Profile = () => {
                                     />
                                     <i
                                         type="button"
-                                        className="fa-solid fa-pencil position-absolute top-0 start-0 m-2 bg-dark text-white p-2 rounded-circle"
+                                        className="fa-solid fa-pencil bg-dark text-white p-2 rounded-circle hover-shadow"
                                         data-bs-toggle="modal"
                                         data-bs-target="#exampleModal"
-                                        style={{ cursor: "pointer", boxShadow: "0 0 5px rgba(0,0,0,0.5)" }}
+                                        style={{
+                                            cursor: "pointer",
+                                            boxShadow: "0 0 3px rgba(200, 200, 200, 1)",
+                                            position: "absolute",
+                                            bottom: "35px",
+                                            right: "10px",
+                                        }}
                                     ></i>
                                 </div>
+
                                 <h3 className="text-center text-light mt-3">{user.username}</h3>
                             </div>
                         </div>
@@ -167,8 +174,8 @@ export const Profile = () => {
                                             (<button className="button" type="button" onClick={editUser}>Edit Profile</button>)
                                             :
                                             (<>
-                                            <button className="button me-2" type="submit" onClick={(e) => { handleEdit(e); setUserEdit(false) }}>Save changes</button>
-                                            <button className="button" type="button" onClick={(e) => { resetData(e); setUserEdit(false); }}>Cancel</button>
+                                                <button className="button me-2" type="submit" onClick={(e) => { handleEdit(e); setUserEdit(false) }}>Save changes</button>
+                                                <button className="button" type="button" onClick={(e) => { resetData(e); setUserEdit(false); }}>Cancel</button>
                                             </>)
                                         }
                                     </div>

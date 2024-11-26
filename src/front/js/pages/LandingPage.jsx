@@ -61,7 +61,7 @@ export const LandingPage = () => {
                                         <span>
                                             <strong className="text-light">{game.likes} &nbsp;</strong> 
                                             <i 
-                                                className={`far fa-heart ${game.is_liked ? "fas text-danger" : "far text-light"}`} 
+                                                className={`far fa-heart hover-shadow ${game.is_liked ? "fas text-danger" : "far text-light"}`} 
                                                 style={{ cursor: 'pointer' }} 
                                                 onClick={() => store.isLogin ? actions.handleGameLike(game.id) : navigate("/login-register")}
                                             ></i> 

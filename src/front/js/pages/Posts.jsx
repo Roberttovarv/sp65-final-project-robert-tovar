@@ -66,7 +66,7 @@ export const Posts = () => {
                                         </div>
                                         <div className="d-flex justify-content-center align-items-center">
                                         <i
-                                            className={`far fa-heart fas text-black-50 position-absolute bottom-0 end-0 m-3`}
+                                            className={`far fa-heart fas hover-shadow text-black-50 position-absolute bottom-0 end-0 m-3`}
                                                 style={{ cursor: 'pointer', fontSize: "3rem"}}
                                                 onClick={(e) => {
                                                     e.preventDefault();
@@ -74,7 +74,7 @@ export const Posts = () => {
                                                 }}
                                                 ></i>
                                                                                 <i
-                                            className={`far fa-heart ${lastPost.is_liked ? "fas text-danger" : "far text-light"} 
+                                            className={`far fa-heart hover-shadow ${lastPost.is_liked ? "fas text-danger" : "far text-light"} 
                                             position-absolute bottom-0 end-0 m-3`}
                                             style={{ cursor: 'pointer', fontSize: "3rem"}}
                                             onClick={(e) => {
@@ -102,7 +102,7 @@ export const Posts = () => {
                                                     <h5 className="card-title d-flex justify-content-between align-items-end">
                                                         {post.title}
                                                         <i
-                                                            className={`far fa-heart ${post.is_liked ? "fas text-danger" : "far text-light"}`}
+                                                            className={`far fa-heart hover-shadow ${post.is_liked ? "fas text-danger" : "far text-light"}`}
                                                             style={{ cursor: 'pointer' }}
                                                             onClick={() => store.isLogin ? actions.handlePostLike(post.id) : navigate("/login-register")}
                                                         ></i>
@@ -141,7 +141,7 @@ export const Posts = () => {
                                             style={{ width: "100%" }}>
                                                 {post.title}
                                                 <i
-                                                    className={`far fa-heart ${post.is_liked ? "fas text-danger" : "far text-light"}`}
+                                                    className={`far fa-heart hover-shadow ${post.is_liked ? "fas text-danger" : "far text-light"}`}
                                                     style={{ cursor: 'pointer' }}
                                                     onClick={(e) => {
                                                         e.preventDefault();

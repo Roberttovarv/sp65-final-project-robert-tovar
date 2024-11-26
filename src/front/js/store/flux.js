@@ -3,7 +3,7 @@ const getState = ({ getStore, getActions, setStore }) => {
         store: {
             token: null,
             admin: true,
-            user: null,
+            user: 1,
             currentItem: {},
             isLogin: false,
             games: [],
